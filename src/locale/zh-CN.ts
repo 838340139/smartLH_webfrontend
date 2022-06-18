@@ -25,12 +25,17 @@ import locale500 from '@/views/exception/500/locale/zh-CN';
 
 import localeUserInfo from '@/views/user/info/locale/zh-CN';
 import localeUserSetting from '@/views/user/setting/locale/zh-CN';
+
+import localeOrgSearchTable from '@/views/organization/search-org/locale/zh-CN';
+import localeOrgCardList from '@/views/organization/audit/locale/zh-CN';
 /** simple end */
 import localeSettings from './zh-CN/settings';
+
 
 export default {
   'menu.dashboard': '仪表盘',
   'menu.list': '列表页',
+  'menu.organization': '单位管理',
   'menu.result': '结果页',
   'menu.exception': '异常页',
   'menu.form': '表单页',
@@ -59,5 +64,7 @@ export default {
   ...locale500,
   ...localeUserInfo,
   ...localeUserSetting,
+  ...localeOrgCardList,
+  ...localeOrgSearchTable,
   /** simple end */
 };

@@ -7,6 +7,7 @@ import Visualization from './visualization';
 import Result from './result';
 import Exception from './exception';
 import User from './user';
+import organization from './organization';
 /** simple end */
 
 export default [
@@ -19,5 +20,6 @@ export default [
   Result,
   Exception,
   User,
+  organization,
   /** simple end */
 ];
