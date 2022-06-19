@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
+import axios from 'axios';
 import router from './router';
 import store from './store';
 import i18n from './locale';
@@ -22,5 +23,8 @@ app.use(store);
 app.use(i18n);
 app.use(globalComponents);
 app.use(directive);
+
+
+axios.defaults.baseURL='http://127.0.0.1:8081';
 
 app.mount('#app');

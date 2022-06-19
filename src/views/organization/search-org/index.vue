@@ -23,7 +23,10 @@
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="name" :label="$t('searchOrg.form.orgAddress')">
+                <a-form-item
+                  field="name"
+                  :label="$t('searchOrg.form.orgAddress')"
+                >
                   <a-input
                     v-model="formModel.name"
                     :placeholder="$t('searchOrg.form.orgAddress.placeholder')"
@@ -42,46 +45,46 @@
                   />
                 </a-form-item>
               </a-col>
-<!--              <a-col :span="8">-->
-<!--                <a-form-item-->
-<!--                  field="filterType"-->
-<!--                  :label="$t('searchOrg.form.filterType')"-->
-<!--                >-->
-<!--                  <a-select-->
-<!--                    v-model="formModel.filterType"-->
-<!--                    :options="filterTypeOptions"-->
-<!--                    :placeholder="$t('searchOrg.form.selectDefault')"-->
-<!--                  />-->
-<!--                </a-form-item>-->
-<!--              </a-col>-->
-<!--              <a-col :span="8">-->
-<!--                <a-form-item-->
-<!--                  field="createdTime"-->
-<!--                  :label="$t('searchOrg.form.createdTime')"-->
-<!--                >-->
-<!--                  <a-range-picker-->
-<!--                    v-model="formModel.createdTime"-->
-<!--                    style="width: 100%"-->
-<!--                  />-->
-<!--                </a-form-item>-->
-<!--              </a-col>-->
-<!--              <a-col :span="8">-->
-<!--                <a-form-item-->
-<!--                  field="status"-->
-<!--                  :label="$t('searchOrg.form.status')"-->
-<!--                >-->
-<!--                  <a-select-->
-<!--                    v-model="formModel.status"-->
-<!--                    :options="statusOptions"-->
-<!--                    :placeholder="$t('searchOrg.form.selectDefault')"-->
-<!--                  />-->
-<!--                </a-form-item>-->
-<!--              </a-col>-->
+              <!--              <a-col :span="8">-->
+              <!--                <a-form-item-->
+              <!--                  field="filterType"-->
+              <!--                  :label="$t('searchOrg.form.filterType')"-->
+              <!--                >-->
+              <!--                  <a-select-->
+              <!--                    v-model="formModel.filterType"-->
+              <!--                    :options="filterTypeOptions"-->
+              <!--                    :placeholder="$t('searchOrg.form.selectDefault')"-->
+              <!--                  />-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col :span="8">-->
+              <!--                <a-form-item-->
+              <!--                  field="createdTime"-->
+              <!--                  :label="$t('searchOrg.form.createdTime')"-->
+              <!--                >-->
+              <!--                  <a-range-picker-->
+              <!--                    v-model="formModel.createdTime"-->
+              <!--                    style="width: 100%"-->
+              <!--                  />-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
+              <!--              <a-col :span="8">-->
+              <!--                <a-form-item-->
+              <!--                  field="status"-->
+              <!--                  :label="$t('searchOrg.form.status')"-->
+              <!--                >-->
+              <!--                  <a-select-->
+              <!--                    v-model="formModel.status"-->
+              <!--                    :options="statusOptions"-->
+              <!--                    :placeholder="$t('searchOrg.form.selectDefault')"-->
+              <!--                  />-->
+              <!--                </a-form-item>-->
+              <!--              </a-col>-->
             </a-row>
           </a-form>
         </a-col>
         <a-divider style="height: 84px" direction="vertical" />
-        <a-col :flex="'86px'" style="text-align: right;padding-bottom: 10px">
+        <a-col :flex="'86px'" style="text-align: right; padding-bottom: 10px">
           <a-space direction="vertical" :size="18">
             <a-button type="primary" @click="search">
               <template #icon>
@@ -102,7 +105,7 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="16">
           <a-space>
-            <a-button type="primary">
+            <a-button type="primary" @click="handleCreateOrg">
               <template #icon>
                 <icon-plus />
               </template>
@@ -137,7 +140,7 @@
         <template #columns>
           <a-table-column
             :title="$t('searchOrg.columns.number')"
-            data-index="number"
+            data-index="id"
           />
           <a-table-column
             :title="$t('searchOrg.columns.name')"
@@ -145,66 +148,69 @@
           />
           <a-table-column
             :title="$t('searchOrg.columns.address')"
-            data-index="contentType"
+            data-index="address"
           >
-            <template #cell="{ record }">
-              <a-space>
-                <a-avatar
-                  v-if="record.contentType === 'img'"
-                  :size="16"
-                  shape="square"
-                >
-                  <img
-                    alt="avatar"
-                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/581b17753093199839f2e327e726b157.svg~tplv-49unhts6dw-image.image"
-                  />
-                </a-avatar>
-                <a-avatar
-                  v-else-if="record.contentType === 'horizontalVideo'"
-                  :size="16"
-                  shape="square"
-                >
-                  <img
-                    alt="avatar"
-                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/77721e365eb2ab786c889682cbc721c1.svg~tplv-49unhts6dw-image.image"
-                  />
-                </a-avatar>
-                <a-avatar v-else :size="16" shape="square">
-                  <img
-                    alt="avatar"
-                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/ea8b09190046da0ea7e070d83c5d1731.svg~tplv-49unhts6dw-image.image"
-                  />
-                </a-avatar>
-                {{ $t(`searchOrg.form.orgType.${record.contentType}`) }}
-              </a-space>
-            </template>
+            <!--            <template #cell="{ record }">-->
+            <!--              <a-space>-->
+            <!--                <a-avatar-->
+            <!--                  v-if="record.contentType === 'img'"-->
+            <!--                  :size="16"-->
+            <!--                  shape="square"-->
+            <!--                >-->
+            <!--                  <img-->
+            <!--                    alt="avatar"-->
+            <!--                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/581b17753093199839f2e327e726b157.svg~tplv-49unhts6dw-image.image"-->
+            <!--                  />-->
+            <!--                </a-avatar>-->
+            <!--                <a-avatar-->
+            <!--                  v-else-if="record.contentType === 'horizontalVideo'"-->
+            <!--                  :size="16"-->
+            <!--                  shape="square"-->
+            <!--                >-->
+            <!--                  <img-->
+            <!--                    alt="avatar"-->
+            <!--                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/77721e365eb2ab786c889682cbc721c1.svg~tplv-49unhts6dw-image.image"-->
+            <!--                  />-->
+            <!--                </a-avatar>-->
+            <!--                <a-avatar v-else :size="16" shape="square">-->
+            <!--                  <img-->
+            <!--                    alt="avatar"-->
+            <!--                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/ea8b09190046da0ea7e070d83c5d1731.svg~tplv-49unhts6dw-image.image"-->
+            <!--                  />-->
+            <!--                </a-avatar>-->
+            <!--                {{ $t(`searchOrg.form.orgType.${record.contentType}`) }}-->
+            <!--              </a-space>-->
+            <!--            </template>-->
           </a-table-column>
           <a-table-column
             :title="$t('searchOrg.columns.phone')"
-            data-index="filterType"
+            data-index="phone"
           >
-            <template #cell="{ record }">
-              {{ $t(`searchOrg.form.filterType.${record.filterType}`) }}
-            </template>
           </a-table-column>
           <a-table-column
             :title="$t('searchOrg.columns.introduction')"
-            data-index="count"
-          />
-<!--          <a-table-column-->
-<!--            :title="$t('searchOrg.columns.createdTime')"-->
-<!--            data-index="createdTime"-->
-<!--          />-->
-<!--          <a-table-column-->
-<!--            :title="$t('searchOrg.columns.status')"-->
-<!--            data-index="status"-->
-<!--          >-->
-<!--            <template #cell="{ record }">-->
-<!--              <span v-if="record.status === 'offline'" class="circle"></span>-->
-<!--              <span v-else class="circle pass"></span>-->
-<!--              {{ $t(`searchOrg.form.status.${record.status}`) }}-->
-<!--            </template>-->
-<!--          </a-table-column>-->
+            data-index="introduction"
+          >
+            <template #cell="{ record }">
+              <p style="text-overflow: ellipsis; white-space: nowrap">
+                {{ record.introduction }}
+              </p>
+            </template>
+          </a-table-column>
+          <!--          <a-table-column-->
+          <!--            :title="$t('searchOrg.columns.createdTime')"-->
+          <!--            data-index="createdTime"-->
+          <!--          />-->
+          <!--          <a-table-column-->
+          <!--            :title="$t('searchOrg.columns.status')"-->
+          <!--            data-index="status"-->
+          <!--          >-->
+          <!--            <template #cell="{ record }">-->
+          <!--              <span v-if="record.status === 'offline'" class="circle"></span>-->
+          <!--              <span v-else class="circle pass"></span>-->
+          <!--              {{ $t(`searchOrg.form.status.${record.status}`) }}-->
+          <!--            </template>-->
+          <!--          </a-table-column>-->
           <a-table-column
             :title="$t('searchOrg.columns.operations')"
             data-index="operations"
@@ -213,11 +219,50 @@
               <a-button v-permission="['admin']" type="text" size="small">
                 {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
+              <a-button v-permission="['admin']" type="text" size="small">
+                {{ $t('searchOrg.columns.operations.delete') }}
+              </a-button>
             </template>
           </a-table-column>
         </template>
       </a-table>
     </a-card>
+    <a-modal
+      v-model:visible="createOrgModalVisible"
+      width="40%"
+      @ok="handleCreateOrgOk"
+      @cancel="handleCreateCancel"
+    >
+      <template #title> 新建 </template>
+      <div>
+        <a-form :model="createOrgForm" auto-label-width>
+          <a-form-item field="name" label="单位名称">
+            <a-input
+              v-model="createOrgForm.name"
+              placeholder="请输入单位名称"
+            />
+          </a-form-item>
+          <a-form-item field="address" label="单位地址">
+            <a-input
+              v-model="createOrgForm.address"
+              placeholder="请输入单位地址"
+            />
+          </a-form-item>
+          <a-form-item field="phone" label="联系电话">
+            <a-input
+                v-model="createOrgForm.phone"
+                placeholder="请输入联系电话"
+            />
+          </a-form-item>
+          <a-form-item field="type" label="单位性质">
+            <a-input
+                v-model="createOrgForm.type"
+                placeholder="请输入单位性质"
+            />
+          </a-form-item>
+        </a-form>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -225,8 +270,8 @@
 import { defineComponent, computed, ref, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/list';
 import { Pagination, Options } from '@/types/global';
+import { Organization, OrgListParams, queryOrgList } from '@/api/organization';
 
 const generateFormModel = () => {
   return {
@@ -238,11 +283,25 @@ const generateFormModel = () => {
     status: '',
   };
 };
+
+const generateCreateOrgFormModel = () => {
+  return {
+    type: '',
+    name: '',
+    address: '',
+    phone: '',
+    material: '',
+    serialNumber: '',
+    introduction: '',
+  };
+};
 export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(true);
+    const createOrgModalVisible = ref<boolean>(false);
+    const createOrgForm = ref(generateCreateOrgFormModel());
     const { t } = useI18n();
-    const renderData = ref<PolicyRecord[]>([]);
+    const renderData = ref<Organization[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       current: 1,
@@ -286,11 +345,11 @@ export default defineComponent({
       },
     ]);
     const fetchData = async (
-      params: PolicyParams = { current: 1, pageSize: 20 }
+      params: OrgListParams = { current: 1, pageSize: 20 }
     ) => {
       setLoading(true);
       try {
-        const { data } = await queryPolicyList(params);
+        const { data } = await queryOrgList(params);
         renderData.value = data.list;
         pagination.current = params.current;
         pagination.total = data.total;
@@ -305,7 +364,7 @@ export default defineComponent({
       fetchData({
         ...basePagination,
         ...formModel.value,
-      } as unknown as PolicyParams);
+      } as unknown as OrgListParams);
     };
     const onPageChange = (current: number) => {
       fetchData({ ...basePagination, current });
@@ -314,6 +373,16 @@ export default defineComponent({
     fetchData();
     const reset = () => {
       formModel.value = generateFormModel();
+    };
+
+    const handleCreateOrg = () => {
+      createOrgModalVisible.value = true;
+    };
+    const handleCreateOrgOk = () => {
+      createOrgModalVisible.value = false;
+    };
+    const handleCreateCancel = () => {
+      createOrgModalVisible.value = false;
     };
     return {
       loading,
@@ -326,6 +395,11 @@ export default defineComponent({
       contentTypeOptions,
       filterTypeOptions,
       statusOptions,
+      createOrgModalVisible,
+      createOrgForm,
+      handleCreateOrg,
+      handleCreateOrgOk,
+      handleCreateCancel,
     };
   },
 });

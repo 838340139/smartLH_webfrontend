@@ -2,48 +2,34 @@ import axios from 'axios';
 import qs from 'query-string';
 import { Options } from '@/types/global';
 
-export interface PolicyRecord {
-  id: string;
-  number: number;
+export interface Organization {
+  id: number;
+  type?: string;
   name: string;
-  contentType: 'img' | 'horizontalVideo' | 'verticalVideo';
-  filterType: 'artificial' | 'rules';
-  count: number;
-  status: 'online' | 'offline';
-  createdTime: string;
+  address: string;
+  phone: string;
+  audit: number;
+  material: string;
+  serialNumber: string;
+  introduction: string;
+  isDeleted: number;
 }
 
-export interface PolicyParams extends Partial<PolicyRecord> {
+export interface OrgListParams extends Partial<Organization> {
   current: number;
   pageSize: number;
 }
 
-export interface PolicyListRes {
-  list: PolicyRecord[];
+export interface OrgListRes {
+  list: Organization[];
   total: number;
 }
 
-export function queryPolicyList(params: PolicyParams) {
-  return axios.get<PolicyListRes>('/api/list/policy', {
+export function queryOrgList(params: OrgListParams) {
+  return axios.get<OrgListRes>('/Organization/getOrgList', {
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);
     },
   });
 }
-
-export interface ServiceRecord {
-  id: number;
-  title: string;
-  description: string;
-  name?: string;
-  actionType?: string;
-  icon?: string;
-  data?: Options[];
-  enable?: boolean;
-  expires?: boolean;
-}
-export function queryInspectionList() {
-  return axios.get('/api/list/quality-inspection');
-}
-

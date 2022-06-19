@@ -31,4 +31,5 @@ export default {
   'searchOrg.columns.status': 'Status',
   'searchOrg.columns.operations': 'Operations',
   'searchOrg.columns.operations.view': 'View',
+  'searchOrg.columns.operations.delete': 'Delete',
 };
