@@ -1,5 +1,5 @@
 export default {
-  'menu.organization.searchOrg': '查询单位信息',
+  'menu.organization.searchOrg': '查询招聘信息',
   'searchOrg.form.orgName': '单位名称',
   'searchOrg.form.orgName.placeholder': '请输入单位名称',
   'searchOrg.form.orgAddress': '单位地点',
@@ -23,10 +23,10 @@ export default {
   'searchOrg.operation.download': '下载',
   // columns
   'searchOrg.columns.number': '编号',
-  'searchOrg.columns.name': '单位名称',
-  'searchOrg.columns.address': '单位地址',
+  'searchOrg.columns.name': '招聘单位名称',
+  'searchOrg.columns.num': '招聘人数',
   'searchOrg.columns.phone': '联系电话',
-  'searchOrg.columns.introduction': '简介',
+  'searchOrg.columns.address': '工作地点',
   'searchOrg.columns.createdTime': '创建时间',
   'searchOrg.columns.status': '状态',
   'searchOrg.columns.operations': '操作',

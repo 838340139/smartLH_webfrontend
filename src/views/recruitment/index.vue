@@ -233,22 +233,34 @@
       @ok="handleCreateOrgOk"
       @cancel="handleCreateCancel"
     >
-      <template #title> 添加单位 </template>
+      <template #title> 添加招聘信息 </template>
       <div>
         <a-form :model="createOrgForm" auto-label-width>
-          <a-form-item field="name" label="单位名称">
+          <a-form-item field="name" label="招聘单位名称">
             <a-input
               v-model="createOrgForm.name"
               placeholder="请输入"
             />
           </a-form-item>
-          <a-form-item field="type" label="单位性质">
+          <a-form-item field="type" label="职位名称">
             <a-input
               v-model="createOrgForm.type"
               placeholder="请输入"
             />
           </a-form-item>
-          <a-form-item field="address" label="单位地址">
+          <a-form-item field="num" label="招聘人数">
+            <a-input
+              v-model="createOrgForm.num"
+              placeholder="请输入"
+            />
+          </a-form-item>
+          <a-form-item field="education" label="最低学历要求">
+            <a-input
+              v-model="createOrgForm.education"
+              placeholder="请输入"
+            />
+          </a-form-item>
+          <a-form-item field="address" label="工作地点">
             <a-cascader
               size="large"
               :options="regionOptions"
@@ -262,7 +274,7 @@
               placeholder="请输入"
             />
           </a-form-item>
-          <a-form-item field="type" label="介绍">
+          <a-form-item field="type" label="职能介绍">
             <a-textarea
               v-model="createOrgForm.introduction"
               placeholder="请输入"

@@ -54,7 +54,7 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col :span="8">
+              <!-- <a-col :span="8">
                 <a-form-item
                   field="createdTime"
                   :label="$t('searchTable.form.createdTime')"
@@ -64,7 +64,7 @@
                     style="width: 100%"
                   />
                 </a-form-item>
-              </a-col>
+              </a-col> -->
               <a-col :span="8">
                 <a-form-item
                   field="status"
@@ -144,6 +144,79 @@
             data-index="name"
           />
           <a-table-column
+            :title="$t('searchTable.columns.home')"
+            data-index="home"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.place')"
+            data-index="place"
+          />
+           <a-table-column
+            :title="$t('searchTable.columns.subject')"
+            data-index="subject"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.academic')"
+            data-index="academic"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.education')"
+            data-index="education"
+          />
+            <a-table-column
+            :title="$t('searchTable.columns.marriage')"
+            data-index="marriage"
+          />
+           <!--   <a-table-column
+            :title="$t('searchTable.columns.phone')"
+            data-index="phone"
+          />
+             <a-table-column
+            :title="$t('searchTable.columns.politics')"
+            data-index="politics"
+          />
+        <a-table-column
+            :title="$t('searchTable.columns.photo')"
+            data-index="photo"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.post')"
+            data-index="post"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.graduation')"
+            data-index="graduation"
+          />
+         <a-table-column
+            :title="$t('searchTable.columns.birthday')"
+            data-index="birthday"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.fresh')"
+            data-index="fresh"
+          />
+          <a-table-column
+            :title="$t('searchTable.columns.mailbox')"
+            data-index="mailbox"
+          /> 
+          <a-table-column
+            :title="$t('searchTable.columns.work')"
+            data-index="work"
+          /> 
+          <a-table-column
+            :title="$t('searchTable.columns.prize')"
+            data-index="prize"
+          /> 
+          <a-table-column
+            :title="$t('searchTable.columns.introduction')"
+            data-index="introduction"
+          /> 
+          <a-table-column
+            :title="$t('searchTable.columns.undergo')"
+            data-index="undergo"
+          />  -->
+      
+          <a-table-column
             :title="$t('searchTable.columns.contentType')"
             data-index="contentType"
           >
@@ -187,18 +260,18 @@
               {{ $t(`searchTable.form.filterType.${record.filterType}`) }}
             </template>
           </a-table-column>
-          <a-table-column
+           <!-- <a-table-column
             :title="$t('searchTable.columns.count')"
             data-index="count"
           />
           <a-table-column
             :title="$t('searchTable.columns.createdTime')"
             data-index="createdTime"
-          />
+          /> -->
           <a-table-column
             :title="$t('searchTable.columns.status')"
             data-index="status"
-          >
+          > 
             <template #cell="{ record }">
               <span v-if="record.status === 'offline'" class="circle"></span>
               <span v-else class="circle pass"></span>
