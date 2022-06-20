@@ -1,7 +1,7 @@
 <template>
   <a-col :span="24" class="panel">
     <a-row>
-      <a-col class="panel-col" :span="6">
+      <a-col class="panel-col" :span="8">
         <a-space>
           <a-avatar :size="54" class="col-avatar">
             <img
@@ -10,7 +10,7 @@
             />
           </a-avatar>
           <a-statistic
-            :title="$t('workplace.onlineContent')"
+            :title="$t('workplace.userInfoCount')"
             :value="373.5"
             :precision="1"
             :value-from="0"
@@ -23,7 +23,7 @@
           </a-statistic>
         </a-space>
       </a-col>
-      <a-col class="panel-col" :span="6">
+      <a-col class="panel-col" :span="8">
         <a-space>
           <a-avatar :size="54" class="col-avatar">
             <img
@@ -32,7 +32,7 @@
             />
           </a-avatar>
           <a-statistic
-            :title="$t('workplace.putIn')"
+            :title="$t('workplace.orgInfoCount')"
             :value="368"
             :value-from="0"
             animation
@@ -44,7 +44,7 @@
           </a-statistic>
         </a-space>
       </a-col>
-      <a-col class="panel-col" :span="6">
+      <a-col class="panel-col" :span="8">
         <a-space>
           <a-avatar :size="54" class="col-avatar">
             <img
@@ -53,7 +53,7 @@
             />
           </a-avatar>
           <a-statistic
-            :title="$t('workplace.newDay')"
+            :title="$t('workplace.recruitInfoCount')"
             :value="8874"
             :value-from="0"
             animation
@@ -65,25 +65,25 @@
           </a-statistic>
         </a-space>
       </a-col>
-      <a-col class="panel-col" :span="6">
-        <a-space>
-          <a-avatar :size="54" class="col-avatar">
-            <img
-              alt="avatar"
-              src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/c8b36e26d2b9bb5dbf9b74dd6d7345af.svg~tplv-49unhts6dw-image.image"
-            />
-          </a-avatar>
-          <a-statistic
-            :title="$t('workplace.newFromYesterday')"
-            :value="2.8"
-            :precision="1"
-            :value-from="0"
-            animation
-          >
-            <template #suffix> % <icon-caret-up class="up-icon" /> </template>
-          </a-statistic>
-        </a-space>
-      </a-col>
+<!--      <a-col class="panel-col" :span="6">-->
+<!--        <a-space>-->
+<!--          <a-avatar :size="54" class="col-avatar">-->
+<!--            <img-->
+<!--              alt="avatar"-->
+<!--              src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/c8b36e26d2b9bb5dbf9b74dd6d7345af.svg~tplv-49unhts6dw-image.image"-->
+<!--            />-->
+<!--          </a-avatar>-->
+<!--          <a-statistic-->
+<!--            :title="$t('workplace.newFromYesterday')"-->
+<!--            :value="2.8"-->
+<!--            :precision="1"-->
+<!--            :value-from="0"-->
+<!--            animation-->
+<!--          >-->
+<!--            <template #suffix> % <icon-caret-up class="up-icon" /> </template>-->
+<!--          </a-statistic>-->
+<!--        </a-space>-->
+<!--      </a-col>-->
     </a-row>
     <a-divider class="panel-border" />
   </a-col>

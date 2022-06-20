@@ -1,13 +1,13 @@
 <template>
   <a-card
     class="general-card"
-    :title="$t('workplace.quick.operation')"
+    :title="$t('workplace.todoWork')"
     :header-style="{ paddingBottom: '0' }"
     :body-style="{ padding: '24px 20px 0 20px' }"
   >
-    <template #extra>
-      <a-link>{{ $t('workplace.quickOperation.setup') }}</a-link>
-    </template>
+<!--    <template #extra>-->
+<!--      <a-link>{{ $t('workplace.quickOperation.setup') }}</a-link>-->
+<!--    </template>-->
     <a-row :gutter="8">
       <a-col v-for="link in links" :key="link" :span="8" class="wrapper">
         <div class="icon">

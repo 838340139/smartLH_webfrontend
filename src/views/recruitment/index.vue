@@ -12,32 +12,34 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item field="name" :label="$t('searchOrg.form.orgName')">
+                <a-form-item
+                  field="number"
+                  :label="$t('searchOrg.form.orgName')"
+                >
                   <a-input
-                    v-model="formModel.name"
+                    v-model="formModel.number"
                     :placeholder="$t('searchOrg.form.orgName.placeholder')"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="address"
+                  field="name"
                   :label="$t('searchOrg.form.orgAddress')"
                 >
-                  <a-cascader
-                    v-model="formModel.address"
-                    size="large"
-                    class="large-cascader"
-                    :options="regionOptions"
+                  <a-input
+                    v-model="formModel.name"
                     :placeholder="$t('searchOrg.form.orgAddress.placeholder')"
-                    allow-search
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="type" :label="$t('searchOrg.form.orgType')">
+                <a-form-item
+                  field="contentType"
+                  :label="$t('searchOrg.form.orgType')"
+                >
                   <a-select
-                    v-model="formModel.type"
+                    v-model="formModel.contentType"
                     :options="contentTypeOptions"
                     :placeholder="$t('searchOrg.form.selectDefault')"
                   />
@@ -235,22 +237,30 @@
       <div>
         <a-form :model="createOrgForm" auto-label-width>
           <a-form-item field="name" label="单位名称">
-            <a-input v-model="createOrgForm.name" placeholder="请输入" />
+            <a-input
+              v-model="createOrgForm.name"
+              placeholder="请输入"
+            />
           </a-form-item>
           <a-form-item field="type" label="单位性质">
-            <a-input v-model="createOrgForm.type" placeholder="请输入" />
+            <a-input
+              v-model="createOrgForm.type"
+              placeholder="请输入"
+            />
           </a-form-item>
           <a-form-item field="address" label="单位地址">
             <a-cascader
               size="large"
-              class="large-cascader"
               :options="regionOptions"
               placeholder="请选择"
               allow-search
             />
           </a-form-item>
           <a-form-item field="phone" label="联系电话">
-            <a-input v-model="createOrgForm.phone" placeholder="请输入" />
+            <a-input
+              v-model="createOrgForm.phone"
+              placeholder="请输入"
+            />
           </a-form-item>
           <a-form-item field="type" label="介绍">
             <a-textarea
@@ -278,9 +288,12 @@ import { regionData } from 'element-china-area-data';
 
 const generateFormModel = () => {
   return {
+    number: '',
     name: '',
-    address: '',
-    type: '',
+    contentType: '',
+    filterType: '',
+    createdTime: [],
+    status: '',
   };
 };
 
@@ -312,14 +325,48 @@ export default defineComponent({
       ...basePagination,
     });
     const regionOptions = ref(regionData);
+    const contentTypeOptions = computed<Options[]>(() => [
+      {
+        label: t('searchOrg.form.orgType.government'),
+        value: 'img',
+      },
+      {
+        label: t('searchOrg.form.orgType.shiye'),
+        value: 'horizontalVideo',
+      },
+      {
+        label: t('searchOrg.form.orgType.stateEnterprise'),
+        value: 'verticalVideo',
+      },
+    ]);
+    const filterTypeOptions = computed<Options[]>(() => [
+      {
+        label: t('searchOrg.form.filterType.artificial'),
+        value: 'artificial',
+      },
+      {
+        label: t('searchOrg.form.filterType.rules'),
+        value: 'rules',
+      },
+    ]);
+    const statusOptions = computed<Options[]>(() => [
+      {
+        label: t('searchOrg.form.status.online'),
+        value: 'online',
+      },
+      {
+        label: t('searchOrg.form.status.offline'),
+        value: 'offline',
+      },
+    ]);
     const fetchData = async (
-      params: OrgListParams = { pageNum: 1, size: 20 }
+      params: OrgListParams = { current: 1, pageSize: 20 }
     ) => {
       setLoading(true);
       try {
         const { data } = await queryOrgList(params);
         renderData.value = data.list;
-        pagination.current = params.pageNum;
+        pagination.current = params.current;
         pagination.total = data.total;
       } catch (err) {
         // you can report use errorHandler or other
@@ -331,12 +378,11 @@ export default defineComponent({
     const search = () => {
       fetchData({
         ...basePagination,
-        size: basePagination.pageSize,
         ...formModel.value,
       } as unknown as OrgListParams);
     };
-    const onPageChange = (pageNum: number) => {
-      fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
+    const onPageChange = (current: number) => {
+      fetchData({ ...basePagination, current });
     };
 
     fetchData();
@@ -361,6 +407,9 @@ export default defineComponent({
       pagination,
       formModel,
       reset,
+      contentTypeOptions,
+      filterTypeOptions,
+      statusOptions,
       createOrgModalVisible,
       createOrgForm,
       handleCreateOrg,

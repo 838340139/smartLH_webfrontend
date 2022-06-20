@@ -16,8 +16,8 @@ export interface Organization {
 }
 
 export interface OrgListParams extends Partial<Organization> {
-  current: number;
-  pageSize: number;
+  pageNum: number;
+  size: number;
 }
 
 export interface OrgListRes {
@@ -26,7 +26,7 @@ export interface OrgListRes {
 }
 
 export function queryOrgList(params: OrgListParams) {
-  return axios.get<OrgListRes>('/Organization/getOrgList', {
+  return axios.get<OrgListRes>('/Organization/getOrgBySearch', {
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);

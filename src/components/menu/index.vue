@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, ref, watch, h, compile, computed } from 'vue';
+import { defineComponent, ref, watch, h, compile, computed, renderSlot } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
   useRouter,
@@ -107,31 +107,50 @@ export default defineComponent({
           _route.forEach((element) => {
             // This is demo, modify nodes as needed
             const icon = element?.meta?.icon ? `<${element?.meta?.icon}/>` : ``;
-            const r = (
-              <a-sub-menu
-                key={element?.name}
-                v-slots={{
-                  icon: () => h(compile(icon)),
-                  title: () => h(compile(t(element?.meta?.locale || ''))),
-                }}
-              >
-                {element?.children?.map((elem) => {
-                  return (
-                    <a-menu-item key={elem.name} onClick={() => goto(elem)}>
-                      {t(elem?.meta?.locale || '')}
-                      {travel(elem.children ?? [])}
-                    </a-menu-item>
-                  );
-                })}
-              </a-sub-menu>
-            );
-            nodes.push(r as never);
+            if(element.children){
+              const r = (
+                <a-sub-menu
+                  key={element?.name}
+                  v-slots={{
+                    icon: () => h(compile(icon)),
+                    title: () => h(compile(t(element?.meta?.locale || ''))),
+                  }}
+                >
+                  {element?.children?.map((elem) => {
+                    return (
+                      <a-menu-item key={elem.name} onClick={() => goto(elem)}>
+                        {t(elem?.meta?.locale || '')}
+                        {travel(elem.children ?? [])}
+                      </a-menu-item>
+                    );
+                  })}
+                </a-sub-menu>
+              );
+              nodes.push(r as never);
+            }
+           else{
+              const r = (
+                <a-menu-item
+                  key={element.name}
+                  onClick={() => goto(element)}
+                  v-slots={{
+                    icon: () => h(compile(icon)),
+                    title: () => h(compile(t(element?.meta?.locale || ''))),
+                  }}
+                >
+                  {t(element?.meta?.locale || '')}
+                  {travel(element.children ?? [])}
+                </a-menu-item>
+              );
+              nodes.push(r as never);
+            }
           });
         }
         return nodes;
       }
       return travel(menuTree.value);
     };
+    console.log(menuTree.value)
     return () => (
       <a-menu
         theme="dark"

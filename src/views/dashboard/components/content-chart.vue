@@ -6,7 +6,7 @@
       :body-style="{
         paddingTop: '20px',
       }"
-      :title="$t('workplace.contentData')"
+      :title="$t('workplace.userInfoIncrementData')"
     >
       <template #extra>
         <a-link>{{ $t('workplace.viewMore') }}</a-link>
@@ -118,7 +118,7 @@ export default defineComponent({
             const [firstElement] = params as ToolTipFormatterParams[];
             return `<div>
             <p class="tooltip-title">${firstElement.axisValueLabel}</p>
-            <div class="content-panel"><span>总内容量</span><span class="tooltip-value">${(
+            <div class="content-panel"><span>人才信息新增</span><span class="tooltip-value">${(
               Number(firstElement.value) * 10000
             ).toLocaleString()}</span></div>
           </div>`;

@@ -8,6 +8,7 @@ import Result from './result';
 import Exception from './exception';
 import User from './user';
 import organization from './organization';
+import recruitment from './recruitment'
 /** simple end */
 
 export default [
@@ -21,5 +22,6 @@ export default [
   Exception,
   User,
   organization,
+  recruitment,
   /** simple end */
 ];

@@ -1,9 +1,8 @@
 import localeMessageBox from '@/components/message-box/locale/zh-CN';
 import localeLogin from '@/views/login/locale/zh-CN';
 
-import localeWorkplace from '@/views/dashboard/workplace/locale/zh-CN';
+import localeWorkplace from '@/views/dashboard/locale/zh-CN';
 /** simple */
-import localeMonitor from '@/views/dashboard/monitor/locale/zh-CN';
 
 import localeSearchTable from '@/views/list/search-table/locale/zh-CN';
 import localeCardList from '@/views/list/card/locale/zh-CN';
@@ -33,9 +32,10 @@ import localeSettings from './zh-CN/settings';
 
 
 export default {
-  'menu.dashboard': '仪表盘',
+  'menu.dashboard': '工作台',
   'menu.list': '列表页',
-  'menu.organization': '单位管理',
+  'menu.organization': '单位信息管理',
+  'menu.recruitment': '招聘信息管理',
   'menu.result': '结果页',
   'menu.exception': '异常页',
   'menu.form': '表单页',
@@ -49,7 +49,6 @@ export default {
   ...localeLogin,
   ...localeWorkplace,
   /** simple */
-  ...localeMonitor,
   ...localeSearchTable,
   ...localeCardList,
   ...localeStepForm,
