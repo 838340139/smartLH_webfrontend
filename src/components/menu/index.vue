@@ -1,5 +1,13 @@
 <script lang="tsx">
-import { defineComponent, ref, watch, h, compile, computed, renderSlot } from 'vue';
+import {
+  defineComponent,
+  ref,
+  watch,
+  h,
+  compile,
+  computed,
+  renderSlot,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
   useRouter,
@@ -80,7 +88,9 @@ export default defineComponent({
       route,
       (newVal) => {
         if (newVal.meta.requiresAuth && !newVal.meta.hideInMenu) {
-          const key = newVal.matched[2]?.name as string;
+          const key = newVal.matched[2]
+            ? (newVal.matched[2].name as string)
+            : (newVal.matched[1].name as string);
           selectedKey.value = [key];
         }
       },
@@ -107,7 +117,7 @@ export default defineComponent({
           _route.forEach((element) => {
             // This is demo, modify nodes as needed
             const icon = element?.meta?.icon ? `<${element?.meta?.icon}/>` : ``;
-            if(element.children){
+            if (element.children) {
               const r = (
                 <a-sub-menu
                   key={element?.name}
@@ -127,8 +137,7 @@ export default defineComponent({
                 </a-sub-menu>
               );
               nodes.push(r as never);
-            }
-           else{
+            } else {
               const r = (
                 <a-menu-item
                   key={element.name}
@@ -139,7 +148,6 @@ export default defineComponent({
                   }}
                 >
                   {t(element?.meta?.locale || '')}
-                  {travel(element.children ?? [])}
                 </a-menu-item>
               );
               nodes.push(r as never);
@@ -150,7 +158,7 @@ export default defineComponent({
       }
       return travel(menuTree.value);
     };
-    console.log(menuTree.value)
+    console.log(menuTree.value);
     return () => (
       <a-menu
         theme="dark"

@@ -12,8 +12,9 @@ import localeGroupForm from '@/views/form/group/locale/zh-CN';
 
 import localeBasicProfile from '@/views/profile/basic/locale/zh-CN';
 
-import localeDataAnalysis from '@/views/visualization/data-analysis/locale/zh-CN';
-import localeMultiDAnalysis from '@/views/visualization/multi-dimension-data-analysis/locale/zh-CN';
+import localeDataAnalysis from '@/views/visualization/user-info-analysis/locale/zh-CN';
+import localeMultiDAnalysis from '@/views/visualization/org-info-analysis/locale/zh-CN';
+import localeRecruitDAnalysis from '@/views/visualization/recruit-info-analysis/locale/zh-CN';
 
 import localeSuccess from '@/views/result/success/locale/zh-CN';
 import localeError from '@/views/result/error/locale/zh-CN';
@@ -28,6 +29,7 @@ import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 import localeOrgSearchTable from '@/views/organization/search-org/locale/zh-CN';
 import localeOrgCardList from '@/views/organization/audit/locale/zh-CN';
 /** simple end */
+import localeGlobal from './zh-CN/global';
 import localeSettings from './zh-CN/settings';
 
 
@@ -56,6 +58,7 @@ export default {
   ...localeBasicProfile,
   ...localeDataAnalysis,
   ...localeMultiDAnalysis,
+  ...localeRecruitDAnalysis,
   ...localeSuccess,
   ...localeError,
   ...locale403,
@@ -65,5 +68,6 @@ export default {
   ...localeUserSetting,
   ...localeOrgCardList,
   ...localeOrgSearchTable,
+  ...localeGlobal
   /** simple end */
 };

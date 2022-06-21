@@ -24,9 +24,11 @@ export interface PostData {
 }
 
 export interface Pagination {
-  current: number;
-  pageSize: number;
-  total?: number;
+  'show-total': true;
+  'show-jumper': true;
+  'current': number;
+  'pageSize': number;
+  'total'?: number;
 }
 
 export type TimeRanger = [string, string];

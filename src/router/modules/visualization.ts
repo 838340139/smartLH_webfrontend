@@ -9,22 +9,33 @@ export default {
   },
   children: [
     {
-      path: 'data-analysis',
-      name: 'dataAnalysis',
-      component: () => import('@/views/visualization/data-analysis/index.vue'),
+      path: 'user-info-analysis',
+      name: 'userInfoAnalysis',
+      component: () => import('@/views/visualization/user-info-analysis/index.vue'),
       meta: {
-        locale: 'menu.visualization.dataAnalysis',
+        locale: 'menu.visualization.userInfoAnalysis',
         requiresAuth: true,
         roles: ['admin'],
       },
     },
     {
-      path: 'multi-dimension-data-analysis',
-      name: 'multiDimensionDataAnalysis',
+      path: 'org-info-analysis',
+      name: 'orgInfoAnalysis',
       component: () =>
-        import('@/views/visualization/multi-dimension-data-analysis/index.vue'),
+        import('@/views/visualization/org-info-analysis/index.vue'),
       meta: {
-        locale: 'menu.visualization.multiDimensionDataAnalysis',
+        locale: 'menu.visualization.orgInfoAnalysis',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'recruit-info-analysis',
+      name: 'recruitInfoAnalysis',
+      component: () =>
+          import('@/views/visualization/recruit-info-analysis/index.vue'),
+      meta: {
+        locale: 'menu.visualization.recruitInfoAnalysis',
         requiresAuth: true,
         roles: ['admin'],
       },

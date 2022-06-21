@@ -41,7 +41,7 @@ import ContentChart from './components/content-chart.vue';
 import PopularContent from './components/popular-content.vue';
 import CateforiesPercent from './components/categories-percent.vue';
 import RecentlyVisited from './components/recently-visited.vue';
-import QuickOperation from './components/quick-operation.vue';
+import QuickOperation from './components/todowork.vue';
 import Announcement from './components/announcement.vue';
 import Carousel from './components/carousel.vue';
 import Docs from './components/docs.vue';

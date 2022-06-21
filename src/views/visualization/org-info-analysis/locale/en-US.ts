@@ -1,5 +1,5 @@
 export default {
-  'menu.visualization.multiDimensionDataAnalysis': 'Multi-D Analysis',
+  'menu.visualization.orgInfoAnalysis': 'Multi-D Analysis',
   'multiDAnalysis.card.title.dataOverview': 'Overview',
   'multiDAnalysis.dataOverview.contentProduction': 'Content Production',
   'multiDAnalysis.dataOverview.contentClick': 'Content Click',

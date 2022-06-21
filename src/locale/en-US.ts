@@ -12,8 +12,9 @@ import localeGroupForm from '@/views/form/group/locale/en-US';
 
 import localeBasicProfile from '@/views/profile/basic/locale/en-US';
 
-import localeDataAnalysis from '@/views/visualization/data-analysis/locale/en-US';
-import localeMultiDAnalysis from '@/views/visualization/multi-dimension-data-analysis/locale/en-US';
+import localeDataAnalysis from '@/views/visualization/user-info-analysis/locale/en-US';
+import localeMultiDAnalysis from '@/views/visualization/org-info-analysis/locale/en-US';
+import localeRecruitDAnalysis from '@/views/visualization/recruit-info-analysis/locale/en-US';
 
 import localeSuccess from '@/views/result/success/locale/en-US';
 import localeError from '@/views/result/error/locale/en-US';
@@ -50,6 +51,7 @@ export default {
   ...localeBasicProfile,
   ...localeDataAnalysis,
   ...localeMultiDAnalysis,
+  ...localeRecruitDAnalysis,
   ...localeSuccess,
   ...localeError,
   ...locale403,

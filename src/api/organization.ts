@@ -15,7 +15,10 @@ export interface Organization {
   isDeleted: number;
 }
 
-export interface OrgListParams extends Partial<Organization> {
+export interface OrgListParams{
+  orgType?: string;
+  orgName?: string;
+  orgAddress?: string;
   pageNum: number;
   size: number;
 }

@@ -12,21 +12,25 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item field="name" :label="$t('searchOrg.form.orgName')">
+                <a-form-item
+                  field="orgName"
+                  :label="$t('searchOrg.form.orgName')"
+                >
                   <a-input
-                    v-model="formModel.name"
+                    v-model="formModel.orgName"
                     :placeholder="$t('searchOrg.form.orgName.placeholder')"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="address"
+                  field="orgAddress"
                   :label="$t('searchOrg.form.orgAddress')"
                 >
                   <a-cascader
-                    v-model="formModel.address"
+                    v-model="formModel.orgAddress"
                     size="large"
+                    check-strictly
                     class="large-cascader"
                     :options="regionOptions"
                     :placeholder="$t('searchOrg.form.orgAddress.placeholder')"
@@ -35,10 +39,13 @@
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="type" :label="$t('searchOrg.form.orgType')">
+                <a-form-item
+                  field="orgType"
+                  :label="$t('searchOrg.form.orgType')"
+                >
                   <a-select
-                    v-model="formModel.type"
-                    :options="contentTypeOptions"
+                    v-model="formModel.orgType"
+                    :options="typeOptions"
                     :placeholder="$t('searchOrg.form.selectDefault')"
                   />
                 </a-form-item>
@@ -238,12 +245,17 @@
             <a-input v-model="createOrgForm.name" placeholder="请输入" />
           </a-form-item>
           <a-form-item field="type" label="单位性质">
-            <a-input v-model="createOrgForm.type" placeholder="请输入" />
+            <a-select
+              v-model="createOrgForm.type"
+              :options="typeOptions"
+              :placeholder="$t('searchOrg.form.selectDefault')"
+            />
           </a-form-item>
           <a-form-item field="address" label="单位地址">
             <a-cascader
               size="large"
               class="large-cascader"
+              check-strictly
               :options="regionOptions"
               placeholder="请选择"
               allow-search
@@ -274,13 +286,13 @@ import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
 import { Pagination, Options } from '@/types/global';
 import { Organization, OrgListParams, queryOrgList } from '@/api/organization';
-import { regionData } from 'element-china-area-data';
+import { regionData, CodeToText } from 'element-china-area-data';
 
 const generateFormModel = () => {
   return {
-    name: '',
-    address: '',
-    type: '',
+    orgName: '',
+    orgAddress: '',
+    orgType: '',
   };
 };
 
@@ -305,17 +317,55 @@ export default defineComponent({
     const renderData = ref<Organization[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
-      current: 1,
-      pageSize: 20,
+      'current': 1,
+      'pageSize': 20,
+      'show-total': true,
+      'show-jumper': true,
     };
     const pagination = reactive({
       ...basePagination,
     });
     const regionOptions = ref(regionData);
+    const typeOptions = computed<Options[]>(() => [
+      {
+        label: t('organization.orgType.state-enterprise'),
+        value: t('organization.orgType.state-enterprise'),
+      },
+      {
+        label: t('organization.orgType.foreign-enterprise'),
+        value: t('organization.orgType.foreign-enterprise'),
+      },
+      {
+        label: t('organization.orgType.joint-venture'),
+        value: t('organization.orgType.joint-venture'),
+      },
+      {
+        label: t('organization.orgType.private-enterprise'),
+        value: t('organization.orgType.private-enterprise'),
+      },
+      {
+        label: t('organization.orgType.government-affiliated-institution'),
+        value: t('organization.orgType.government-affiliated-institution'),
+      },
+      {
+        label: t('organization.orgType.state-administrative-organs'),
+        value: t('organization.orgType.state-administrative-organs'),
+      },
+      {
+        label: t('organization.orgType.government'),
+        value: t('organization.orgType.government'),
+      },
+      {
+        label: t('organization.orgType.others'),
+        value: t('organization.orgType.others'),
+      },
+    ]);
     const fetchData = async (
       params: OrgListParams = { pageNum: 1, size: 20 }
     ) => {
       setLoading(true);
+      // 地址编码转为文字
+      params.orgAddress = CodeToText[params.orgAddress];
       try {
         const { data } = await queryOrgList(params);
         renderData.value = data.list;
@@ -330,8 +380,8 @@ export default defineComponent({
 
     const search = () => {
       fetchData({
-        ...basePagination,
         size: basePagination.pageSize,
+        pageNum: basePagination.current,
         ...formModel.value,
       } as unknown as OrgListParams);
     };
@@ -361,6 +411,7 @@ export default defineComponent({
       pagination,
       formModel,
       reset,
+      typeOptions,
       createOrgModalVisible,
       createOrgForm,
       handleCreateOrg,

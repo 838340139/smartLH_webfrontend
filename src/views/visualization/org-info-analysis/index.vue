@@ -3,7 +3,7 @@
     <Breadcrumb
       :items="[
         'menu.visualization',
-        'menu.visualization.multiDimensionDataAnalysis',
+        'menu.visualization.orgInfoAnalysis',
       ]"
     />
     <a-space direction="vertical" :size="16" fill>
