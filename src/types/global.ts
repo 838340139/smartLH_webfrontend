@@ -24,8 +24,8 @@ export interface PostData {
 }
 
 export interface Pagination {
-  'show-total': true;
-  'show-jumper': true;
+  'show-total'?: true;
+  'show-jumper'?: true;
   'current': number;
   'pageSize': number;
   'total'?: number;

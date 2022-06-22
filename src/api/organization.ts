@@ -16,7 +16,10 @@ export interface OrgListRes {
 }
 
 export interface QueryAuditParams {
-  audit: number;
+  auditState: number;
+  orgName: string | undefined;
+  pageNum?:  number;
+  size?:  number;
 }
 
 export function getTypes() {
@@ -45,7 +48,16 @@ export function setOrgInfo(params: Organization) {
 }
 
 export function getAuditOrgs(params: QueryAuditParams) {
-  return axios.get('/Organization/getAuditOrgs', {
+  return axios.get('/Organization/getOrgByAudit', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
+
+export function auditOrg(params: { orgId: number; audit: number }) {
+  return axios.get('/Organization/auditOrg', {
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);

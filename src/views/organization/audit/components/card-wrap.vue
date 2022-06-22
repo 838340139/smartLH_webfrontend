@@ -3,7 +3,7 @@
     <a-card v-if="loading" :bordered="false" hoverable>
       <slot name="skeleton"></slot>
     </a-card>
-    <a-card v-else :bordered="false" hoverable>
+    <a-card v-else :bordered="false" hoverable :body-style="{ width: '100%' }">
       <a-space align="start">
         <a-avatar
           v-if="icon"
@@ -15,60 +15,62 @@
         <a-card-meta>
           <template #title>
             <a-typography-text style="margin-right: 10px">
-              {{ title }}
+              {{ name }}
             </a-typography-text>
             <template v-if="showTag">
-              <a-tag
-                v-if="open && isExpires === false"
-                size="small"
-                color="green"
-              >
+              <a-tag v-if="tagType === 'success'" size="small" color="green">
                 <template #icon>
                   <icon-check-circle-fill />
                 </template>
                 <span>{{ tagText }}</span>
               </a-tag>
-              <a-tag v-else-if="isExpires" size="small" color="red">
+              <a-tag v-else-if="tagType === 'danger'" size="small" color="red">
                 <template #icon>
                   <icon-check-circle-fill />
                 </template>
-                <span>{{ expiresTagText }}</span>
+                <span>{{ tagText }}</span>
               </a-tag>
             </template>
           </template>
           <template #description>
-            {{ description }}
+            <a-descriptions
+              style="margin-top: 20px; height: 17em"
+              :data="[
+                {
+                  label: '单位性质',
+                  value: type,
+                },
+                {
+                  label: '单位地址',
+                  value: address,
+                },
+                {
+                  label: '联系电话',
+                  value: phone,
+                },
+                {
+                  label: '简介',
+                  value: cutString(introduction, 25),
+                }
+              ]"
+              size="large"
+              title=""
+              :column="1"
+            />
             <slot></slot>
           </template>
         </a-card-meta>
       </a-space>
       <template #actions>
-        <a-switch v-if="actionType === 'switch'" v-model="open" />
-        <a-space v-else-if="actionType === 'button'">
-          <template v-if="isExpires">
-            <a-button type="outline" @click="renew">
-              {{ expiresText }}
-            </a-button>
-          </template>
-          <template v-else>
-            <a-button v-if="open" @click="toggle">
-              {{ closeTxt }}
-            </a-button>
-            <a-button v-else-if="!open" type="outline" @click="toggle">
-              {{ openTxt }}
-            </a-button>
-          </template>
-        </a-space>
-        <div v-else>
-          <a-space>
-            <a-button @click="toggle(false)">
-              {{ closeTxt }}
-            </a-button>
-            <a-button type="primary" @click="toggle(true)">
-              {{ openTxt }}
-            </a-button>
-          </a-space>
-        </div>
+        <a-button v-if="onDetail" type="primary" @click="onDetail">
+          详情
+        </a-button>
+        <a-button v-if="onPass" type="primary" status="success" @click="onPass">
+          通过
+        </a-button>
+        <a-button v-if="onReject" type="primary" status="danger" @click="onReject">
+          不通过
+        </a-button>
       </template>
     </a-card>
   </div>
@@ -77,6 +79,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useToggle } from '@vueuse/core';
+import { cutString } from '@/utils/stringUtils';
 
 export default defineComponent({
   props: {
@@ -84,15 +87,23 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    title: {
+    name: {
       type: String,
       default: '',
     },
-    description: {
+    address: {
       type: String,
       default: '',
     },
-    actionType: {
+    phone: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    introduction: {
       type: String,
       default: '',
     },
@@ -100,17 +111,17 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    openTxt: {
-      type: String,
-      default: '',
+    onPass: {
+      type: Function,
+      default: null,
     },
-    closeTxt: {
-      type: String,
-      default: '',
+    onDetail: {
+      type: Function,
+      default: null,
     },
-    expiresText: {
-      type: String,
-      default: '',
+    onReject: {
+      type: Function,
+      default: null,
     },
     icon: {
       type: String,
@@ -124,26 +135,17 @@ export default defineComponent({
       type: String,
       default: '',
     },
-    expires: {
-      type: Boolean,
-      default: false,
-    },
-    expiresTagText: {
+    tagType: {
       type: String,
-      default: '',
+      default: 'success',
     },
   },
   setup(props) {
     const [open, toggle] = useToggle(props.defaultValue);
-    const isExpires = ref(props.expires);
-    const renew = () => {
-      isExpires.value = false;
-    };
     return {
       open,
-      toggle,
-      isExpires,
-      renew,
+      cutString,
+      toggle
     };
   },
 });
@@ -156,8 +158,8 @@ export default defineComponent({
   border: 1px solid var(--color-neutral-3);
   border-radius: 4px;
   &:hover {
-    transform: translateY(-4px);
-    // box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+    //transform: translateY(-4px);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
   }
   :deep(.arco-card) {
     height: 100%;
@@ -206,6 +208,9 @@ export default defineComponent({
       justify-content: flex-end;
       margin-top: 20px;
     }
+  }
+  :deep(.arco-card-meta){
+    width: 100%;
   }
 }
 </style>

@@ -167,7 +167,7 @@
           >
             <template #cell="{ record }">
               <p style="text-overflow: ellipsis; white-space: nowrap">
-                {{ record.introduction }}
+                {{ cutString(record.introduction, 25) }}
               </p>
             </template>
           </a-table-column>
@@ -258,6 +258,7 @@ import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message  } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
 import { Organization } from '@/types/global';
+import {cutString} from "@/utils/stringUtils";
 
 const generateFormModel = () => {
   return {
@@ -410,12 +411,12 @@ export default defineComponent({
       if(viewOrCreate.value){
         orgForm.value.address = codeToText(orgForm.value.address).join('/');
         await setOrgInfo(orgForm.value)
-        Message.info('修改成功')
+        Message.success('修改成功')
       }
       else{
         orgForm.value.address = codeToText(orgForm.value.address).join('/');
         await addOrg(orgForm.value)
-        Message.info('添加成功')
+        Message.success('添加成功')
       }
       orgModalVisible.value = false;
       setLoading(false);
@@ -432,6 +433,7 @@ export default defineComponent({
       pagination,
       formModel,
       reset,
+      cutString,
       typeOptions,
       handleClickDelete,
       handleDeleteOk,
