@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.list', 'menu.list.searchTable']" />
+    <Breadcrumb :items="['menu.personnel', 'menu.list.searchTable']" />
     <a-card class="general-card" :title="$t('menu.list.searchTable')">
       <a-row>
         <a-col :flex="1">
@@ -411,5 +411,12 @@ export default defineComponent({
       margin-left: 16px;
     }
   }
+}
+.container {
+  padding: 0 20px 20px 20px;
+}
+
+.operations {
+  display: flex;
 }
 </style>

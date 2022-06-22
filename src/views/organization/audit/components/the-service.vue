@@ -1,7 +1,7 @@
 <template>
   <div class="list-wrap">
     <a-typography-title class="block-title" :heading="6">
-      {{ $t('cardList.tab.title.service') }}
+      {{ $t('orgAudit.tab.title.notPassAudit') }}
     </a-typography-title>
     <a-row class="list-row" :gutter="24">
       <a-col
@@ -18,11 +18,11 @@
           :default-value="item.enable"
           :action-type="item.actionType"
           :expires="item.expires"
-          :open-txt="$t('cardList.service.open')"
-          :close-txt="$t('cardList.service.cancel')"
-          :expires-text="$t('cardList.service.renew')"
-          :tag-text="$t('cardList.service.tag')"
-          :expires-tag-text="$t('cardList.service.expiresTag')"
+          :open-txt="$t('orgAudit.service.open')"
+          :close-txt="$t('orgAudit.service.cancel')"
+          :expires-text="$t('orgAudit.service.renew')"
+          :tag-text="$t('orgAudit.service.tag')"
+          :expires-tag-text="$t('orgAudit.service.expiresTag')"
           :icon="item.icon"
         >
           <template #skeleton>

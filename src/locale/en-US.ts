@@ -4,8 +4,7 @@ import localeLogin from '@/views/login/locale/en-US';
 import localeWorkplace from '@/views/dashboard/locale/en-US';
 /** simple */
 
-import localeSearchTable from '@/views/list/search-table/locale/en-US';
-import localeCardList from '@/views/list/card/locale/en-US';
+import localeSearchTable from '@/views/personnel/locale/en-US';
 
 import localeStepForm from '@/views/form/step/locale/en-US';
 import localeGroupForm from '@/views/form/group/locale/en-US';
@@ -30,7 +29,7 @@ import localeSettings from './en-US/settings';
 
 export default {
   'menu.dashboard': 'Dashboard',
-  'menu.list': 'List',
+  'menu.personnel': 'personnel',
   'menu.result': 'Result',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
@@ -45,7 +44,6 @@ export default {
   ...localeWorkplace,
   /** simple */
   ...localeSearchTable,
-  ...localeCardList,
   ...localeStepForm,
   ...localeGroupForm,
   ...localeBasicProfile,

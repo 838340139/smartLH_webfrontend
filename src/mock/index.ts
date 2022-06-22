@@ -6,8 +6,7 @@ import './message-box';
 import '@/views/dashboard/mock';
 /** simple */
 
-import '@/views/list/card/mock';
-import '@/views/list/search-table/mock';
+import '@/views/personnel/mock';
 
 import '@/views/form/step/mock';
 

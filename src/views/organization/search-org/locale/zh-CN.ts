@@ -27,6 +27,6 @@ export default {
   'searchOrg.columns.createdTime': '创建时间',
   'searchOrg.columns.status': '状态',
   'searchOrg.columns.operations': '操作',
-  'searchOrg.columns.operations.view': '查看',
+  'searchOrg.columns.operations.view': '详情',
   'searchOrg.columns.operations.delete': '删除',
 };

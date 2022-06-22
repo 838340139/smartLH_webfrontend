@@ -4,7 +4,7 @@ import { useUserStore } from '@/store';
 
 export interface HttpResponse<T = unknown> {
   status: number;
-  msg: string;
+  message: string;
   code: number;
   data: T;
 }
@@ -25,7 +25,7 @@ axios.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000 && res.code !== 6) {
       Message.error({
-        content: res.msg || 'Error',
+        content: res.message || 'Error',
         duration: 5 * 1000,
       });
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
@@ -46,7 +46,7 @@ axios.interceptors.response.use(
           },
         });
       }
-      return Promise.reject(new Error(res.msg || 'Error'));
+      return Promise.reject(new Error(res.message || 'Error'));
     }
     return res;
   },

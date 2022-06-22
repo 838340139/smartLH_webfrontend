@@ -1,6 +1,6 @@
 import Dashboard from './dashboard';
 /** simple */
-import List from './list';
+import List from './userPersonnel';
 import Form from './form';
 import Profile from './profile';
 import Visualization from './visualization';
@@ -16,12 +16,12 @@ export default [
   /** simple */
   Visualization,
   List,
-  Form,
-  Profile,
-  Result,
-  Exception,
-  User,
+  // Form,
+  // Profile,
+  // Result,
+  // Exception,
   organization,
   recruitment,
+  User,
   /** simple end */
 ];

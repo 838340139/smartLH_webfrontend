@@ -441,4 +441,11 @@ export default defineComponent({
     }
   }
 }
+.container {
+  padding: 0 20px 20px 20px;
+}
+
+.operations {
+  display: flex;
+}
 </style>

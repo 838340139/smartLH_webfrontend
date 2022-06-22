@@ -4,8 +4,7 @@ import localeLogin from '@/views/login/locale/zh-CN';
 import localeWorkplace from '@/views/dashboard/locale/zh-CN';
 /** simple */
 
-import localeSearchTable from '@/views/list/search-table/locale/zh-CN';
-import localeCardList from '@/views/list/card/locale/zh-CN';
+import localeSearchTable from '@/views/personnel/locale/zh-CN';
 
 import localeStepForm from '@/views/form/step/locale/zh-CN';
 import localeGroupForm from '@/views/form/group/locale/zh-CN';
@@ -35,7 +34,7 @@ import localeSettings from './zh-CN/settings';
 
 export default {
   'menu.dashboard': '工作台',
-  'menu.list': '列表页',
+  'menu.personnel': '人才信息查询',
   'menu.organization': '单位信息管理',
   'menu.recruitment': '招聘信息管理',
   'menu.result': '结果页',
@@ -52,7 +51,6 @@ export default {
   ...localeWorkplace,
   /** simple */
   ...localeSearchTable,
-  ...localeCardList,
   ...localeStepForm,
   ...localeGroupForm,
   ...localeBasicProfile,

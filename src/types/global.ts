@@ -37,3 +37,25 @@ export interface GeneralChart {
   xAxis: string[];
   data: Array<{ name: string; value: number[] }>;
 }
+
+export interface Organization {
+  id?: number;
+  type?: string;
+  name?: string;
+  address?: string;
+  phone?: string;
+  audit?: number;
+  material?: string;
+  serialNumber?: string;
+  introduction?: string;
+  isDeleted?: number;
+}
+
+export const AuditEnum = {
+  0: '未审核',
+  1: '已通过',
+  2: '未通过',
+  toAudit: 0,
+  passAudit: 1,
+  notPassAudit: 2,
+};
