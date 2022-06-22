@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.organization', 'menu.organization.searchOrg']" />
-    <a-card class="general-card" :title="$t('menu.organization.searchOrg')">
+    <Breadcrumb :items="['menu.recruitment', 'menu.recruitment.searchRec']" />
+    <a-card class="general-card" :title="$t('menu.recruitment.searchRec')">
       <a-row>
         <a-col :flex="1">
           <a-form
@@ -12,36 +12,37 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item
-                  field="number"
-                  :label="$t('searchOrg.form.orgName')"
-                >
-                  <a-input
-                    v-model="formModel.number"
-                    :placeholder="$t('searchOrg.form.orgName.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="name"
-                  :label="$t('searchOrg.form.orgAddress')"
-                >
+                <a-form-item field="name" :label="$t('searchRec.form.recName')">
                   <a-input
                     v-model="formModel.name"
-                    :placeholder="$t('searchOrg.form.orgAddress.placeholder')"
+                    :placeholder="$t('searchRec.form.recName.placeholder')"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="contentType"
-                  :label="$t('searchOrg.form.orgType')"
+                  field="address"
+                  :label="$t('searchRec.form.recAddress')"
+                >
+                  <a-cascader
+                    v-model="formModel.address"
+                    size="large"
+                    class="large-cascader"
+                    :options="regionOptions"
+                    :placeholder="$t('searchRec.form.recAddress.placeholder')"
+                    allow-search
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  field="recType"
+                  :label="$t('searchRec.form.recType')"
                 >
                   <a-select
-                    v-model="formModel.contentType"
-                    :options="contentTypeOptions"
-                    :placeholder="$t('searchOrg.form.selectDefault')"
+                    v-model="formModel.recType"
+                    :options="typeOptions"
+                    :placeholder="$t('searchRec.form.selectDefault')"
                   />
                 </a-form-item>
               </a-col>
@@ -90,13 +91,13 @@
               <template #icon>
                 <icon-search />
               </template>
-              {{ $t('searchOrg.form.search') }}
+              {{ $t('searchRec.form.search') }}
             </a-button>
             <a-button @click="reset">
               <template #icon>
                 <icon-refresh />
               </template>
-              {{ $t('searchOrg.form.reset') }}
+              {{ $t('searchRec.form.reset') }}
             </a-button>
           </a-space>
         </a-col>
@@ -105,16 +106,16 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="16">
           <a-space>
-            <a-button type="primary" @click="handleCreateOrg">
+            <a-button type="primary" @click="handleCreateRec">
               <template #icon>
                 <icon-plus />
               </template>
-              {{ $t('searchOrg.operation.create') }}
+              {{ $t('searchRec.operation.create') }}
             </a-button>
             <a-upload action="/">
               <template #upload-button>
                 <a-button>
-                  {{ $t('searchOrg.operation.import') }}
+                  {{ $t('searchRec.operation.import') }}
                 </a-button>
               </template>
             </a-upload>
@@ -125,7 +126,7 @@
             <template #icon>
               <icon-download />
             </template>
-            {{ $t('searchOrg.operation.download') }}
+            {{ $t('searchRec.operation.download') }}
           </a-button>
         </a-col>
       </a-row>
@@ -139,15 +140,23 @@
       >
         <template #columns>
           <a-table-column
-            :title="$t('searchOrg.columns.number')"
+            :title="$t('searchRec.columns.number')"
             data-index="id"
           />
           <a-table-column
-            :title="$t('searchOrg.columns.name')"
+            :title="$t('searchRec.columns.name')"
             data-index="name"
           />
+         <a-table-column
+            :title="$t('searchRec.columns.num')"
+            data-index="num"
+          /> 
           <a-table-column
-            :title="$t('searchOrg.columns.address')"
+            :title="$t('searchRec.columns.phone')"
+            data-index="phone"
+          />
+          <a-table-column
+            :title="$t('searchRec.columns.address')"
             data-index="address"
           >
             <!--            <template #cell="{ record }">-->
@@ -182,14 +191,10 @@
             <!--              </a-space>-->
             <!--            </template>-->
           </a-table-column>
+         
           <a-table-column
-            :title="$t('searchOrg.columns.phone')"
-            data-index="phone"
-          >
-          </a-table-column>
-          <a-table-column
-            :title="$t('searchOrg.columns.introduction')"
-            data-index="introduction"
+            :title="$t('searchRec.columns.education')"
+            data-index="education"
           >
             <template #cell="{ record }">
               <p style="text-overflow: ellipsis; white-space: nowrap">
@@ -212,15 +217,15 @@
           <!--            </template>-->
           <!--          </a-table-column>-->
           <a-table-column
-            :title="$t('searchOrg.columns.operations')"
+            :title="$t('searchRec.columns.operations')"
             data-index="operations"
           >
             <template #cell>
               <a-button v-permission="['admin']" type="text" size="small">
-                {{ $t('searchOrg.columns.operations.view') }}
+                {{ $t('searchRec.columns.operations.view') }}
               </a-button>
               <a-button v-permission="['admin']" type="text" size="small">
-                {{ $t('searchOrg.columns.operations.delete') }}
+                {{ $t('searchRec.columns.operations.delete') }}
               </a-button>
             </template>
           </a-table-column>
@@ -228,35 +233,35 @@
       </a-table>
     </a-card>
     <a-modal
-      v-model:visible="createOrgModalVisible"
+      v-model:visible="createRecModalVisible"
       width="40%"
-      @ok="handleCreateOrgOk"
+      @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
       <template #title> 添加招聘信息 </template>
       <div>
-        <a-form :model="createOrgForm" auto-label-width>
+        <a-form :model="createRecForm" auto-label-width>
           <a-form-item field="name" label="招聘单位名称">
             <a-input
-              v-model="createOrgForm.name"
+              v-model="createRecForm.name"
               placeholder="请输入"
             />
           </a-form-item>
           <a-form-item field="type" label="职位名称">
             <a-input
-              v-model="createOrgForm.type"
+              v-model="createRecForm.type"
               placeholder="请输入"
             />
           </a-form-item>
           <a-form-item field="num" label="招聘人数">
             <a-input
-              v-model="createOrgForm.num"
+              v-model="createRecForm.num"
               placeholder="请输入"
             />
           </a-form-item>
           <a-form-item field="education" label="最低学历要求">
             <a-input
-              v-model="createOrgForm.education"
+              v-model="createRecForm.education"
               placeholder="请输入"
             />
           </a-form-item>
@@ -270,13 +275,13 @@
           </a-form-item>
           <a-form-item field="phone" label="联系电话">
             <a-input
-              v-model="createOrgForm.phone"
+              v-model="createRecForm.phone"
               placeholder="请输入"
             />
           </a-form-item>
           <a-form-item field="type" label="职能介绍">
             <a-textarea
-              v-model="createOrgForm.introduction"
+              v-model="createRecForm.introduction"
               placeholder="请输入"
               :max-length="255"
               allow-clear
@@ -295,21 +300,18 @@ import { defineComponent, computed, ref, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
 import { Pagination, Options } from '@/types/global';
-import { Organization, OrgListParams, queryOrgList } from '@/api/organization';
+import { Recruitment, RecListParams, queryRecList } from '@/api/recruitment';
 import { regionData } from 'element-china-area-data';
 
 const generateFormModel = () => {
   return {
-    number: '',
     name: '',
-    contentType: '',
-    filterType: '',
-    createdTime: [],
-    status: '',
+    address: '',
+    type: '',
   };
 };
 
-const generateCreateOrgFormModel = () => {
+const generateCreateRecFormModel = () => {
   return {
     type: '',
     name: '',
@@ -324,10 +326,10 @@ export default defineComponent({
   components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
-    const createOrgModalVisible = ref<boolean>(false);
-    const createOrgForm = ref(generateCreateOrgFormModel());
+    const createRecModalVisible = ref<boolean>(false);
+    const createRecForm = ref(generateCreateRecFormModel());
     const { t } = useI18n();
-    const renderData = ref<Organization[]>([]);
+    const renderData = ref<Recruitment[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       current: 1,
@@ -337,48 +339,32 @@ export default defineComponent({
       ...basePagination,
     });
     const regionOptions = ref(regionData);
-    const contentTypeOptions = computed<Options[]>(() => [
+     const typeOptions = computed<Options[]>(() => [
       {
-        label: t('searchOrg.form.orgType.government'),
-        value: 'img',
+        label: t('recruitment.recType.undergraduate'),
+        value: t('recruitment.recType.undergraduate'),
       },
       {
-        label: t('searchOrg.form.orgType.shiye'),
-        value: 'horizontalVideo',
+        label: t('recruitment.recType.master'),
+        value: t('recruitment.recType.master'),
       },
       {
-        label: t('searchOrg.form.orgType.stateEnterprise'),
-        value: 'verticalVideo',
-      },
-    ]);
-    const filterTypeOptions = computed<Options[]>(() => [
-      {
-        label: t('searchOrg.form.filterType.artificial'),
-        value: 'artificial',
+        label: t('recruitment.recType.phd'),
+        value: t('recruitment.recType.phd'),
       },
       {
-        label: t('searchOrg.form.filterType.rules'),
-        value: 'rules',
-      },
-    ]);
-    const statusOptions = computed<Options[]>(() => [
-      {
-        label: t('searchOrg.form.status.online'),
-        value: 'online',
-      },
-      {
-        label: t('searchOrg.form.status.offline'),
-        value: 'offline',
+        label: t('recruitment.recType.others'),
+        value: t('recruitment.recType.others'),
       },
     ]);
     const fetchData = async (
-      params: OrgListParams = { current: 1, pageSize: 20 }
+      params: RecListParams = { pageNum: 1, size: 20 }
     ) => {
       setLoading(true);
       try {
-        const { data } = await queryOrgList(params);
+        const { data } = await queryRecList(params);
         renderData.value = data.list;
-        pagination.current = params.current;
+        pagination.current = params.pageNum;
         pagination.total = data.total;
       } catch (err) {
         // you can report use errorHandler or other
@@ -390,11 +376,12 @@ export default defineComponent({
     const search = () => {
       fetchData({
         ...basePagination,
+        size: basePagination.pageSize,
         ...formModel.value,
-      } as unknown as OrgListParams);
+      } as unknown as RecListParams);
     };
-    const onPageChange = (current: number) => {
-      fetchData({ ...basePagination, current });
+    const onPageChange = (pageNum: number) => {
+      fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
     };
 
     fetchData();
@@ -402,14 +389,14 @@ export default defineComponent({
       formModel.value = generateFormModel();
     };
 
-    const handleCreateOrg = () => {
-      createOrgModalVisible.value = true;
+    const handleCreateRec = () => {
+      createRecModalVisible.value = true;
     };
-    const handleCreateOrgOk = () => {
-      createOrgModalVisible.value = false;
+    const handleCreateRecOk = () => {
+      createRecModalVisible.value = false;
     };
     const handleCreateCancel = () => {
-      createOrgModalVisible.value = false;
+      createRecModalVisible.value = false;
     };
     return {
       loading,
@@ -419,13 +406,11 @@ export default defineComponent({
       pagination,
       formModel,
       reset,
-      contentTypeOptions,
-      filterTypeOptions,
-      statusOptions,
-      createOrgModalVisible,
-      createOrgForm,
-      handleCreateOrg,
-      handleCreateOrgOk,
+      typeOptions,
+      createRecModalVisible,
+      createRecForm,
+      handleCreateRec,
+      handleCreateRecOk,
       handleCreateCancel,
       regionOptions,
     };

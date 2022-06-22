@@ -27,6 +27,8 @@ import localeUserSetting from '@/views/user/setting/locale/zh-CN';
 
 import localeOrgSearchTable from '@/views/organization/search-org/locale/zh-CN';
 import localeOrgCardList from '@/views/organization/audit/locale/zh-CN';
+
+import localeOrgRecruitment from '@/views/recruitment/locale/zh-CN';
 /** simple end */
 import localeGlobal from './zh-CN/global';
 import localeSettings from './zh-CN/settings';
@@ -66,6 +68,7 @@ export default {
   ...localeUserSetting,
   ...localeOrgCardList,
   ...localeOrgSearchTable,
+  ...localeOrgRecruitment,
   ...localeGlobal
   /** simple end */
 };
