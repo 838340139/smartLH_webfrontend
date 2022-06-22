@@ -49,9 +49,13 @@
                   value: phone,
                 },
                 {
+                  label: isAudited ? '审核时间' : '申请时间',
+                  value: auditTime,
+                },
+                {
                   label: '简介',
                   value: cutString(introduction, 25),
-                }
+                },
               ]"
               size="large"
               title=""
@@ -68,7 +72,12 @@
         <a-button v-if="onPass" type="primary" status="success" @click="onPass">
           通过
         </a-button>
-        <a-button v-if="onReject" type="primary" status="danger" @click="onReject">
+        <a-button
+          v-if="onReject"
+          type="primary"
+          status="danger"
+          @click="onReject"
+        >
           不通过
         </a-button>
       </template>
@@ -102,6 +111,14 @@ export default defineComponent({
     type: {
       type: String,
       default: '',
+    },
+    isAudited: {
+      type: Boolean,
+      default: true,
+    },
+    auditTime: {
+      type: String,
+      default: null,
     },
     introduction: {
       type: String,
@@ -145,7 +162,7 @@ export default defineComponent({
     return {
       open,
       cutString,
-      toggle
+      toggle,
     };
   },
 });
@@ -209,7 +226,7 @@ export default defineComponent({
       margin-top: 20px;
     }
   }
-  :deep(.arco-card-meta){
+  :deep(.arco-card-meta) {
     width: 100%;
   }
 }

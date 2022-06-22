@@ -35,10 +35,10 @@
               </a-tabs>
             </a-col>
             <a-input-search
-              :placeholder="$t('orgAudit.searchInput.placeholder')"
               v-model="searchForm.orgName"
-              @press-enter="handleClickSearch"
+              :placeholder="$t('orgAudit.searchInput.placeholder')"
               style="width: 240px; position: absolute; top: 60px; right: 20px"
+              @press-enter="handleClickSearch"
             />
           </a-row>
           <a-card
@@ -60,6 +60,8 @@
                   :address="item.address"
                   :type="item.type"
                   :phone="item.phone"
+                  :audit-time="item.auditTime"
+                  :is-audited="item.audit !== AuditEnum.toAudit"
                   :show-tag="item.audit !== AuditEnum.toAudit"
                   :tag-type="
                     item.audit === AuditEnum.passAudit ? 'success' : 'danger'
@@ -92,19 +94,80 @@
               </a-col>
             </a-row>
           </a-card>
-          <a-pagination :total="pagination.total" :size="pagination.size" show-total show-jumper/>
+          <a-pagination
+            :total="pagination.total"
+            :size="pagination.size"
+            show-total
+            show-jumper
+          />
         </a-card>
+        <a-modal
+          v-model:visible="orgDetailModalVisible"
+          width="800px"
+          top="100px"
+          :hide-cancel="true"
+          :mask-closable="false"
+          @ok="handleDetailModalOk"
+          @cancel="handleDetailModalCancel"
+        >
+          <template #title> 详情 </template>
+          <div>
+            <a-row style="height: 400px">
+              <a-col :span="12">
+                <a-image
+                  width="350px"
+                  :src="orgDetail.material"
+                />
+              </a-col>
+              <a-col :span="12">
+                <a-descriptions
+                  style="margin-top: 20px; height: 17em"
+                  :data="[
+                    {
+                      label: '单位名称',
+                      value: orgDetail.name,
+                    },
+                    {
+                      label: '单位性质',
+                      value: orgDetail.type,
+                    },
+                    {
+                      label: '单位地址',
+                      value: orgDetail.address,
+                    },
+                    {
+                      label: '联系电话',
+                      value: orgDetail.phone,
+                    },
+                    {
+                      label: orgDetail.audit !== AuditEnum.toAudit ? '审核时间' : '申请时间',
+                      value: orgDetail.auditTime,
+                    },
+                    {
+                      label: '简介',
+                      value: orgDetail.introduction
+                    },
+                  ]"
+                  size="large"
+                  title=""
+                  :column="1"
+                />
+              </a-col>
+            </a-row>
+          </div>
+        </a-modal>
       </a-col>
     </a-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 import { getAuditOrgs, auditOrg, QueryAuditParams } from '@/api/organization';
-import {AuditEnum, Organization, Pagination} from '@/types/global';
+import { AuditEnum, Organization, Pagination } from '@/types/global';
 import useLoading from '@/hooks/loading';
 import { Modal, Message } from '@arco-design/web-vue';
+import noImgSvg from '@/assets/images/no-img.svg'
 import CardWrap from './components/card-wrap.vue';
 
 const generateSearchForm = () => {
@@ -113,7 +176,18 @@ const generateSearchForm = () => {
     orgName: undefined,
   };
 };
-
+const generateEmptyOrg = () => {
+  return {
+    id: undefined,
+    type: '',
+    name: '',
+    address: '',
+    phone: '',
+    material: '',
+    serialNumber: '',
+    introduction: '',
+  };
+};
 export default defineComponent({
   components: {
     // QualityInspection,
@@ -125,9 +199,11 @@ export default defineComponent({
     const { loading, setLoading } = useLoading(true);
     const orgList = ref<Organization[]>([]);
     const searchForm = ref<QueryAuditParams>(generateSearchForm());
+    const orgDetailModalVisible = ref<boolean>(false);
+    const orgDetail = ref<Organization>(generateEmptyOrg());
     const basePagination: Pagination = {
       current: 1,
-      pageSize: 1,
+      pageSize: 10,
       total: 0,
     };
     const pagination = reactive({
@@ -139,7 +215,7 @@ export default defineComponent({
       const { data } = await getAuditOrgs({
         ...searchForm.value,
         pageNum: pagination.current,
-        size: pagination.pageSize
+        size: pagination.pageSize,
       });
       orgList.value = data.list;
       pagination.total = data.total;
@@ -148,7 +224,7 @@ export default defineComponent({
 
     const handleClickSearch = () => {
       fetchData();
-    }
+    };
 
     const handleTabChange = (key: number) => {
       searchForm.value.auditState = key;
@@ -160,7 +236,7 @@ export default defineComponent({
         title: '审核提醒',
         content: `请确认是否通过${item.name}的申请，提交后不可修改？`,
         hideCancel: false,
-        onOk: async ()=>{
+        onOk: async () => {
           setLoading(true);
           const data = await auditOrg({
             orgId: item.id,
@@ -169,18 +245,30 @@ export default defineComponent({
           Message.success('操作成功');
           await fetchData();
           setLoading(false);
-        }
+        },
       });
     };
 
-    const handleClickDetail = (item) => {};
+    const handleClickDetail = (item: Organization) => {
+      orgDetail.value = item;
+      console.log(orgDetail.value)
+      orgDetailModalVisible.value = true;
+    };
 
-    const handleClickReject = async (item: { id: any; name: string  }) => {
+    const handleDetailModalOk = () => {
+      orgDetailModalVisible.value = false;
+    };
+
+    const handleDetailModalCancel = () => {
+      orgDetailModalVisible.value = false;
+    };
+
+    const handleClickReject = async (item: { id: any; name: string }) => {
       Modal.info({
         title: '审核提醒',
         content: `请确认是否不通过${item.name}的申请，提交后不可修改？`,
         hideCancel: false,
-        onOk: async ()=>{
+        onOk: async () => {
           setLoading(true);
           const data = await auditOrg({
             orgId: item.id,
@@ -189,7 +277,7 @@ export default defineComponent({
           Message.success('操作成功');
           await fetchData();
           setLoading(false);
-        }
+        },
       });
     };
 
@@ -198,8 +286,13 @@ export default defineComponent({
       loading,
       orgList,
       AuditEnum,
+      noImgSvg,
       searchForm,
       pagination,
+      orgDetail,
+      orgDetailModalVisible,
+      handleDetailModalOk,
+      handleDetailModalCancel,
       handleClickSearch,
       handleTabChange,
       handleClickPass,

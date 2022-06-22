@@ -28,16 +28,16 @@ export default defineComponent({
         subSlogan: t('login.banner.subSlogan1'),
         image: bannerImage,
       },
-      {
-        slogan: t('login.banner.slogan2'),
-        subSlogan: t('login.banner.subSlogan2'),
-        image: bannerImage,
-      },
-      {
-        slogan: t('login.banner.slogan3'),
-        subSlogan: t('login.banner.subSlogan3'),
-        image: bannerImage,
-      },
+      // {
+      //   slogan: t('login.banner.slogan2'),
+      //   subSlogan: t('login.banner.subSlogan2'),
+      //   image: bannerImage,
+      // },
+      // {
+      //   slogan: t('login.banner.slogan3'),
+      //   subSlogan: t('login.banner.subSlogan3'),
+      //   image: bannerImage,
+      // },
     ]);
     return {
       carouselItem,

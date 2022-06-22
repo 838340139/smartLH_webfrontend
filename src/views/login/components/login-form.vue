@@ -48,14 +48,14 @@
           <!--  <a-checkbox checked="rememberPassword" @change="setRememberPassword">
             {{ $t('login.form.rememberPassword') }}
           </a-checkbox> -->
-          <a-link>{{ $t('login.form.forgetPassword') }}</a-link>
+<!--          <a-link>{{ $t('login.form.forgetPassword') }}</a-link>-->
         </div>
         <a-button type="primary" html-type="submit" long :loading="loading">
           {{ $t('login.form.login') }}
         </a-button>
-        <a-button type="text" long class="login-form-register-btn">
-          {{ $t('login.form.register') }}
-        </a-button>
+<!--        <a-button type="text" long class="login-form-register-btn">-->
+<!--          {{ $t('login.form.register') }}-->
+<!--        </a-button>-->
       </a-space>
     </a-form>
   </div>
@@ -89,7 +89,6 @@ export default defineComponent({
       errors: Record<string, ValidatedError> | undefined;
       values: LoginData;
     }) => {
-      debugger;
       if (!errors) {
         setLoading(true);
         try {
@@ -110,11 +109,11 @@ export default defineComponent({
       }
     };
     // 演示地址自动登录
-    onMounted(() => {
-      setTimeout(() => {
-        handleSubmit({ errors: undefined, values: userInfo });
-      }, 3000);
-    });
+    // onMounted(() => {
+    //   setTimeout(() => {
+    //     handleSubmit({ errors: undefined, values: userInfo });
+    //   }, 3000);
+    // });
     const setRememberPassword = () => {
       //
     };
