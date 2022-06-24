@@ -51,6 +51,44 @@ export interface Organization {
   isDeleted?: number;
 }
 
+export interface Personnel {
+  id?: number;
+  account?: string;
+  name?: string;
+  sex?: string;
+  home?: string;
+  place?: string;
+  subject?: number;
+  academic?: string;
+  education?: string;
+  marriage?: string;
+  nation?: number;
+  phone?: string;
+  politics?: string;
+  photo?: string;
+  post?: String;
+  fresh?: number;
+  mailbox?: string;
+  work?: string;
+  prize?: string;
+  introduction?: string;
+  undergo?: string;
+  status?: number;
+}
+
+export interface Recruitment {
+  id?: number;
+  org_id?: number;
+  position?: string;
+  number?: number;
+  age?: number;
+  subject?: string;
+  fresh?: string;
+  education?: string;
+  place?: string;
+  politics?: string;
+  remark?: string;
+}
 export const AuditEnum = {
   0: '未审核',
   1: '已通过',
