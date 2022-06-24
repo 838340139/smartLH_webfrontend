@@ -6,7 +6,7 @@
         <DataPanel />
         <ContentChart />
       </div>
-      <a-row style="margin-top: 16px">
+      <a-row style="margin-top: 16px" v-if="false">
         <a-col :flex="1" class="panel" style="margin-right: 16px">
           <PopularContent />
         </a-col>
@@ -15,7 +15,7 @@
         </a-col>
       </a-row>
     </div>
-    <div class="right-side">
+    <div class="right-side" v-if="false">
       <div class="panel moduler-wrap">
         <QuickOperation />
         <RecentlyVisited />

@@ -144,10 +144,6 @@
       >
         <template #columns>
           <a-table-column
-            :title="$t('searchOrg.columns.number')"
-            data-index="id"
-          />
-          <a-table-column
             :title="$t('searchOrg.columns.name')"
             data-index="name"
           />
@@ -175,12 +171,16 @@
             :title="$t('searchOrg.columns.operations')"
             data-index="operations"
           >
-            <template #cell="{record}">
+            <template #cell="{ record }">
               <a-button
                 v-permission="['admin']"
                 type="text"
                 size="small"
-                @click="()=>{handleClickView(record)}"
+                @click="
+                  () => {
+                    handleClickView(record);
+                  }
+                "
               >
                 {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
@@ -189,7 +189,11 @@
                 type="text"
                 status="danger"
                 size="small"
-                @click="handleClickDelete"
+                @click="
+                  () => {
+                    handleClickDelete(record);
+                  }
+                "
               >
                 {{ $t('searchOrg.columns.operations.delete') }}
               </a-button>
@@ -252,13 +256,19 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options } from '@/types/global';
-import { OrgListParams, queryOrgList, addOrg, setOrgInfo, getTypes } from '@/api/organization';
-import { regionData, CodeToText } from 'element-china-area-data';
-import { Modal, Message  } from '@arco-design/web-vue';
+import { Pagination, Organization } from '@/types/global';
+import {
+  OrgListParams,
+  queryOrgList,
+  addOrg,
+  setOrgInfo,
+  getTypes,
+  deleteOrg,
+} from '@/api/organization';
+import { regionData } from 'element-china-area-data';
+import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
-import { Organization } from '@/types/global';
-import {cutString} from "@/utils/stringUtils";
+import { cutString } from '@/utils/stringUtils';
 
 const generateFormModel = () => {
   return {
@@ -302,7 +312,7 @@ export default defineComponent({
     const regionOptions = ref(regionData);
     const fetchTypeData = async () => {
       const data = await getTypes();
-      if(data.data){
+      if (data.data) {
         typeOptions.value = data.data.map((item) => {
           return {
             label: item,
@@ -384,43 +394,53 @@ export default defineComponent({
       orgModalVisible.value = true;
       viewOrCreate.value = true;
       orgForm.value = record;
-      orgForm.value.address = textToCode(orgForm.value.address)
+      orgForm.value.address = textToCode(orgForm.value.address);
     };
 
-    const handleDeleteOk = () => {
+    const handleDeleteOk = async (item: { id: number }) => {
+      setLoading(true);
+      deleteOrg({
+        orgId: item.id,
+      })
+        .then(async () => {
+          await fetchData();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
 
-    const handleClickDelete = () => {
+    const handleClickDelete = (item: { id: number }) => {
       Modal.warning({
         title: '提醒',
-        content: ()=>h('div', {style: 'text-align: center;'}, '是否确认删除？'),
+        content: () =>
+          h('div', { style: 'text-align: center;' }, '是否确认删除？'),
         width: '20em',
-        onOk: ()=>{
-          handleDeleteOk()
-        }
+        onOk: () => {
+          handleDeleteOk(item);
+        },
       });
-    }
+    };
 
     const handleCreateOrg = () => {
       orgModalVisible.value = true;
       viewOrCreate.value = false;
-      orgForm.value = generateCreateOrgFormModel()
+      orgForm.value = generateCreateOrgFormModel();
     };
     const handleCreateOrgOk = async () => {
-      setLoading(true)
-      if(viewOrCreate.value){
+      setLoading(true);
+      if (viewOrCreate.value) {
         orgForm.value.address = codeToText(orgForm.value.address).join('/');
-        await setOrgInfo(orgForm.value)
-        Message.success('修改成功')
-      }
-      else{
+        await setOrgInfo(orgForm.value);
+        Message.success('修改成功');
+      } else {
         orgForm.value.address = codeToText(orgForm.value.address).join('/');
-        await addOrg(orgForm.value)
-        Message.success('添加成功')
+        await addOrg(orgForm.value);
+        Message.success('添加成功');
       }
       orgModalVisible.value = false;
       setLoading(false);
-      search()
+      search();
     };
     const handleCreateCancel = () => {
       orgModalVisible.value = false;

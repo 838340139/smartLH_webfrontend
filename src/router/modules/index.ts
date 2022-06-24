@@ -22,6 +22,6 @@ export default [
   // Exception,
   organization,
   recruitment,
-  User,
+  // User,
   /** simple end */
 ];

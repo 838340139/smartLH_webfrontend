@@ -48,6 +48,7 @@ export interface Organization {
   material?: string;
   serialNumber?: string;
   introduction?: string;
+  auditTime?: string;
   isDeleted?: number;
 }
 

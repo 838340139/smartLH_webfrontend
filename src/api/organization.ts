@@ -64,3 +64,12 @@ export function auditOrg(params: { orgId: number; audit: number }) {
     },
   });
 }
+
+export function deleteOrg(params: { orgId: number }) {
+  return axios.get('/Organization/deleteOrg', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}

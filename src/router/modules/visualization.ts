@@ -18,27 +18,27 @@ export default {
         roles: ['admin'],
       },
     },
-    {
-      path: 'org-info-analysis',
-      name: 'orgInfoAnalysis',
-      component: () =>
-        import('@/views/visualization/org-info-analysis/index.vue'),
-      meta: {
-        locale: 'menu.visualization.orgInfoAnalysis',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    {
-      path: 'recruit-info-analysis',
-      name: 'recruitInfoAnalysis',
-      component: () =>
-          import('@/views/visualization/recruit-info-analysis/index.vue'),
-      meta: {
-        locale: 'menu.visualization.recruitInfoAnalysis',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+    // {
+    //   path: 'org-info-analysis',
+    //   name: 'orgInfoAnalysis',
+    //   component: () =>
+    //     import('@/views/visualization/org-info-analysis/index.vue'),
+    //   meta: {
+    //     locale: 'menu.visualization.orgInfoAnalysis',
+    //     requiresAuth: true,
+    //     roles: ['admin'],
+    //   },
+    // },
+    // {
+    //   path: 'recruit-info-analysis',
+    //   name: 'recruitInfoAnalysis',
+    //   component: () =>
+    //       import('@/views/visualization/recruit-info-analysis/index.vue'),
+    //   meta: {
+    //     locale: 'menu.visualization.recruitInfoAnalysis',
+    //     requiresAuth: true,
+    //     roles: ['admin'],
+    //   },
+    // },
   ],
 };

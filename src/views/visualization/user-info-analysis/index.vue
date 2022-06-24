@@ -21,7 +21,7 @@
         </div>
         <div>
           <RegionAnalysis style="margin-bottom: 1em"/>
-          <ContentPeriodAnalysis />
+          <ContentPeriodAnalysis v-if="false"/>
         </div>
       </a-space>
     </a-space>
