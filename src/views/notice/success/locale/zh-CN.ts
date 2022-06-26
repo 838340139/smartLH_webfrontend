@@ -1,0 +1,15 @@
+export default {
+  'menu.notice.success': '发送成功',
+  'success.result.title': '发送成功',
+  'success.result.subTitle': '系统消息已发送！',
+  'success.result.sendMore': '再发一个',
+  'success.result.toList': '系统消息列表',
+  'success.result.progress': '当前进度',
+  'success.submitApplication': '提交申请',
+  'success.leaderReview': '直属领导审核',
+  'success.purchaseCertificate': '购买证书',
+  'success.safetyTest': '安全测试',
+  'success.launched': '正式上线',
+  'success.waiting': '未开始',
+  'success.processing': '进行中',
+};

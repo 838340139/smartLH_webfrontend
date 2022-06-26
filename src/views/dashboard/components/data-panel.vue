@@ -1,5 +1,90 @@
 <template>
   <a-col :span="24" class="panel">
+    <a-row style="margin-bottom: 2em">
+      <a-col class="panel-col" :span="8">
+        <a-space>
+          <a-avatar
+            :size="54"
+            class="col-avatar"
+            :style="{
+              verticalAlign: 'middle',
+              backgroundColor: '#14a9f8',
+            }"
+          >
+            <perVisitSvg style="width: 30px; height: 30px"></perVisitSvg>
+          </a-avatar>
+          <a-statistic
+            :title="$t('workplace.personnel.visitCount')"
+            :value="
+              Number.isInteger(summaryData.perVisitCount)
+                ? summaryData.perVisitCount
+                : undefined
+            "
+            :value-from="0"
+            placeholder="-"
+            animation
+            show-group-separator
+          >
+            <template #suffix>
+              <span class="unit">{{ $t('workplace.pecs.second') }}</span>
+            </template>
+          </a-statistic>
+        </a-space>
+      </a-col>
+      <a-col class="panel-col" :span="8">
+        <a-space>
+          <a-avatar
+            :size="54"
+            class="col-avatar"
+            :style="{
+              verticalAlign: 'middle',
+              backgroundColor: '#FF9800',
+            }"
+          >
+            <org-visit-svg style="width: 30px; height: 30px"></org-visit-svg>
+          </a-avatar>
+          <a-statistic
+            :title="$t('workplace.org.visitCount')"
+            :value="
+              Number.isInteger(summaryData.orgVisitCount)
+                ? summaryData.orgVisitCount
+                : undefined
+            "
+            :value-from="0"
+            placeholder="-"
+            animation
+            show-group-separator
+          >
+            <template #suffix>
+              <span class="unit">{{ $t('workplace.pecs.second') }}</span>
+            </template>
+          </a-statistic>
+        </a-space>
+      </a-col>
+      <a-col class="panel-col" :span="8">
+        <a-space>
+          <a-avatar :size="54" class="col-avatar">
+            <history-visit-svg
+              style="width: 30px; height: 30px"
+            ></history-visit-svg>
+          </a-avatar>
+          <a-statistic
+            :title="$t('workplace.history.visitCount')"
+            :value="
+              Number.isInteger(summaryData.historyTotal) ? summaryData.historyTotal : undefined
+            "
+            :value-from="0"
+            placeholder="-"
+            animation
+            show-group-separator
+          >
+            <template #suffix>
+              <span class="unit">{{ $t('workplace.pecs.second') }}</span>
+            </template>
+          </a-statistic>
+        </a-space>
+      </a-col>
+    </a-row>
     <a-row>
       <a-col class="panel-col" :span="8">
         <a-space>
@@ -10,15 +95,19 @@
             />
           </a-avatar>
           <a-statistic
-            :title="$t('workplace.userInfoCount')"
-            :value="373.5"
-            :precision="1"
+            :title="$t('workplace.personnel.dataCount')"
+            :value="
+              Number.isInteger(summaryData.perCount)
+                ? summaryData.perCount
+                : undefined
+            "
             :value-from="0"
+            placeholder="-"
             animation
             show-group-separator
           >
             <template #suffix>
-              W+ <span class="unit">{{ $t('workplace.pecs') }}</span>
+              <span class="unit">{{ $t('workplace.pecs.strip') }}</span>
             </template>
           </a-statistic>
         </a-space>
@@ -33,13 +122,18 @@
           </a-avatar>
           <a-statistic
             :title="$t('workplace.orgInfoCount')"
-            :value="368"
+            :value="
+              Number.isInteger(summaryData.orgCount)
+                ? summaryData.orgCount
+                : undefined
+            "
             :value-from="0"
+            placeholder="-"
             animation
             show-group-separator
           >
             <template #suffix>
-              <span class="unit">{{ $t('workplace.pecs') }}</span>
+              <span class="unit">{{ $t('workplace.pecs.strip') }}</span>
             </template>
           </a-statistic>
         </a-space>
@@ -54,45 +148,53 @@
           </a-avatar>
           <a-statistic
             :title="$t('workplace.recruitInfoCount')"
-            :value="8874"
+            :value="
+              Number.isInteger(summaryData.recruitCount) ? summaryData.recruitCount : undefined
+            "
             :value-from="0"
+            placeholder="-"
             animation
             show-group-separator
           >
             <template #suffix>
-              <span class="unit">{{ $t('workplace.pecs') }}</span>
+              <span class="unit">{{ $t('workplace.pecs.strip') }}</span>
             </template>
           </a-statistic>
         </a-space>
       </a-col>
-<!--      <a-col class="panel-col" :span="6">-->
-<!--        <a-space>-->
-<!--          <a-avatar :size="54" class="col-avatar">-->
-<!--            <img-->
-<!--              alt="avatar"-->
-<!--              src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/c8b36e26d2b9bb5dbf9b74dd6d7345af.svg~tplv-49unhts6dw-image.image"-->
-<!--            />-->
-<!--          </a-avatar>-->
-<!--          <a-statistic-->
-<!--            :title="$t('workplace.newFromYesterday')"-->
-<!--            :value="2.8"-->
-<!--            :precision="1"-->
-<!--            :value-from="0"-->
-<!--            animation-->
-<!--          >-->
-<!--            <template #suffix> % <icon-caret-up class="up-icon" /> </template>-->
-<!--          </a-statistic>-->
-<!--        </a-space>-->
-<!--      </a-col>-->
     </a-row>
     <a-divider class="panel-border" />
   </a-col>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import perVisitSvg from '@/assets/images/perVisit.svg';
+import orgVisitSvg from '@/assets/images/orgVisit.svg';
+import historyVisitSvg from '@/assets/images/historyVisit.svg';
+import { getDataSummary, DataSummary } from '@/api/dashboard';
 
-export default defineComponent({});
+export default defineComponent({
+  components: {
+    // @ts-ignore
+    perVisitSvg,
+    // @ts-ignore
+    orgVisitSvg,
+    // @ts-ignore
+    historyVisitSvg,
+  },
+  setup() {
+    const summaryData = ref<DataSummary>({});
+    const fetchData = async () => {
+      const { data } = await getDataSummary();
+      summaryData.value = data;
+    };
+    fetchData();
+    return {
+      summaryData,
+    };
+  },
+});
 </script>
 
 <style lang="less" scoped>

@@ -167,7 +167,7 @@ export default defineComponent({
         auto-open={false}
         selected-keys={selectedKey.value}
         auto-open-selected={true}
-        level-indent={34}
+        level-indent={45}
         style="height: 100%"
         onCollapse={setCollapse}
       >

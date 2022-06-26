@@ -6,7 +6,7 @@
         <DataPanel />
         <ContentChart />
       </div>
-      <a-row style="margin-top: 16px" v-if="false">
+      <a-row style="margin-top: 16px">
         <a-col :flex="1" class="panel" style="margin-right: 16px">
           <PopularContent />
         </a-col>
@@ -15,20 +15,22 @@
         </a-col>
       </a-row>
     </div>
-    <div class="right-side" v-if="false">
+    <div class="right-side">
       <div class="panel moduler-wrap">
         <QuickOperation />
-        <RecentlyVisited />
       </div>
       <div class="panel" style="margin-top: 16px">
         <Carousel />
       </div>
+      <template v-if="false">
+        <div class="panel" style="margin-top: 16px">
+          <Docs />
+        </div>
+      </template>
       <div class="panel" style="margin-top: 16px">
-        <Announcement />
+        <SystemMessage />
       </div>
-      <div class="panel" style="margin-top: 16px">
-        <Docs />
-      </div>
+
     </div>
   </div>
 </template>
@@ -40,9 +42,8 @@ import DataPanel from './components/data-panel.vue';
 import ContentChart from './components/content-chart.vue';
 import PopularContent from './components/popular-content.vue';
 import CateforiesPercent from './components/categories-percent.vue';
-import RecentlyVisited from './components/recently-visited.vue';
 import QuickOperation from './components/todowork.vue';
-import Announcement from './components/announcement.vue';
+import SystemMessage from './components/system-message.vue';
 import Carousel from './components/carousel.vue';
 import Docs from './components/docs.vue';
 
@@ -53,9 +54,8 @@ export default defineComponent({
     ContentChart,
     PopularContent,
     CateforiesPercent,
-    RecentlyVisited,
     QuickOperation,
-    Announcement,
+    SystemMessage,
     Carousel,
     Docs,
   },

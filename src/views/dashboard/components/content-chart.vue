@@ -6,10 +6,10 @@
       :body-style="{
         paddingTop: '20px',
       }"
-      :title="$t('workplace.userInfoIncrementData')"
+      :title="$t('workplace.visit.dailyChange')"
     >
       <template #extra>
-        <a-link>{{ $t('workplace.viewMore') }}</a-link>
+        <!--        <a-link>{{ $t('workplace.viewMore') }}</a-link>-->
       </template>
       <Chart height="289px" :option="chartOption" />
     </a-card>
@@ -20,10 +20,17 @@
 import { defineComponent, ref } from 'vue';
 import { graphic } from 'echarts';
 import useLoading from '@/hooks/loading';
-import { queryContentData, ContentDataRecord } from '@/api/dashboard';
+import {
+  queryContentData,
+  ContentDataRecord,
+  Visit,
+  PeriodVisit,
+  getRecentVisit,
+} from '@/api/dashboard';
 import useChartOption from '@/hooks/chart-option';
 import { ToolTipFormatterParams } from '@/types/echarts';
 import { AnyObject } from '@/types/global';
+import { periodDate } from '@/utils/dateUtils';
 
 function graphicFactory(side: AnyObject) {
   return {
@@ -42,7 +49,9 @@ export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(true);
     const xAxis = ref<string[]>([]);
-    const chartsData = ref<number[]>([]);
+    const perChartsData = ref<number[]>([]);
+    const orgChartsData = ref<number[]>([]);
+    // const chartsData = ref<number[]>([]);
     const graphicElements = ref([
       graphicFactory({ left: '2.6%' }),
       graphicFactory({ right: 0 }),
@@ -93,6 +102,9 @@ export default defineComponent({
             },
           },
         },
+        legend: {
+          data: ['个人', '单位'],
+        },
         yAxis: {
           type: 'value',
           axisLine: {
@@ -114,15 +126,6 @@ export default defineComponent({
         },
         tooltip: {
           trigger: 'axis',
-          formatter(params) {
-            const [firstElement] = params as ToolTipFormatterParams[];
-            return `<div>
-            <p class="tooltip-title">${firstElement.axisValueLabel}</p>
-            <div class="content-panel"><span>人才信息新增</span><span class="tooltip-value">${(
-              Number(firstElement.value) * 10000
-            ).toLocaleString()}</span></div>
-          </div>`;
-          },
           className: 'echarts-tooltip-diy',
         },
         graphic: {
@@ -130,7 +133,8 @@ export default defineComponent({
         },
         series: [
           {
-            data: chartsData.value,
+            data: perChartsData.value,
+            name: '个人',
             type: 'line',
             smooth: true,
             // symbol: 'circle',
@@ -173,29 +177,93 @@ export default defineComponent({
               ]),
             },
           },
+          {
+            data: orgChartsData.value,
+            type: 'line',
+            name: '单位',
+            smooth: true,
+            // symbol: 'circle',
+            symbolSize: 12,
+            emphasis: {
+              focus: 'series',
+              itemStyle: {
+                borderWidth: 2,
+              },
+            },
+            lineStyle: {
+              width: 3,
+              color: new graphic.LinearGradient(0, 0, 1, 0, [
+                {
+                  offset: 0,
+                  color: '#FFEB3B',
+                },
+                {
+                  offset: 0.5,
+                  color: '#FFC107',
+                },
+                {
+                  offset: 1,
+                  color: '#FF5722',
+                },
+              ]),
+            },
+            showSymbol: false,
+            areaStyle: {
+              opacity: 0.8,
+              color: new graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgba(17, 126, 255, 0.16)',
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(17, 128, 255, 0)',
+                },
+              ]),
+            },
+          },
         ],
       };
     });
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: chartData } = await queryContentData();
-        chartData.forEach((el: ContentDataRecord, idx: number) => {
-          xAxis.value.push(el.x);
-          chartsData.value.push(el.y);
-          if (idx === 0) {
-            graphicElements.value[0].style.text = el.x;
-          }
-          if (idx === chartData.length - 1) {
-            graphicElements.value[1].style.text = el.x;
+        const {
+          data: { intervalDay, from, to, list },
+        } = await getRecentVisit();
+        const fromDate = from.split(' ')[0];
+        const toDate = to.split(' ')[0];
+        const dateList = periodDate(fromDate, toDate, intervalDay);
+        // console.log(dateList);
+        list.sort((v1, v2) => {
+          return v1.visitTime > v2.visitTime ? 1 : -1;
+        });
+        let index = 0;
+        dateList.forEach((item) => {
+          if (
+            list.length > index &&
+            new Date(list[index].visitTime).toLocaleDateString() === item
+          ) {
+            xAxis.value.push(item);
+            orgChartsData.value.push(list[index].orgVisit);
+            perChartsData.value.push(list[index].userVisit);
+            index += 1;
+          } else {
+            xAxis.value.push(item);
+            orgChartsData.value.push(0);
+            perChartsData.value.push(0);
           }
         });
+        // console.log(xAxis.value);
+        // console.log(orgChartsData.value);
+        // console.log(perChartsData.value);
       } catch (err) {
         // you can report use errorHandler or other
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
     return {
       loading,

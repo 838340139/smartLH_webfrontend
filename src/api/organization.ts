@@ -13,6 +13,7 @@ export interface OrgListParams{
 export interface OrgListRes {
   list: Organization[];
   total: number;
+  hasNextPage: boolean
 }
 
 export interface QueryAuditParams {

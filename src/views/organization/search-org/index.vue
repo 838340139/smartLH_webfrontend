@@ -50,41 +50,6 @@
                   />
                 </a-form-item>
               </a-col>
-              <!--              <a-col :span="8">-->
-              <!--                <a-form-item-->
-              <!--                  field="filterType"-->
-              <!--                  :label="$t('searchOrg.form.filterType')"-->
-              <!--                >-->
-              <!--                  <a-select-->
-              <!--                    v-model="formModel.filterType"-->
-              <!--                    :options="filterTypeOptions"-->
-              <!--                    :placeholder="$t('searchOrg.form.selectDefault')"-->
-              <!--                  />-->
-              <!--                </a-form-item>-->
-              <!--              </a-col>-->
-              <!--              <a-col :span="8">-->
-              <!--                <a-form-item-->
-              <!--                  field="createdTime"-->
-              <!--                  :label="$t('searchOrg.form.createdTime')"-->
-              <!--                >-->
-              <!--                  <a-range-picker-->
-              <!--                    v-model="formModel.createdTime"-->
-              <!--                    style="width: 100%"-->
-              <!--                  />-->
-              <!--                </a-form-item>-->
-              <!--              </a-col>-->
-              <!--              <a-col :span="8">-->
-              <!--                <a-form-item-->
-              <!--                  field="status"-->
-              <!--                  :label="$t('searchOrg.form.status')"-->
-              <!--                >-->
-              <!--                  <a-select-->
-              <!--                    v-model="formModel.status"-->
-              <!--                    :options="statusOptions"-->
-              <!--                    :placeholder="$t('searchOrg.form.selectDefault')"-->
-              <!--                  />-->
-              <!--                </a-form-item>-->
-              <!--              </a-col>-->
             </a-row>
           </a-form>
         </a-col>
@@ -290,7 +255,7 @@ const generateCreateOrgFormModel = () => {
   };
 };
 export default defineComponent({
-  components: {},
+  components: {  },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const orgModalVisible = ref<boolean>(false);

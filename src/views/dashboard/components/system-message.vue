@@ -1,14 +1,14 @@
 <template>
   <a-card
     class="general-card"
-    :title="$t('workplace.announcement')"
+    :title="$t('workplace.system-message')"
     :header-style="{ paddingBottom: '0' }"
     :body-style="{ padding: '15px 20px 13px 20px' }"
   >
     <template #extra>
       <a-link>{{ $t('workplace.viewMore') }}</a-link>
     </template>
-    <div>
+    <div style="min-height: 150px">
       <div v-for="(item, idx) in list" :key="idx" class="item">
         <a-tag :color="item.type" size="small">{{ item.label }}</a-tag>
         <span class="item-content">
@@ -27,29 +27,14 @@ export default defineComponent({
     //
     const list = [
       {
+        type: 'cyan',
+        label: '群发',
+        content: '欢迎大家来到隆回工作！',
+      },
+      {
         type: 'orangered',
-        label: '活动',
-        content: '内容最新优惠活动',
-      },
-      {
-        type: 'cyan',
-        label: '消息',
-        content: '新增内容尚未通过审核，详情请点击查看。',
-      },
-      {
-        type: 'blue',
-        label: '通知',
-        content: '当前产品试用期即将结束，如需续费请点击查看。',
-      },
-      {
-        type: 'blue',
-        label: '通知',
-        content: '1月新系统升级计划通知',
-      },
-      {
-        type: 'cyan',
-        label: '消息',
-        content: '新增内容已经通过审核，详情请点击查看。',
+        label: '私发',
+        content: '隆回XXX企业招聘公告',
       },
     ];
     return {

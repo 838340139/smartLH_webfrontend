@@ -9,6 +9,7 @@ import Exception from './exception';
 import User from './user';
 import organization from './organization';
 import recruitment from './recruitment'
+import Notice from "./notice";
 /** simple end */
 
 export default [
@@ -23,5 +24,6 @@ export default [
   organization,
   recruitment,
   // User,
+  Notice
   /** simple end */
 ];

@@ -29,6 +29,9 @@ import localeOrgSearchTable from '@/views/organization/search-org/locale/zh-CN';
 import localeOrgCardList from '@/views/organization/audit/locale/zh-CN';
 
 import localeOrgRecruitment from '@/views/recruitment/locale/zh-CN';
+
+import localeNoticeSend from '@/views/notice/send/locale/zh-CN'
+import localeNoticeSuccess from '@/views/notice/success/locale/zh-CN'
 /** simple end */
 import localeGlobal from './zh-CN/global';
 import localeSettings from './zh-CN/settings';
@@ -43,6 +46,7 @@ export default {
   'menu.exception': '异常页',
   'menu.form': '表单页',
   'menu.profile': '详情页',
+  'menu.notice': '消息管理',
   'menu.visualization': '数据可视化',
   'menu.user': '个人中心',
   'navbar.docs': '文档中心',
@@ -68,6 +72,8 @@ export default {
   ...localeUserSetting,
   ...localeOrgCardList,
   ...localeOrgSearchTable,
+  ...localeNoticeSend,
+  ...localeNoticeSuccess,
   ...localeOrgRecruitment,
   ...localeGlobal
   /** simple end */
