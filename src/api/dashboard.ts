@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'query-string';
-import { Recruitment } from '@/types/global';
+import {Notice, Recruitment} from '@/types/global';
 
 export interface ContentDataRecord {
   x: string;
@@ -79,4 +79,13 @@ export interface ToDoWork {
 
 export function getToDoWork() {
   return axios.get<ToDoWork>('/dashboard/getToDoWork', {});
+}
+
+export function getRecentNotices(params: { topN: number }) {
+  return axios.get<Notice[]>('/Notice/getRecentNotices', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
 }

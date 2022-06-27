@@ -45,7 +45,6 @@ import CateforiesPercent from './components/categories-percent.vue';
 import QuickOperation from './components/todowork.vue';
 import SystemMessage from './components/system-message.vue';
 import Carousel from './components/carousel.vue';
-import Docs from './components/docs.vue';
 
 export default defineComponent({
   components: {
@@ -57,7 +56,6 @@ export default defineComponent({
     QuickOperation,
     SystemMessage,
     Carousel,
-    Docs,
   },
 });
 </script>

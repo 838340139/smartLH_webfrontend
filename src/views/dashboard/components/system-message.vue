@@ -1,18 +1,21 @@
 <template>
   <a-card
     class="general-card"
+    :loading="loading"
     :title="$t('workplace.system-message')"
     :header-style="{ paddingBottom: '0' }"
     :body-style="{ padding: '15px 20px 13px 20px' }"
   >
-    <template #extra>
-      <a-link>{{ $t('workplace.viewMore') }}</a-link>
-    </template>
+<!--    <template #extra>-->
+<!--      <a-link>{{ $t('workplace.viewMore') }}</a-link>-->
+<!--    </template>-->
     <div style="min-height: 150px">
-      <div v-for="(item, idx) in list" :key="idx" class="item">
-        <a-tag :color="item.type" size="small">{{ item.label }}</a-tag>
+      <div v-for="(item, idx) in dataList" :key="idx" class="item">
+        <a-tag color="blue" size="medium" style="margin-right: 10px">{{
+          item.sendTime
+        }}</a-tag>
         <span class="item-content">
-          {{ item.content }}
+          {{ cutString(item.title, 15) }}
         </span>
       </div>
     </div>
@@ -20,25 +23,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import useLoading from "@/hooks/loading";
+import {Notice, Recruitment} from "@/types/global";
+import {getPopularRecruitment, getRecentNotices} from "@/api/dashboard";
+import { cutString } from "@/utils/stringUtils";
 
 export default defineComponent({
   setup() {
-    //
-    const list = [
-      {
-        type: 'cyan',
-        label: '群发',
-        content: '欢迎大家来到隆回工作！',
-      },
-      {
-        type: 'orangered',
-        label: '私发',
-        content: '隆回XXX企业招聘公告',
-      },
-    ];
+    const { loading, setLoading } = useLoading();
+    const dataList = ref<Notice[]>([])
+    const fetchData = async (topN = 5) => {
+      try {
+        setLoading(true);
+        const { data } = await getRecentNotices({ topN });
+        dataList.value = data;
+        dataList.value.forEach((item) => {
+          if(item.sendTime!==undefined){
+            // eslint-disable-next-line prefer-destructuring
+            item.sendTime = item.sendTime.split(' ')[0]
+          }
+        })
+      } catch (err) {
+        // you can report use errorHandler or other
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
     return {
-      list,
+      loading,
+      dataList,
+      cutString
     };
   },
 });
