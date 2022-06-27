@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue';
-import { EnterpriseCertificationModel } from '@/api/user-center';
+import { EnterpriseCertificationModel } from '@/api/admin';
 
 export default defineComponent({
   props: {

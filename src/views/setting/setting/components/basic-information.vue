@@ -3,8 +3,8 @@
     ref="formRef"
     :model="formData"
     class="form"
-    :label-col-props="{ span: 8 }"
-    :wrapper-col-props="{ span: 16 }"
+    :label-col-props="{ span: 4 }"
+    :wrapper-col-props="{ span: 18 }"
   >
     <a-form-item
       field="email"
@@ -128,7 +128,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
-import { BasicInfoModel } from '@/api/user-center';
+import { BasicInfoModel } from '@/api/admin';
 
 export default defineComponent({
   setup() {

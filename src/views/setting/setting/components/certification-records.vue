@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { CertificationRecord } from '@/api/user-center';
+import { CertificationRecord } from '@/api/admin';
 
 export default defineComponent({
   props: {

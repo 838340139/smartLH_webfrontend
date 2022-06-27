@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { queryMyTeamList, MyTeamRecord } from '@/api/user-center';
+import { queryMyTeamList, MyTeamRecord } from '@/api/admin';
 import useRequest from '@/hooks/request';
 
 export default defineComponent({

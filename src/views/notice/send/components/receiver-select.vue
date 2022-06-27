@@ -9,12 +9,16 @@
           style="margin-bottom: 20px"
           @change="handleReceiverTypeChange"
         >
-          <a-radio value="org">单位</a-radio>
-          <a-radio value="personnel">个人用户</a-radio>
+          <a-radio :value="ReceiverTypeEnum.org">单位</a-radio>
+          <a-radio :value="ReceiverTypeEnum.personnel">个人用户</a-radio>
         </a-radio-group>
         <span style="margin-left: 10px">（只允许一种）</span>
       </div>
-      <a-checkbox v-model="selectAll" :value="true" style="margin-bottom: 10px" @change="handleCheckAllChange"
+      <a-checkbox
+        v-model="selectAll"
+        :value="true"
+        style="margin-bottom: 10px"
+        @change="handleCheckAllChange"
         >选择{{ selectAllButtonText }}</a-checkbox
       >
       <a-row :gutter="20">
@@ -78,7 +82,7 @@
         <a-col :span="14">
           <a-card title="已选择：" :bordered="false">
             <a-space wrap>
-              <a-tag v-if="selectAll" :key="-1" color="blue" size="medium">
+              <a-tag v-if="selectAll" :key="-1" color="blue" size="large">
                 {{ selectAllButtonText }}
               </a-tag>
               <a-tag
@@ -86,7 +90,7 @@
                 :key="item.value"
                 :visible="!selectAll"
                 color="blue"
-                size="medium"
+                size="large"
                 closable
                 @close="handleClickClose(item)"
               >
@@ -127,10 +131,15 @@ import { defineComponent, ref, reactive, computed, watch } from 'vue';
 import useLoading from '@/hooks/loading';
 import { useI18n } from 'vue-i18n';
 import { OrgListParams, queryOrgList } from '@/api/organization';
+import { getUserBySearch, QueryPersonnelParams } from '@/api/notice';
 import { codeToText } from '@/utils/region';
-import { generateDelay } from '@/utils/sleepUtils';
 import { IconPlus, IconMinus } from '@arco-design/web-vue/es/icon';
+import { Modal } from '@arco-design/web-vue';
 
+const ReceiverTypeEnum = {
+  org: 'org',
+  personnel: 'personnel'
+}
 export default defineComponent({
   components: { IconPlus, IconMinus },
   emits: ['select'],
@@ -147,7 +156,7 @@ export default defineComponent({
       { label?: string; value?: number; checked?: boolean }[]
     >([]);
     let dataListIndexCacheMap: any = {};
-    const receiverType = ref<string>('org');
+    const receiverType = ref<string>(ReceiverTypeEnum.org);
     const pagination = reactive({
       current: 1,
       pageSize: 6,
@@ -163,9 +172,9 @@ export default defineComponent({
     resetPagination();
     const selectAllButtonText = computed(() => {
       switch (receiverType.value) {
-        case 'org':
+        case ReceiverTypeEnum.org:
           return t('notice.form.selectAllOrg');
-        case 'personnel':
+        case ReceiverTypeEnum.personnel:
           return t('notice.form.selectAllPersonnel');
         default:
           return '';
@@ -173,9 +182,9 @@ export default defineComponent({
     });
     const selectPlaceholder = computed(() => {
       switch (receiverType.value) {
-        case 'org':
+        case ReceiverTypeEnum.org:
           return t('notice.form.selectOrg.placeholder');
-        case 'personnel':
+        case ReceiverTypeEnum.personnel:
           return t('notice.form.selectPersonnel.placeholder');
         default:
           return '';
@@ -195,7 +204,7 @@ export default defineComponent({
         // }
         const newData = data.list.map((item) => {
           return {
-            label: `${item.name} （ 编号：${item.id} ）`,
+            label: `${item.name} ( 编号: ${item.id} )`,
             value: item.id,
             // @ts-ignore
             checked: selectReceiverMap.value[item.id] !== undefined,
@@ -217,9 +226,33 @@ export default defineComponent({
     };
 
     const fetchPersonnelData = async (
-      params: OrgListParams,
+      params: QueryPersonnelParams,
       ifMore: boolean
-    ) => {};
+    ) => {
+      try {
+        const { data } = await getUserBySearch(params);
+        const newData = data.list.map((item) => {
+          return {
+            label: `${item.name} ( 编号: ${item.id} ; 电话: ${item.phone} )`,
+            value: item.id,
+            // @ts-ignore
+            checked: selectReceiverMap.value[item.id] !== undefined,
+          };
+        });
+        // console.log(newData)
+        // console.log(selectReceiverMap.value)
+        if (ifMore) {
+          dataList.value = dataList.value.concat(newData);
+        } else {
+          dataList.value = newData;
+        }
+        pagination.current = params.pageNum;
+        pagination.total = data.total;
+        pagination.hasNextPage = data.hasNextPage;
+      } catch (err) {
+        // you can report use errorHandler or other
+      }
+    };
 
     const fetchData = async (ifMore: boolean) => {
       if (ifMore) {
@@ -228,7 +261,7 @@ export default defineComponent({
       } else {
         setLoading(true);
       }
-      if (receiverType.value === 'org') {
+      if (receiverType.value === ReceiverTypeEnum.org) {
         await fetchOrgData(
           {
             pageNum: pagination.current,
@@ -238,14 +271,20 @@ export default defineComponent({
           ifMore
         );
       } else {
-        await fetchPersonnelData(
-          {
-            pageNum: pagination.current,
-            size: pagination.pageSize,
-            orgName: keyword.value,
-          },
-          ifMore
-        );
+        const params: QueryPersonnelParams = {
+          pageNum: pagination.current,
+          size: pagination.pageSize,
+        };
+        keyword.value = keyword.value.trim();
+        if (keyword.value) {
+          if (/^\d+$/.test(keyword.value)) {
+            params.phone = keyword.value;
+          } else {
+            params.userName = keyword.value;
+          }
+        }
+
+        await fetchPersonnelData(params, ifMore);
       }
       if (ifMore) {
         setLoadingMore(false);
@@ -259,23 +298,43 @@ export default defineComponent({
       context.emit('select', {
         receivers: selectReceiver.value,
         type: receiverType.value,
-        all: selectAll.value
+        all: selectAll.value,
       });
-    }
+    };
 
-    const handleReceiverTypeChange = () => {
-      selectReceiver.value = [];
-      selectReceiverMap.value = {};
-      dataList.value = [];
-      keyword.value = '';
-      resetPagination();
-      fetchData(false);
-      emitSelectEvent();
+    const handleReceiverTypeChange = (value: any) => {
+      const reset = () => {
+        selectReceiver.value = [];
+        selectReceiverMap.value = {};
+        dataList.value = [];
+        keyword.value = '';
+        resetPagination();
+        fetchData(false);
+        emitSelectEvent();
+      };
+      if (selectReceiver.value.length <= 0) {
+        reset();
+        return;
+      }
+      Modal.info({
+        title: '提示',
+        content: '切换将丢失已选择的发送对象，是否继续？',
+        onOk: () => {
+          reset();
+        },
+        hideCancel: false,
+        onCancel: () => {
+          receiverType.value =
+            value === ReceiverTypeEnum.org
+              ? ReceiverTypeEnum.personnel
+              : ReceiverTypeEnum.org;
+        },
+      });
     };
 
     const handleCheckAllChange = () => {
       emitSelectEvent();
-    }
+    };
 
     const handleClickAdd = (item: any) => {
       // console.log(selectReceiverMap.value);
@@ -341,6 +400,7 @@ export default defineComponent({
     return {
       loading,
       loadingMore,
+      ReceiverTypeEnum,
       keyword,
       dataList,
       pagination,

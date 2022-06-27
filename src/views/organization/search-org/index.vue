@@ -169,50 +169,103 @@
     </a-card>
     <a-modal
       v-model:visible="orgModalVisible"
-      width="40%"
+      :width="1000"
       :mask-closable="false"
+      :on-before-ok="handleBeforeOk"
       @ok="handleCreateOrgOk"
       @cancel="handleCreateCancel"
     >
       <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
-      <div>
-        <a-form :model="orgForm" auto-label-width>
-          <a-form-item field="name" label="单位名称">
-            <a-input v-model="orgForm.name" placeholder="请输入" />
-          </a-form-item>
-          <a-form-item field="type" label="单位性质">
-            <a-select
-              v-model="orgForm.type"
-              :options="typeOptions"
-              :placeholder="$t('searchOrg.form.selectDefault')"
-            />
-          </a-form-item>
-          <a-form-item field="address" label="单位地址">
-            <a-cascader
-              v-model="orgForm.address"
-              size="large"
-              class="large-cascader"
-              check-strictly
-              :options="regionOptions"
-              placeholder="请选择"
-              allow-search
-            />
-          </a-form-item>
-          <a-form-item field="phone" label="联系电话">
-            <a-input v-model="orgForm.phone" placeholder="请输入" />
-          </a-form-item>
-          <a-form-item field="type" label="介绍">
-            <a-textarea
-              v-model="orgForm.introduction"
-              placeholder="请输入"
-              :max-length="255"
-              allow-clear
-              style="height: 100px"
-              show-word-limit
-            />
-          </a-form-item>
-        </a-form>
-      </div>
+      <a-row style="height: 450px" :gutter="20">
+        <a-col v-if="viewOrCreate" :span="12">
+          <a-carousel
+            v-if="orgForm.material && orgForm.material.length > 0"
+            :style="{
+              width: '480px',
+              height: '400px',
+            }"
+          >
+            <a-carousel-item
+              v-for="(image, index) in orgForm.material"
+              :key="index"
+            >
+              <a-image width="480px" height="400px" :src="image" />
+            </a-carousel-item>
+          </a-carousel>
+          <div
+            v-else
+            style="
+              width: 480px;
+              height: 400px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <a-empty />
+          </div>
+          <div style="text-align: center; padding-top: 10px">审核材料</div>
+        </a-col>
+        <a-col :span="viewOrCreate ? 12 : 24">
+          <div>
+            <a-form
+              :model="orgForm"
+              auto-label-width
+              @submit="handleCreateOrgOk"
+            >
+              <a-form-item
+                field="name"
+                label="单位名称"
+                required
+                :rules="[{ required: true, message: '单位名称必填' }]"
+              >
+                <a-input v-model="orgForm.name" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="type"
+                label="单位性质"
+                required
+                :rules="[{ required: true, message: '单位性质必填' }]"
+              >
+                <a-select
+                  v-model="orgForm.type"
+                  :options="typeOptions"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+              <a-form-item
+                field="address"
+                label="单位地址"
+                required
+                :rules="[{ required: true, message: '单位地址必填' }]"
+              >
+                <a-cascader
+                  v-model="orgForm.address"
+                  size="large"
+                  class="large-cascader"
+                  check-strictly
+                  :options="regionOptions"
+                  placeholder="请选择"
+                  allow-search
+                />
+              </a-form-item>
+              <a-form-item field="phone" label="联系电话">
+                <a-input v-model="orgForm.phone" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item field="type" label="介绍">
+                <a-textarea
+                  v-model="orgForm.introduction"
+                  placeholder="请输入"
+                  :max-length="255"
+                  allow-clear
+                  style="height: 200px"
+                  show-word-limit
+                />
+              </a-form-item>
+            </a-form>
+          </div>
+        </a-col>
+      </a-row>
     </a-modal>
   </div>
 </template>
@@ -255,7 +308,7 @@ const generateCreateOrgFormModel = () => {
   };
 };
 export default defineComponent({
-  components: {  },
+  components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
     const orgModalVisible = ref<boolean>(false);
@@ -267,7 +320,7 @@ export default defineComponent({
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       'current': 1,
-      'pageSize': 20,
+      'pageSize': 10,
       'show-total': true,
       'show-jumper': true,
     };
@@ -287,42 +340,8 @@ export default defineComponent({
       }
     };
     fetchTypeData();
-    // const typeOptions = computed<Options[]>(() => [
-    //   {
-    //     label: t('organization.orgType.state-enterprise'),
-    //     value: t('organization.orgType.state-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.foreign-enterprise'),
-    //     value: t('organization.orgType.foreign-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.joint-venture'),
-    //     value: t('organization.orgType.joint-venture'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.private-enterprise'),
-    //     value: t('organization.orgType.private-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.government-affiliated-institution'),
-    //     value: t('organization.orgType.government-affiliated-institution'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.state-administrative-organs'),
-    //     value: t('organization.orgType.state-administrative-organs'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.government'),
-    //     value: t('organization.orgType.government'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.others'),
-    //     value: t('organization.orgType.others'),
-    //   },
-    // ]);
     const fetchData = async (
-      params: OrgListParams = { pageNum: 1, size: 20 }
+      params: OrgListParams = { pageNum: pagination.current, size: pagination.pageSize }
     ) => {
       setLoading(true);
       // 地址编码转为文字
@@ -330,8 +349,19 @@ export default defineComponent({
       try {
         const { data } = await queryOrgList(params);
         renderData.value = data.list;
+        renderData.value.forEach((item) => {
+          if (typeof item.material === 'string') {
+            item.material = item.material
+              .trim()
+              .split(';')
+              .filter((s) => {
+                return s !== '';
+              });
+          }
+        });
         pagination.current = params.pageNum;
         pagination.total = data.total;
+        console.log(pagination)
       } catch (err) {
         // you can report use errorHandler or other
       } finally {
@@ -358,7 +388,7 @@ export default defineComponent({
     const handleClickView = (record: Organization) => {
       orgModalVisible.value = true;
       viewOrCreate.value = true;
-      orgForm.value = record;
+      orgForm.value = JSON.parse(JSON.stringify(record));
       orgForm.value.address = textToCode(orgForm.value.address);
     };
 
@@ -392,22 +422,49 @@ export default defineComponent({
       viewOrCreate.value = false;
       orgForm.value = generateCreateOrgFormModel();
     };
+    const isBlank = (s?: string) => {
+      return !s || s.trim() === '';
+    };
+    const handleBeforeOk = (done: any): boolean => {
+      if (isBlank(orgForm.value.name)) {
+        Message.info('单位名称必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(orgForm.value.type)) {
+        Message.info('单位性质必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(orgForm.value.address)){
+        Message.info('单位地址必填');
+        done(false);
+        return false;
+      }
+      return true;
+    };
     const handleCreateOrgOk = async () => {
       setLoading(true);
-      if (viewOrCreate.value) {
-        orgForm.value.address = codeToText(orgForm.value.address).join('/');
-        await setOrgInfo(orgForm.value);
-        Message.success('修改成功');
-      } else {
-        orgForm.value.address = codeToText(orgForm.value.address).join('/');
-        await addOrg(orgForm.value);
-        Message.success('添加成功');
+      if (Array.isArray(orgForm.value.material)) {
+        orgForm.value.material = orgForm.value.material.join('');
       }
-      orgModalVisible.value = false;
-      setLoading(false);
-      search();
+      orgForm.value.address = codeToText(orgForm.value.address).join('/');
+      try {
+        if (viewOrCreate.value) {
+          await setOrgInfo(orgForm.value);
+          Message.success('修改成功');
+        } else {
+          await addOrg(orgForm.value);
+          Message.success('添加成功');
+        }
+        search();
+      } finally {
+        orgModalVisible.value = false;
+        setLoading(false);
+      }
     };
     const handleCreateCancel = () => {
+      console.log(orgModalVisible.value)
       orgModalVisible.value = false;
     };
     return {
@@ -427,6 +484,7 @@ export default defineComponent({
       orgForm,
       handleClickView,
       handleCreateOrg,
+      handleBeforeOk,
       handleCreateOrgOk,
       handleCreateCancel,
       regionOptions,

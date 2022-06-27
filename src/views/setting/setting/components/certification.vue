@@ -11,7 +11,7 @@ import {
   queryCertification,
   UnitCertification,
   EnterpriseCertificationModel,
-} from '@/api/user-center';
+} from '@/api/admin';
 import useLoading from '@/hooks/loading';
 import EnterpriseCertification from './enterprise-certification.vue';
 import CertificationRecords from './certification-records.vue';

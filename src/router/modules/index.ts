@@ -6,7 +6,7 @@ import Profile from './profile';
 import Visualization from './visualization';
 import Result from './result';
 import Exception from './exception';
-import User from './user';
+import User from './setting';
 import organization from './organization';
 import recruitment from './recruitment'
 import Notice from "./notice";
@@ -23,7 +23,7 @@ export default [
   // Exception,
   organization,
   recruitment,
-  // User,
+  User,
   Notice
   /** simple end */
 ];

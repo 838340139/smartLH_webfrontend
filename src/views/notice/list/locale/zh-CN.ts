@@ -1,0 +1,18 @@
+export default {
+  'menu.notice.list': '消息列表',
+  'notice.tab.title.toAudit': '待审核',
+  'notice.tab.title.passAudit': '已通过',
+  'notice.tab.title.notPassAudit': '未通过',
+  'notice.listSearch.placeholder': '搜索标题',
+  // 'notice.statistic.enable': '已启用',
+  // 'notice.statistic.disable': '未启用',
+  'notice.content.delete': '删除',
+  'notice.content.inspection': '质检',
+  'notice.content.action': '点击创建质检内容队列',
+  'notice.service.open': '开通服务',
+  'notice.service.cancel': '取消服务',
+  'notice.service.renew': '续约服务',
+  'notice.service.tag': '已开通',
+  'notice.service.expiresTag': '已过期',
+  'notice.preset.tag': '已启用',
+};

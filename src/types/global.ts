@@ -45,7 +45,7 @@ export interface Organization {
   address?: string;
   phone?: string;
   audit?: number;
-  material?: string;
+  material?: string | string[];
   serialNumber?: string;
   introduction?: string;
   auditTime?: string;
@@ -75,7 +75,7 @@ export interface Personnel {
   introduction?: string;
   undergo?: string;
   status?: number;
-}
+};
 
 export interface Recruitment {
   id?: number;
@@ -116,6 +116,7 @@ export interface Notice {
   type?: number;
   sendTime?: string;
   title?: string;
+  receiverInfo?: string;
 };
 
 export const NoticeType = {
@@ -124,4 +125,18 @@ export const NoticeType = {
   massAll: 5,
   privatePersonnel: 3,
   privateOrg: 4,
+};
+
+export interface Manager {
+  id?: number;
+  mailbox?: string;
+  username?: string;
+  phone?: string;
+  password?: string;
+  isManager?: number;
+};
+
+export const ManagerType = {
+  superAdmin: 0,
+  normalAdmin: 1,
 };

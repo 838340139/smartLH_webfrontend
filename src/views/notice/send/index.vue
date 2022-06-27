@@ -22,11 +22,17 @@
       >
         <receiver-select @select="handledSelectReceiver"></receiver-select>
       </a-card>
-      <div style="text-align: center">
-        <a-button type="primary" size="large" :loading="loading" @click="handleClickSend"
-          >发送</a-button
-        >
-      </div>
+      <a-card class="general-card">
+        <div style="text-align: center; padding: 30px 0 10px">
+          <a-button
+            type="primary"
+            size="large"
+            :loading="loading"
+            @click="handleClickSend"
+            >发送</a-button
+          >
+        </div>
+      </a-card>
     </a-space>
   </div>
 </template>
@@ -39,6 +45,7 @@ import { Notice, NoticeType } from '@/types/global';
 import { SendNoticeParams, sendMessage } from '@/api/notice';
 import { Message } from '@arco-design/web-vue';
 import { useRouter } from 'vue-router';
+import { cutString } from '@/utils/stringUtils';
 import receiverSelect from './components/receiver-select.vue';
 
 const generateNoticeForm = () => {
@@ -53,6 +60,12 @@ const generateNoticeForm = () => {
     receiverIds: [],
   };
 };
+interface SelectReceiverRes {
+  receivers: { value: number; label: string }[];
+  all: boolean;
+  type: string;
+}
+
 export default defineComponent({
   components: {
     editor,
@@ -62,22 +75,35 @@ export default defineComponent({
     const { loading, setLoading } = useLoading(false);
     const router = useRouter();
     const noticeForm = ref<SendNoticeParams>(generateNoticeForm());
-    const handledSelectReceiver = (params: {
-      receivers: { value: number }[];
-      all: boolean;
-      type: string;
-    }) => {
+    const selectReceiverResCache = ref<SelectReceiverRes>();
+    const handledSelectReceiver = (params: SelectReceiverRes) => {
+      selectReceiverResCache.value = params;
+    };
+
+    const generateReceiver = (params?: SelectReceiverRes) => {
+      if (params === undefined) return;
       const { receivers, all, type } = params;
       if (all && type === 'org') {
         noticeForm.value.notice.type = NoticeType.massOrg;
+        noticeForm.value.notice.receiverInfo = '@全部单位';
         noticeForm.value.receiverIds = undefined;
       } else if (all && type === 'personnel') {
         noticeForm.value.notice.type = NoticeType.massPersonnel;
+        noticeForm.value.notice.receiverInfo = '@全部个人用户';
         noticeForm.value.receiverIds = undefined;
       } else if (!all) {
         noticeForm.value.receiverIds = receivers.map((item) => {
           return item.value;
         });
+        noticeForm.value.notice.receiverInfo = receivers
+          .map((item) => {
+            return `@${item.label}`.replace(/\s+/g, '');
+          })
+          .join('');
+        noticeForm.value.notice.receiverInfo = cutString(
+          noticeForm.value.notice.receiverInfo,
+          500
+        );
         if (type === 'org') {
           noticeForm.value.notice.type = NoticeType.privateOrg;
         } else {
@@ -85,8 +111,11 @@ export default defineComponent({
         }
       }
     };
+
     const handleClickSend = async () => {
-      if (!noticeForm.value.notice.title ||
+      generateReceiver(selectReceiverResCache.value);
+      if (
+        !noticeForm.value.notice.title ||
         !noticeForm.value.notice.title.trim()
       ) {
         Message.info('请填写标题');
@@ -128,6 +157,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="less">
-
-</style>
+<style scoped lang="less"></style>

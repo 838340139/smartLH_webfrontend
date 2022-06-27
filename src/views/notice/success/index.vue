@@ -36,7 +36,9 @@ export default defineComponent({
       });
     };
     const handleClickToList = () => {
-
+      router.push({
+        name: 'noticeList',
+      });
     };
     return {
       handleClickSendMore,

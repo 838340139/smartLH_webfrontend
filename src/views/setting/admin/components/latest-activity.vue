@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { queryLatestActivity, LatestActivity } from '@/api/user-center';
+import { queryLatestActivity, LatestActivity } from '@/api/admin';
 import useLoading from '@/hooks/loading';
 
 export default defineComponent({

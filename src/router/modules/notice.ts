@@ -19,6 +19,16 @@ export default {
       },
     },
     {
+      path: 'noticeList',
+      name: 'noticeList',
+      component: () => import('@/views/notice/list/index.vue'),
+      meta: {
+        locale: 'menu.notice.list',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
       path: 'sendSuccess',
       name: 'sendSuccess',
       component: () => import('@/views/notice/success/index.vue'),
