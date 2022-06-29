@@ -54,7 +54,7 @@ export interface Organization {
 
 export interface Personnel {
   id?: number;
-  account?: string;
+  wx_account?: string;
   name?: string;
   sex?: string;
   home?: string;
@@ -80,6 +80,7 @@ export interface Personnel {
 export interface Recruitment {
   id?: number;
   org_id?: number;
+  org_name?: string;
   position?: string;
   number?: number;
   age?: number;

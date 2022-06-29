@@ -25,7 +25,7 @@ export default {
   'searchRec.columns.number': '编号',
   'searchRec.columns.name': '招聘单位名称',
   'searchRec.columns.num': '招聘人数',
-  'searchRec.columns.phone': '联系电话',
+  // 'searchRec.columns.phone': '联系电话',
   'searchRec.columns.address': '工作地点',
   'searchRec.columns.education': '学历要求',
   'searchRec.columns.createdTime': '创建时间',

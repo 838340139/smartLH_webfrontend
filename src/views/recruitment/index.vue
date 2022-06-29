@@ -12,7 +12,7 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item field="name" :label="$t('searchRec.form.recName')">
+                <a-form-item field="orgName" :label="$t('searchRec.form.recName')">
                   <a-input
                     v-model="formModel.name"
                     :placeholder="$t('searchRec.form.recName.placeholder')"
@@ -21,7 +21,7 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="address"
+                  field="place"
                   :label="$t('searchRec.form.recAddress')"
                 >
                   <a-cascader
@@ -36,7 +36,7 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="recType"
+                  field="education"
                   :label="$t('searchRec.form.recType')"
                 >
                   <a-select
@@ -145,19 +145,19 @@
           />
           <a-table-column
             :title="$t('searchRec.columns.name')"
-            data-index="name"
+            data-index="orgName"
           />
          <a-table-column
             :title="$t('searchRec.columns.num')"
-            data-index="num"
+            data-index="number"
           /> 
-          <a-table-column
+          <!-- <a-table-column
             :title="$t('searchRec.columns.phone')"
             data-index="phone"
-          />
+          /> -->
           <a-table-column
             :title="$t('searchRec.columns.address')"
-            data-index="address"
+            data-index="place"
           >
             <!--            <template #cell="{ record }">-->
             <!--              <a-space>-->
@@ -198,7 +198,7 @@
           >
             <template #cell="{ record }">
               <p style="text-overflow: ellipsis; white-space: nowrap">
-                {{ record.introduction }}
+                {{ record.education }}
               </p>
             </template>
           </a-table-column>
@@ -220,75 +220,77 @@
             :title="$t('searchRec.columns.operations')"
             data-index="operations"
           >
-            <template #cell>
-              <a-button v-permission="['admin']" type="text" size="small">
-                {{ $t('searchRec.columns.operations.view') }}
+            <template #cell="{ record }">
+              <a-button
+                v-permission="['admin']"
+                type="text"
+                size="small"
+                @click="
+                  () => {
+                    handleClickView(record);
+                  }
+                "
+              >
+                {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
-              <a-button v-permission="['admin']" type="text" size="small">
-                {{ $t('searchRec.columns.operations.delete') }}
+              <a-button
+                v-permission="['admin']"
+                type="text"
+                status="danger"
+                size="small"
+                @click="
+                  () => {
+                    handleClickDelete(record);
+                  }
+                "
+              >
+                {{ $t('searchOrg.columns.operations.delete') }}
               </a-button>
             </template>
-          </a-table-column>
+            </a-table-column>
         </template>
       </a-table>
     </a-card>
     <a-modal
-      v-model:visible="createRecModalVisible"
+      v-model:visible="recModalVisible"
       width="40%"
+      :mask-closable="false"
       @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
-      <template #title> 添加招聘信息 </template>
+      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
       <div>
-        <a-form :model="createRecForm" auto-label-width>
-          <a-form-item field="name" label="招聘单位名称">
-            <a-input
-              v-model="createRecForm.name"
-              placeholder="请输入"
-            />
+        <a-form :model="recForm" auto-label-width>
+          <a-form-item field="orgName" label="招聘单位名称">
+            <a-input v-model="recForm.orgName" placeholder="请输入" />
           </a-form-item>
-          <a-form-item field="type" label="职位名称">
-            <a-input
-              v-model="createRecForm.type"
-              placeholder="请输入"
-            />
+          <a-form-item field="number" label="招聘人数">
+           <a-input v-model="recForm.number" placeholder="请输入" />
           </a-form-item>
-          <a-form-item field="num" label="招聘人数">
-            <a-input
-              v-model="createRecForm.num"
-              placeholder="请输入"
-            />
-          </a-form-item>
-          <a-form-item field="education" label="最低学历要求">
-            <a-input
-              v-model="createRecForm.education"
-              placeholder="请输入"
-            />
-          </a-form-item>
-          <a-form-item field="address" label="工作地点">
+          <a-form-item field="place" label="工作地点">
             <a-cascader
+              v-model="recForm.place"
               size="large"
+              class="large-cascader"
+              check-strictly
               :options="regionOptions"
               placeholder="请选择"
               allow-search
             />
           </a-form-item>
-          <a-form-item field="phone" label="联系电话">
-            <a-input
-              v-model="createRecForm.phone"
-              placeholder="请输入"
-            />
+          <a-form-item field="education" label="学历要求">
+            <a-input v-model="recForm.education" placeholder="请输入" />
           </a-form-item>
-          <a-form-item field="type" label="职能介绍">
+          <!-- <a-form-item field="type" label="介绍">
             <a-textarea
-              v-model="createRecForm.introduction"
+              v-model="recForm.introduction"
               placeholder="请输入"
               :max-length="255"
               allow-clear
               style="height: 100px"
               show-word-limit
             />
-          </a-form-item>
+          </a-form-item> -->
         </a-form>
       </div>
     </a-modal>
@@ -296,71 +298,94 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, reactive } from 'vue';
+import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
 import { Pagination, Options } from '@/types/global';
-import { Recruitment, RecListParams, queryRecList } from '@/api/recruitment';
-import { regionData } from 'element-china-area-data';
+import { RecListParams, queryRecList, addRecruitment, setRecruitInfo,deleteRecruit} from '@/api/recruitment';
+import { regionData, CodeToText } from 'element-china-area-data';
+import { Modal, Message  } from '@arco-design/web-vue';
+import { codeToText, textToCode } from '@/utils/region';
+import { Recruitment } from '@/types/global';
+import {cutString} from "@/utils/stringUtils";
 
 const generateFormModel = () => {
   return {
-    name: '',
-    address: '',
-    type: '',
+    orgName: '',
+    place: '',
+    education: '',
   };
 };
 
 const generateCreateRecFormModel = () => {
   return {
-    type: '',
-    name: '',
-    address: '',
-    phone: '',
-    material: '',
-    serialNumber: '',
-    introduction: '',
+    orgName: '',
+    num: '',
+    place: '',
+    education: '',
   };
 };
 export default defineComponent({
   components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
-    const createRecModalVisible = ref<boolean>(false);
-    const createRecForm = ref(generateCreateRecFormModel());
+    const recModalVisible = ref<boolean>(false);
+    const viewRecCreate = ref<boolean>(false);
+    const recForm = ref<Recruitment>(generateCreateRecFormModel());
     const { t } = useI18n();
     const renderData = ref<Recruitment[]>([]);
+    const typeOptions = ref<{ label: string; value: string }[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
-      current: 1,
-      pageSize: 20,
+      'current': 1,
+      'pageSize': 20,
+      'show-total': true,
+      'show-jumper': true,
     };
     const pagination = reactive({
       ...basePagination,
     });
     const regionOptions = ref(regionData);
-     const typeOptions = computed<Options[]>(() => [
-      {
-        label: t('recruitment.recType.undergraduate'),
-        value: t('recruitment.recType.undergraduate'),
-      },
-      {
-        label: t('recruitment.recType.master'),
-        value: t('recruitment.recType.master'),
-      },
-      {
-        label: t('recruitment.recType.phd'),
-        value: t('recruitment.recType.phd'),
-      },
-      {
-        label: t('recruitment.recType.others'),
-        value: t('recruitment.recType.others'),
-      },
-    ]);
+    // const fetchTypeData = async () => {
+    //   const data = await getTypes();
+    //   if (data.data) {
+    //     typeOptions.value = data.data.map((item) => {
+    //       return {
+    //         label: item,
+    //         value: item,
+    //       };
+    //     });
+    //   }
+    // };
+    // fetchTypeData();
+    // const typeOptions = computed<Options[]>(() => [
+    //   {
+    //     label: t('organization.orgType.state-enterprise'),
+    //     value: t('organization.orgType.state-enterprise'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.foreign-enterprise'),
+    //     value: t('organization.orgType.foreign-enterprise'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.joint-venture'),
+    //     value: t('organization.orgType.joint-venture'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.private-enterprise'),
+    //     value: t('organization.orgType.private-enterprise'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.government-affiliated-institution'),
+    //     value: t('organization.orgType.government-affiliated-institution'),
+    //   },
+    // ]);
     const fetchData = async (
       params: RecListParams = { pageNum: 1, size: 20 }
     ) => {
       setLoading(true);
+      // 地址编码转为文字
+      params.place = codeToText(params.place).join('/');
       try {
         const { data } = await queryRecList(params);
         renderData.value = data.list;
@@ -375,8 +400,8 @@ export default defineComponent({
 
     const search = () => {
       fetchData({
-        ...basePagination,
         size: basePagination.pageSize,
+        pageNum: basePagination.current,
         ...formModel.value,
       } as unknown as RecListParams);
     };
@@ -389,14 +414,60 @@ export default defineComponent({
       formModel.value = generateFormModel();
     };
 
-    const handleCreateRec = () => {
-      createRecModalVisible.value = true;
+    const handleClickView = (record: Recruitment) => {
+      recModalVisible.value = true;
+      viewRecCreate.value = true;
+      recForm.value = record;
+      recForm.value.place = textToCode(recForm.value.place);
     };
-    const handleCreateRecOk = () => {
-      createRecModalVisible.value = false;
+
+    const handleDeleteOk = async (item: { id: number }) => {
+      setLoading(true);
+      deleteRecruit({
+        recruitmentId: item.id,
+      })
+        .then(async () => {
+          await fetchData();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    const handleClickDelete = (item: { id: number }) => {
+      Modal.warning({
+        title: '提醒',
+        content: () =>
+          h('div', { style: 'text-align: center;' }, '是否确认删除？'),
+        width: '20em',
+        onOk: () => {
+          handleDeleteOk(item);
+        },
+      });
+    };
+
+    const handleCreateRec = () => {
+      recModalVisible.value = true;
+      viewRecCreate.value = false;
+      recForm.value = generateCreateRecFormModel();
+    };
+    const handleCreateRecOk = async () => {
+      setLoading(true);
+      if (viewRecCreate.value) {
+        recForm.value.place = codeToText(recForm.value.place).join('/');
+        await setRecruitInfo(recForm.value);
+        Message.success('修改成功');
+      } else {
+        recForm.value.place = codeToText(recForm.value.place).join('/');
+        await addRecruitment(recForm.value);
+        Message.success('添加成功');
+      }
+      recModalVisible.value = false;
+      setLoading(false);
+      search();
     };
     const handleCreateCancel = () => {
-      createRecModalVisible.value = false;
+      recModalVisible.value = false;
     };
     return {
       loading,
@@ -406,9 +477,14 @@ export default defineComponent({
       pagination,
       formModel,
       reset,
+      cutString,
       typeOptions,
-      createRecModalVisible,
-      createRecForm,
+      handleClickDelete,
+      handleDeleteOk,
+      viewRecCreate,
+      recModalVisible,
+      recForm,
+      handleClickView,
       handleCreateRec,
       handleCreateRecOk,
       handleCreateCancel,

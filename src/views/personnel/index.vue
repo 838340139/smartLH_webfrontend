@@ -13,7 +13,7 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
-                  field="number"
+                  field="userName"
                   :label="$t('searchTable.form.number')"
                 >
                   <a-input
@@ -23,7 +23,7 @@
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="name" :label="$t('searchTable.form.name')">
+                <a-form-item field="subject" :label="$t('searchTable.form.name')">
                   <a-input
                     v-model="formModel.name"
                     :placeholder="$t('searchTable.form.name.placeholder')"
@@ -32,7 +32,7 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="contentType"
+                  field="academic"
                   :label="$t('searchTable.form.contentType')"
                 >
                   <a-select
@@ -44,12 +44,24 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="filterType"
+                  field="sex"
                   :label="$t('searchTable.form.filterType')"
                 >
                   <a-select
                     v-model="formModel.filterType"
                     :options="filterTypeOptions"
+                    :placeholder="$t('searchTable.form.selectDefault')"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  field="politics"
+                  :label="$t('searchTable.form.politicsType')"
+                >
+                  <a-select
+                    v-model="formModel.politicsType"
+                    :options="contentTypeOptions"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -67,9 +79,10 @@
               </a-col> -->
               <a-col :span="8">
                 <a-form-item
-                  field="status"
+                  field="fresh"
                   :label="$t('searchTable.form.status')"
                 >
+                
                   <a-select
                     v-model="formModel.status"
                     :options="statusOptions"
@@ -102,7 +115,7 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="16">
           <a-space>
-            <a-button type="primary">
+            <a-button type="primary" @click="handleCreatePer">
               <template #icon>
                 <icon-plus />
               </template>
@@ -137,7 +150,7 @@
         <template #columns>
           <a-table-column
             :title="$t('searchTable.columns.number')"
-            data-index="number"
+            data-index="wxAccount"
           />
           <a-table-column
             :title="$t('searchTable.columns.name')"
@@ -155,10 +168,10 @@
             :title="$t('searchTable.columns.subject')"
             data-index="subject"
           />
-          <a-table-column
+          <!-- <a-table-column
             :title="$t('searchTable.columns.academic')"
             data-index="academic"
-          />
+          /> -->
           <a-table-column
             :title="$t('searchTable.columns.education')"
             data-index="education"
@@ -218,9 +231,9 @@
       
           <a-table-column
             :title="$t('searchTable.columns.contentType')"
-            data-index="contentType"
+            data-index="academic"
           >
-            <template #cell="{ record }">
+            <!-- <template #cell="{ record }">
               <a-space>
                 <a-avatar
                   v-if="record.contentType === 'img'"
@@ -250,14 +263,14 @@
                 </a-avatar>
                 {{ $t(`searchTable.form.contentType.${record.contentType}`) }}
               </a-space>
-            </template>
+            </template> -->
           </a-table-column>
           <a-table-column
             :title="$t('searchTable.columns.filterType')"
-            data-index="filterType"
+            data-index="sex"
           >
             <template #cell="{ record }">
-              {{ $t(`searchTable.form.filterType.${record.filterType}`) }}
+             {{ record.sex }}
             </template>
           </a-table-column>
            <!-- <a-table-column
@@ -273,99 +286,230 @@
             data-index="status"
           > 
             <template #cell="{ record }">
-              <span v-if="record.status === 'offline'" class="circle"></span>
-              <span v-else class="circle pass"></span>
-              {{ $t(`searchTable.form.status.${record.status}`) }}
+              <!-- <span v-if="record.status === 'offline'" class="circle"></span>
+              <span v-else class="circle pass"></span> -->
+               {{ record.status }}
             </template>
           </a-table-column>
           <a-table-column
             :title="$t('searchTable.columns.operations')"
             data-index="operations"
           >
-            <template #cell>
-              <a-button v-permission="['admin']" type="text" size="small">
-                {{ $t('searchTable.columns.operations.view') }}
+             <template #cell="{ record }">
+              <a-button
+                v-permission="['admin']"
+                type="text"
+                size="small"
+                @click="
+                  () => {
+                    handleClickView(record);
+                  }
+                "
+              >
+                {{ $t('searchOrg.columns.operations.view') }}
+              </a-button>
+              <a-button
+                v-permission="['admin']"
+                type="text"
+                status="danger"
+                size="small"
+                @click="
+                  () => {
+                    handleClickDelete(record);
+                  }
+                "
+              >
+                {{ $t('searchOrg.columns.operations.delete') }}
               </a-button>
             </template>
           </a-table-column>
         </template>
       </a-table>
     </a-card>
+    <a-modal
+      v-model:visible="perModalVisible"
+      width="40%"
+      :mask-closable="false"
+      @ok="handleCreatePerOk"
+      @cancel="handleCreateCancel"
+    >
+      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
+      <div>
+        <a-form :model="perForm" auto-label-width>
+          <a-form-item field="wxAccount" label="用户账号">
+            <a-input v-model="perForm.wxAccount" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="name" label="姓名">
+           <a-input v-model="perForm.name" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="home" label="籍贯">
+            <a-cascader
+              v-model="perForm.home"
+              size="large"
+              class="large-cascader"
+              check-strictly
+              :options="regionOptions"
+              placeholder="请选择"
+              allow-search
+            />
+          </a-form-item>
+            <a-form-item field="place" label="现居地">
+            <a-cascader
+              v-model="perForm.place"
+              size="large"
+              class="large-cascader"
+              check-strictly
+              :options="regionOptions"
+              placeholder="请选择"
+              allow-search
+            />
+          </a-form-item>
+          <a-form-item field="subject" label="专业">
+            <a-input v-model="perForm.subject" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="academic" label="教育经历">
+            <a-input v-model="perForm.academic" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="marriage" label="婚姻状况">
+            <a-input v-model="perForm.marriage" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="education" label="学历">
+            <a-input v-model="perForm.education" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="sex" label="性别">
+            <a-input v-model="perForm.sex" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="status" label="状态">
+            <a-input v-model="perForm.status" placeholder="请输入" />
+          </a-form-item>
+          <!-- <a-form-item field="type" label="介绍">
+            <a-textarea
+              v-model="recForm.introduction"
+              placeholder="请输入"
+              :max-length="255"
+              allow-clear
+              style="height: 100px"
+              show-word-limit
+            />
+          </a-form-item> -->
+        </a-form>
+      </div>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, reactive } from 'vue';
+import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/list';
 import { Pagination, Options } from '@/types/global';
+import { PerListParams, queryPerList, setUserInfo,deleteUser} from '@/api/personnel';
+import { regionData, CodeToText } from 'element-china-area-data';
+import { Modal, Message  } from '@arco-design/web-vue';
+import { codeToText, textToCode } from '@/utils/region';
+import { Personnel } from '@/types/global';
+import {cutString} from "@/utils/stringUtils";
 
 const generateFormModel = () => {
   return {
-    number: '',
+    userName: '',
+    subject: '',
+    academic: '',
+    sex: '',
+    fresh: '',
+    politics:'',
+  };
+};
+
+const generateCreatePerFormModel = () => {
+  return {
+    wxAccount: '',
     name: '',
-    contentType: '',
-    filterType: '',
-    createdTime: [],
-    status: '',
+    home: '',
+    place: '',
+    subject: '',
+    education: '',
+    marriage: '',
+    academic:'',
+    sex:'',
   };
 };
 export default defineComponent({
+  components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
+    const perModalVisible = ref<boolean>(false);
+    const viewPerCreate = ref<boolean>(false);
+    const perForm = ref<Personnel>(generateCreatePerFormModel());
     const { t } = useI18n();
-    const renderData = ref<PolicyRecord[]>([]);
+    const renderData = ref<Personnel[]>([]);
+    const typeOptions = ref<{ label: string; value: string }[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
-      current: 1,
-      pageSize: 20,
+      'current': 1,
+      'pageSize': 20,
+      'show-total': true,
+      'show-jumper': true,
     };
     const pagination = reactive({
       ...basePagination,
     });
-    const contentTypeOptions = computed<Options[]>(() => [
-      {
-        label: t('searchTable.form.contentType.img'),
-        value: 'img',
-      },
-      {
-        label: t('searchTable.form.contentType.horizontalVideo'),
-        value: 'horizontalVideo',
-      },
-      {
-        label: t('searchTable.form.contentType.verticalVideo'),
-        value: 'verticalVideo',
-      },
-    ]);
-    const filterTypeOptions = computed<Options[]>(() => [
-      {
-        label: t('searchTable.form.filterType.artificial'),
-        value: 'artificial',
-      },
-      {
-        label: t('searchTable.form.filterType.rules'),
-        value: 'rules',
-      },
-    ]);
-    const statusOptions = computed<Options[]>(() => [
-      {
-        label: t('searchTable.form.status.online'),
-        value: 'online',
-      },
-      {
-        label: t('searchTable.form.status.offline'),
-        value: 'offline',
-      },
-    ]);
+    const regionOptions = ref(regionData);
+    // const fetchTypeData = async () => {
+    //   const data = await getTypes();
+    //   if(data.data){
+    //     typeOptions.value = data.data.map((item) => {
+    //       return {
+    //         label: item,
+    //         value: item,
+    //       };
+    //     });
+    //   }
+    // };
+    // fetchTypeData();
+    //  const typeOptions = computed<Options[]>(() => [
+    //   {
+    //     label: t('organization.orgType.state-enterprise'),
+    //     value: t('organization.orgType.state-enterprise'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.foreign-enterprise'),
+    //     value: t('organization.orgType.foreign-enterprise'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.joint-venture'),
+    //     value: t('organization.orgType.joint-venture'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.private-enterprise'),
+    //     value: t('organization.orgType.private-enterprise'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.government-affiliated-institution'),
+    //     value: t('organization.orgType.government-affiliated-institution'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.state-administrative-organs'),
+    //     value: t('organization.orgType.state-administrative-organs'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.government'),
+    //     value: t('organization.orgType.government'),
+    //   },
+    //   {
+    //     label: t('organization.orgType.others'),
+    //     value: t('organization.orgType.others'),
+    //   },
+    //  ]);
     const fetchData = async (
-      params: PolicyParams = { current: 1, pageSize: 20 }
+      params: PerListParams = { pageNum: 1, size: 20 }
     ) => {
       setLoading(true);
+      // params.place = codeToText(params.place).join('/');
       try {
-        const { data } = await queryPolicyList(params);
+        const { data } = await queryPerList(params);
         renderData.value = data.list;
-        pagination.current = params.current;
+        pagination.current = params.pageNum;
         pagination.total = data.total;
       } catch (err) {
         // you can report use errorHandler or other
@@ -376,17 +520,74 @@ export default defineComponent({
 
     const search = () => {
       fetchData({
-        ...basePagination,
+        size: basePagination.pageSize,
+        pageNum: basePagination.current,
         ...formModel.value,
-      } as unknown as PolicyParams);
+      } as unknown as PerListParams);
     };
-    const onPageChange = (current: number) => {
-      fetchData({ ...basePagination, current });
+    const onPageChange = (pageNum: number) => {
+      fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
     };
 
-    fetchData();
+       fetchData();
     const reset = () => {
       formModel.value = generateFormModel();
+    };
+
+    const handleClickView = (record: Personnel) => {
+      perModalVisible.value = true;
+      viewPerCreate.value = true;
+      perForm.value = record;
+      perForm.value.place = textToCode(perForm.value.place);
+    };
+
+  const handleDeleteOk = async (item: { id: number }) => {
+      setLoading(true);
+      deleteUser({
+        userId: item.id,
+      })
+        .then(async () => {
+          await fetchData();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    const handleClickDelete = (item: { id: number }) => {
+      Modal.warning({
+        title: '提醒',
+        content: () =>
+          h('div', { style: 'text-align: center;' }, '是否确认删除？'),
+        width: '20em',
+        onOk: () => {
+          handleDeleteOk(item);
+        },
+      });
+    };
+
+    const handleCreatePer = () => {
+      perModalVisible.value = true;
+      viewPerCreate.value = false;
+      perForm.value = generateCreatePerFormModel();
+    };
+    const handleCreatePerOk = async () => {
+      setLoading(true);
+      if (viewPerCreate.value) {
+        perForm.value.place = codeToText(perForm.value.place).join('/');
+        await setUserInfo(perForm.value);
+        Message.success('修改成功');
+      } else {
+        perForm.value.place = codeToText(perForm.value.place).join('/');
+        // await addRecruitment(perForm.value);
+        Message.success('添加成功');
+      }
+      perModalVisible.value = false;
+      setLoading(false);
+      search();
+    };
+    const handleCreateCancel = () => {
+      perModalVisible.value = false;
     };
     return {
       loading,
@@ -396,9 +597,18 @@ export default defineComponent({
       pagination,
       formModel,
       reset,
-      contentTypeOptions,
-      filterTypeOptions,
-      statusOptions,
+      cutString,
+      typeOptions,
+      handleClickDelete,
+      handleDeleteOk,
+      viewPerCreate,
+      perModalVisible,
+      perForm,
+      handleClickView,
+      handleCreatePer,
+      handleCreatePerOk,
+      handleCreateCancel,
+      regionOptions,
     };
   },
 });
