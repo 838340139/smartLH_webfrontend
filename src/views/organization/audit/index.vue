@@ -47,14 +47,10 @@
             style="min-height: 500px"
           >
             <a-empty v-if="!orgList.length" />
-            <a-row v-else :gutter="24">
-              <a-col
-                v-for="item in orgList"
-                :key="item.id"
-                :span="6"
-                class="list-col"
-              >
+            <a-space v-else wrap>
+              <template v-for="item in orgList" :key="item.id">
                 <CardWrap
+                  style="width: 280px"
                   :loading="loading"
                   :name="item.name"
                   :address="item.address"
@@ -91,19 +87,21 @@
                   "
                 >
                 </CardWrap>
-              </a-col>
-            </a-row>
+              </template>
+            </a-space>
           </a-card>
           <a-pagination
+            v-model:current="pagination.current"
+            v-model:page-size="pagination.pageSize"
             :total="pagination.total"
-            :size="pagination.size"
             show-total
             show-jumper
+            @change="handlePageChange"
           />
         </a-card>
         <a-modal
           v-model:visible="orgDetailModalVisible"
-          width="800px"
+          width="1000px"
           top="100px"
           :hide-cancel="true"
           :mask-closable="false"
@@ -112,12 +110,38 @@
         >
           <template #title> 详情 </template>
           <div>
-            <a-row style="height: 400px">
+            <a-row style="height: 450px" :gutter="20">
               <a-col :span="12">
-                <a-image
-                  width="350px"
-                  :src="orgDetail.material"
-                />
+                <a-carousel
+                  v-if="orgDetail.material && orgDetail.material.length > 0"
+                  :style="{
+                    width: '480px',
+                    height: '400px',
+                  }"
+                >
+                  <a-carousel-item
+                    v-for="(image, index) in orgDetail.material"
+                    :key="index"
+                  >
+                    <a-image width="480px" height="400px" :src="image" />
+                  </a-carousel-item>
+                </a-carousel>
+                <div
+                  v-else
+                  style="
+                    width: 480px;
+                    height: 400px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <a-empty />
+                </div>
+
+                <div style="text-align: center; padding-top: 10px"
+                  >审核材料</div
+                >
               </a-col>
               <a-col :span="12">
                 <a-descriptions
@@ -140,12 +164,15 @@
                       value: orgDetail.phone,
                     },
                     {
-                      label: orgDetail.audit !== AuditEnum.toAudit ? '审核时间' : '申请时间',
+                      label:
+                        orgDetail.audit !== AuditEnum.toAudit
+                          ? '审核时间'
+                          : '申请时间',
                       value: orgDetail.auditTime,
                     },
                     {
                       label: '简介',
-                      value: orgDetail.introduction
+                      value: orgDetail.introduction,
                     },
                   ]"
                   size="large"
@@ -167,7 +194,7 @@ import { getAuditOrgs, auditOrg, QueryAuditParams } from '@/api/organization';
 import { AuditEnum, Organization, Pagination } from '@/types/global';
 import useLoading from '@/hooks/loading';
 import { Modal, Message } from '@arco-design/web-vue';
-import noImgSvg from '@/assets/images/no-img.svg'
+import noImgSvg from '@/assets/images/no-img.svg';
 import CardWrap from './components/card-wrap.vue';
 
 const generateSearchForm = () => {
@@ -203,21 +230,35 @@ export default defineComponent({
     const orgDetail = ref<Organization>(generateEmptyOrg());
     const basePagination: Pagination = {
       current: 1,
-      pageSize: 10,
+      pageSize: 5,
       total: 0,
     };
     const pagination = reactive({
       ...basePagination,
     });
 
+    let fetchIndex = 0;
     const fetchData = async () => {
       setLoading(true);
+      fetchIndex += 1;
+      const currentFetchIndex = fetchIndex;
       const { data } = await getAuditOrgs({
         ...searchForm.value,
         pageNum: pagination.current,
         size: pagination.pageSize,
       });
+      if (fetchIndex !== currentFetchIndex) return;
       orgList.value = data.list;
+      orgList.value.forEach((item) => {
+        if (typeof item.material === 'string') {
+          item.material = item.material
+            .trim()
+            .split(';')
+            .filter((s) => {
+              return s !== '';
+            });
+        }
+      });
       pagination.total = data.total;
       setLoading(false);
     };
@@ -228,6 +269,7 @@ export default defineComponent({
 
     const handleTabChange = (key: number) => {
       searchForm.value.auditState = key;
+      pagination.current = 1;
       fetchData();
     };
 
@@ -251,7 +293,7 @@ export default defineComponent({
 
     const handleClickDetail = (item: Organization) => {
       orgDetail.value = item;
-      console.log(orgDetail.value)
+      console.log(orgDetail.value);
       orgDetailModalVisible.value = true;
     };
 
@@ -281,6 +323,10 @@ export default defineComponent({
       });
     };
 
+    const handlePageChange = () => {
+      fetchData();
+    };
+
     fetchData();
     return {
       loading,
@@ -298,6 +344,7 @@ export default defineComponent({
       handleClickPass,
       handleClickReject,
       handleClickDetail,
+      handlePageChange,
     };
   },
 });

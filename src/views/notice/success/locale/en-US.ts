@@ -1,0 +1,15 @@
+export default {
+  'menu.notice.success': 'Success',
+  'success.result.title': 'Submit Success',
+  'success.result.subTitle': 'Submit form success!',
+  'success.result.sendMore': 'Print result',
+  'success.result.toList': 'Project List',
+  'success.result.progress': 'Progress',
+  'success.submitApplication': 'Submit Application',
+  'success.leaderReview': 'Leader Review',
+  'success.purchaseCertificate': 'Purchase Certificate',
+  'success.safetyTest': 'Safety Test',
+  'success.launched': 'Officially launched',
+  'success.waiting': 'Waiting',
+  'success.processing': 'Processing',
+};

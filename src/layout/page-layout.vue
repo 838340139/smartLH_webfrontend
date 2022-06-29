@@ -20,12 +20,21 @@
                   alt="logo"
                   src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
                 />
+                <span
+                  style="
+                    display: inline-block;
+                    font-size: 17px;
+                    font-weight: bold;
+                    color: #fff;
+                  "
+                  >智慧隆回</span
+                >
                 <a-typography-title
-                  :style="{ margin: 0, fontSize: '16px', color: '#fff',textAlign:'center' }"
+                  :style="{ margin: 0, fontSize: '14px', color: '#fff',textAlign:'center' }"
                   :heading="5"
                 >
-                  <span style="width: 7em;display: inline-block">
-                    智慧隆回人才信息管理系统
+                  <span style="width: 6em; display: inline-block">
+                    人才信息管理
                   </span>
                 </a-typography-title>
               </a-space>

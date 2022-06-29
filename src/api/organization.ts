@@ -2,24 +2,27 @@ import axios from 'axios';
 import qs from 'query-string';
 import { Organization } from '@/types/global';
 
-export interface OrgListParams{
+export interface OrgListParams {
   orgType?: string;
   orgName?: string;
   orgAddress?: string;
-  pageNum: number;
-  size: number;
+  pageNum?: number;
+  size?: number;
 }
 
 export interface OrgListRes {
   list: Organization[];
   total: number;
+  hasNextPage: boolean;
+  pages: number;
+  pageNum: number;
 }
 
 export interface QueryAuditParams {
   auditState: number;
   orgName: string | undefined;
-  pageNum?:  number;
-  size?:  number;
+  pageNum?: number;
+  size?: number;
 }
 
 export function getTypes() {
@@ -37,13 +40,13 @@ export function queryOrgList(params: OrgListParams) {
 
 export function addOrg(params: Organization) {
   return axios.post('/Organization/addOrg', {
-    ...params
+    ...params,
   });
 }
 
 export function setOrgInfo(params: Organization) {
   return axios.post('/Organization/setOrgInfo', {
-    ...params
+    ...params,
   });
 }
 
@@ -67,6 +70,19 @@ export function auditOrg(params: { orgId: number; audit: number }) {
 
 export function deleteOrg(params: { orgId: number }) {
   return axios.get('/Organization/deleteOrg', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
+
+export function exportExcel(params: OrgListParams) {
+  return axios.get('/Organization/exportExcel', {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    responseType: 'blob',
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);

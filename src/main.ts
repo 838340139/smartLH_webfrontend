@@ -3,11 +3,11 @@ import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
 import axios from 'axios';
+import config from '@/config/settings.json'
 import router from './router';
 import store from './store';
 import i18n from './locale';
 import directive from './directive';
-import './mock';
 import App from './App.vue';
 import '@arco-design/web-vue/dist/arco.css';
 import '@/assets/style/global.less';
@@ -25,6 +25,6 @@ app.use(globalComponents);
 app.use(directive);
 
 
-axios.defaults.baseURL='http://127.0.0.1:8081';
+axios.defaults.baseURL= config.baseUrl;
 
 app.mount('#app');

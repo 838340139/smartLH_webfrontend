@@ -36,7 +36,7 @@ export type TimeRanger = [string, string];
 export interface GeneralChart {
   xAxis: string[];
   data: Array<{ name: string; value: number[] }>;
-}
+};
 
 export interface Organization {
   id?: number;
@@ -45,12 +45,12 @@ export interface Organization {
   address?: string;
   phone?: string;
   audit?: number;
-  material?: string;
+  material?: string | string[];
   serialNumber?: string;
   introduction?: string;
   auditTime?: string;
   isDeleted?: number;
-}
+};
 
 export interface Personnel {
   id?: number;
@@ -67,7 +67,7 @@ export interface Personnel {
   phone?: string;
   politics?: string;
   photo?: string;
-  post?: String;
+  post?: string;
   fresh?: number;
   mailbox?: string;
   work?: string;
@@ -90,6 +90,7 @@ export interface Recruitment {
   place?: string;
   politics?: string;
   remark?: string;
+  publishTime?: string;
 }
 export const AuditEnum = {
   0: '未审核',

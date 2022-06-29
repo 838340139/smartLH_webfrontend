@@ -9,7 +9,7 @@
         {{ $t('workplace.popularContent') }}
       </template>
       <template #extra>
-        <a-link>{{ $t('workplace.viewMore') }}</a-link>
+<!--        <a-link>{{ $t('workplace.viewMore') }}</a-link>-->
       </template>
       <a-space direction="vertical" :size="10" fill>
         <a-radio-group
@@ -17,20 +17,20 @@
           type="button"
           @change="typeChange"
         >
-          <a-radio value="text">
-            {{ $t('workplace.popularContent.text') }}
+          <a-radio :value="PopularTypeEnum.total">
+            {{ $t('workplace.popularContent.totalHistory') }}
           </a-radio>
-          <a-radio value="image">
-            {{ $t('workplace.popularContent.image') }}
+          <a-radio :value="PopularTypeEnum.lastWeek">
+            {{ $t('workplace.popularContent.week') }}
           </a-radio>
-          <a-radio value="video">
-            {{ $t('workplace.popularContent.video') }}
+          <a-radio :value="PopularTypeEnum.lastMonth">
+            {{ $t('workplace.popularContent.month') }}
           </a-radio>
         </a-radio-group>
         <a-table :data="renderList" :pagination="false" :bordered="false">
           <template #columns>
-            <a-table-column title="排名" data-index="key"></a-table-column>
-            <a-table-column title="内容标题" data-index="title">
+            <a-table-column title="排名" data-index="rankIndex"></a-table-column>
+            <a-table-column title="招聘标题" data-index="title">
               <template #cell="{ record }">
                 <a-typography-paragraph
                   :ellipsis="{
@@ -41,24 +41,17 @@
                 </a-typography-paragraph>
               </template>
             </a-table-column>
-            <a-table-column title="点击量" data-index="clickNumber">
-            </a-table-column>
-            <a-table-column
-              title="日涨幅"
-              data-index="increases"
-              :sortable="{
-                sortDirections: ['ascend', 'descend'],
-              }"
-            >
+            <a-table-column title="发布时间" data-index="publishTime">
               <template #cell="{ record }">
-                <div class="increases-cell">
-                  <span>{{ record.increases }}%</span>
-                  <icon-caret-up
-                    v-if="record.increases !== 0"
-                    style="color: #f53f3f; font-size: 8px"
-                  />
-                </div>
+                <a-typography-paragraph
+                    :ellipsis="{
+                    rows: 1,
+                  }">
+                  {{ record.publishTime }}
+                </a-typography-paragraph>
               </template>
+            </a-table-column>
+            <a-table-column title="点击量" data-index="view">
             </a-table-column>
           </template>
         </a-table>
@@ -70,33 +63,40 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import useLoading from '@/hooks/loading';
-import { queryPopularList, PopularRecord } from '@/api/dashboard';
+import { queryPopularList, PopularRecord, getPopularRecruitment } from '@/api/dashboard';
+import { PopularTypeEnum, Recruitment } from "@/types/global";
 
 export default defineComponent({
   setup() {
-    const type = ref('text');
+    const type = ref(PopularTypeEnum.total);
     const { loading, setLoading } = useLoading();
-    const renderList = ref<PopularRecord[]>();
-    const fetchData = async (contentType: string) => {
+    const renderList = ref<Recruitment[]>();
+    const fetchData = async (contentType: number) => {
       try {
         setLoading(true);
-        const { data } = await queryPopularList({ type: contentType });
-        renderList.value = data;
+        const { data } = await getPopularRecruitment({ type: contentType });
+        renderList.value = data.map((item, index) => {
+          return {
+            ...item,
+            rankIndex: index + 1,
+          };
+        });
       } catch (err) {
         // you can report use errorHandler or other
       } finally {
         setLoading(false);
       }
     };
-    const typeChange = (contentType: string) => {
+    const typeChange = (contentType: number) => {
       fetchData(contentType);
     };
-    fetchData('text');
+    fetchData(PopularTypeEnum.total);
     return {
       type,
       typeChange,
       loading,
       renderList,
+      PopularTypeEnum
     };
   },
 });

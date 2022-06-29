@@ -23,7 +23,12 @@ axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
     const res = response.data;
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000 && res.code !== 6) {
+    console.log(response)
+    if (
+      response.headers['content-type'] !== 'application/octet-stream' &&
+      res.code !== 20000 &&
+      res.code !== 6
+    ) {
       Message.error({
         content: res.message || 'Error',
         duration: 5 * 1000,

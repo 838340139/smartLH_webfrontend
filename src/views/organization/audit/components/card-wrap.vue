@@ -5,13 +5,6 @@
     </a-card>
     <a-card v-else :bordered="false" hoverable :body-style="{ width: '100%' }">
       <a-space align="start">
-        <a-avatar
-          v-if="icon"
-          :size="24"
-          style="margin-right: 8px; background-color: #626aea"
-        >
-          <icon-filter />
-        </a-avatar>
         <a-card-meta>
           <template #title>
             <a-typography-text style="margin-right: 10px">
