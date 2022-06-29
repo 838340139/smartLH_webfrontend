@@ -91,7 +91,7 @@
           </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-button>
+          <a-button @click="handleClickDownload" :loading="downloadLoading">
             <template #icon>
               <icon-download />
             </template>
@@ -282,6 +282,7 @@ import {
   setOrgInfo,
   getTypes,
   deleteOrg,
+  exportExcel,
 } from '@/api/organization';
 import { regionData } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
@@ -311,6 +312,8 @@ export default defineComponent({
   components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
+    const { loading: downloadLoading, setLoading: setDownloadLoading } =
+      useLoading(false);
     const orgModalVisible = ref<boolean>(false);
     const viewOrCreate = ref<boolean>(false);
     const orgForm = ref<Organization>(generateCreateOrgFormModel());
@@ -320,7 +323,7 @@ export default defineComponent({
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       'current': 1,
-      'pageSize': 10,
+      'pageSize': 2,
       'show-total': true,
       'show-jumper': true,
     };
@@ -341,30 +344,38 @@ export default defineComponent({
     };
     fetchTypeData();
     const fetchData = async (
-      params: OrgListParams = { pageNum: pagination.current, size: pagination.pageSize }
+      params: OrgListParams = {
+        pageNum: pagination.current,
+        size: pagination.pageSize,
+      }
     ) => {
       setLoading(true);
+      if (!params.pageNum || params.pageNum < 1) return;
       // 地址编码转为文字
       params.orgAddress = codeToText(params.orgAddress).join('/');
       try {
         const { data } = await queryOrgList(params);
-        if (data.list.length === 0) {
-          params.pageNum = data.pages;
-          await fetchData(params);
-          return;
-        }
         renderData.value = data.list;
-        renderData.value.forEach((item) => {
-          if (typeof item.material === 'string') {
-            item.material = item.material
-              .trim()
-              .split(';')
-              .filter((s) => {
-                return s !== '';
-              });
-          }
-        });
-        pagination.current = params.pageNum;
+        // console.log(data.list);
+        // console.log(renderData.value);
+        if (data.list.length === 0 && data.total > 0) {
+          params.pageNum = data.pages;
+          fetchData(params);
+        }
+        if (renderData.value.length > 0) {
+          renderData.value.forEach((item) => {
+            if (typeof item.material === 'string') {
+              item.material = item.material
+                .trim()
+                .split(';')
+                .filter((s) => {
+                  return s !== '';
+                });
+            }
+          });
+        }
+        // console.log(renderData.value);
+        pagination.current = data.pageNum;
         pagination.total = data.total;
       } catch (err) {
         // you can report use errorHandler or other
@@ -375,13 +386,13 @@ export default defineComponent({
 
     const search = () => {
       fetchData({
-        size: basePagination.pageSize,
-        pageNum: basePagination.current,
+        size: pagination.pageSize,
+        pageNum: pagination.current,
         ...formModel.value,
       } as unknown as OrgListParams);
     };
     const onPageChange = (pageNum: number) => {
-      fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
+      fetchData({ ...formModel.value, size: pagination.pageSize, pageNum });
     };
 
     fetchData();
@@ -444,7 +455,7 @@ export default defineComponent({
         done(false);
         return false;
       }
-      if (isBlank(orgForm.value.address)){
+      if (isBlank(orgForm.value.address)) {
         Message.info('单位地址必填');
         done(false);
         return false;
@@ -466,26 +477,50 @@ export default defineComponent({
           data = await addOrg(orgForm.value);
           Message.success('添加成功');
         }
-        fetchData({
-          size: pagination.pageSize,
-          pageNum: pagination.current,
-          ...formModel.value,
-        });
+        // fetchData({
+        //   size: pagination.pageSize,
+        //   pageNum: pagination.current,
+        //   ...formModel.value,
+        // });
       } finally {
         setLoading(false);
       }
     };
     const handleCreateCancel = () => {
-      console.log(orgModalVisible.value)
+      console.log(orgModalVisible.value);
       orgModalVisible.value = false;
+    };
+    const handleClickDownload = async () => {
+      setDownloadLoading(true)
+      const res = await exportExcel({
+        size: basePagination.pageSize,
+        pageNum: basePagination.current,
+        ...formModel.value,
+      });
+      // @ts-ignore
+      const blob = new Blob([res], { type: 'application/x-xls' });
+      const a = document.createElement('a');
+      // 创建URL
+      const blobUrl = window.URL.createObjectURL(blob);
+      a.download = '单位信息表.xlsx';
+      a.href = blobUrl;
+      document.body.appendChild(a);
+      // 下载文件
+      a.click();
+      // 释放内存
+      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+      setDownloadLoading(false);
     };
     return {
       loading,
+      downloadLoading,
       search,
       onPageChange,
       renderData,
       pagination,
       formModel,
+      regionOptions,
       reset,
       cutString,
       typeOptions,
@@ -499,7 +534,7 @@ export default defineComponent({
       handleBeforeOk,
       handleCreateOrgOk,
       handleCreateCancel,
-      regionOptions,
+      handleClickDownload,
     };
   },
 });
