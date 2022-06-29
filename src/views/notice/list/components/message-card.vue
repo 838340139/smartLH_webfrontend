@@ -5,22 +5,28 @@
       :hoverable="false"
       :bordered="false"
       class="general-card"
-      :body-style="{ padding: '10px 20px 15px', position: 'relative', height: '500px' }"
+      :body-style="{
+        padding: '10px 20px 15px',
+        position: 'relative',
+        height: '500px',
+      }"
     >
       <div class="label-container">
         <span>标题</span>
         <span>{{ title }}</span>
       </div>
       <div class="label-container">
-        <span>发布时间</span>
-        <span>{{ sendTime }}
-        </span>
-      </div>
-      <div class="label-container">
         <span>接收者</span>
         <span>{{ receiverInfo }}</span>
       </div>
-      <p v-html="content"></p>
+      <div class="label-container">
+        <span>发布时间</span>
+        <span>{{ sendTime }} </span>
+      </div>
+      <p
+        style="padding: 10px 20px; background: #fafafa; min-height: 400px"
+        v-html="content"
+      ></p>
     </a-card>
   </div>
 </template>

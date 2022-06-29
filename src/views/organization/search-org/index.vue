@@ -348,6 +348,11 @@ export default defineComponent({
       params.orgAddress = codeToText(params.orgAddress).join('/');
       try {
         const { data } = await queryOrgList(params);
+        if (data.list.length === 0) {
+          params.pageNum = data.pages;
+          await fetchData(params);
+          return;
+        }
         renderData.value = data.list;
         renderData.value.forEach((item) => {
           if (typeof item.material === 'string') {
@@ -361,7 +366,6 @@ export default defineComponent({
         });
         pagination.current = params.pageNum;
         pagination.total = data.total;
-        console.log(pagination)
       } catch (err) {
         // you can report use errorHandler or other
       } finally {
@@ -398,7 +402,11 @@ export default defineComponent({
         orgId: item.id,
       })
         .then(async () => {
-          await fetchData();
+          fetchData({
+            size: pagination.pageSize,
+            pageNum: pagination.current,
+            ...formModel.value,
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -450,16 +458,20 @@ export default defineComponent({
       }
       orgForm.value.address = codeToText(orgForm.value.address).join('/');
       try {
+        let data;
         if (viewOrCreate.value) {
-          await setOrgInfo(orgForm.value);
+          data = await setOrgInfo(orgForm.value);
           Message.success('修改成功');
         } else {
-          await addOrg(orgForm.value);
+          data = await addOrg(orgForm.value);
           Message.success('添加成功');
         }
-        search();
+        fetchData({
+          size: pagination.pageSize,
+          pageNum: pagination.current,
+          ...formModel.value,
+        });
       } finally {
-        orgModalVisible.value = false;
         setLoading(false);
       }
     };

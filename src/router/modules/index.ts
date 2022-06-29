@@ -23,7 +23,7 @@ export default [
   // Exception,
   organization,
   recruitment,
+  Notice,
   User,
-  Notice
   /** simple end */
 ];

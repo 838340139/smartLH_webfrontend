@@ -101,6 +101,7 @@
     <a-modal
       v-model:visible="detailModelVisible"
       width="1000px"
+      unmount-on-close
       top="100px"
       :hide-cancel="true"
       :mask-closable="false"

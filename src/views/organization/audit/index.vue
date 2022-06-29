@@ -269,6 +269,7 @@ export default defineComponent({
 
     const handleTabChange = (key: number) => {
       searchForm.value.auditState = key;
+      pagination.current = 1;
       fetchData();
     };
 
