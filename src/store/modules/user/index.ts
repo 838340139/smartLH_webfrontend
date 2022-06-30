@@ -6,30 +6,22 @@ import {
   LoginData,
 } from '@/api/user';
 import { setToken, clearToken } from '@/utils/auth';
+import { Manager } from '@/types/global';
+import { useRouter } from 'vue-router';
 import { UserState } from './types';
 
 const useUserStore = defineStore('user', {
-  state: (): UserState => ({
-    name: undefined,
-    avatar: undefined,
-    job: undefined,
-    organization: undefined,
-    location: undefined,
-    email: undefined,
-    introduction: undefined,
-    personalWebsite: undefined,
-    jobName: undefined,
-    organizationName: undefined,
-    locationName: undefined,
+  state: (): Manager => ({
+    id: undefined,
+    username: undefined,
+    password: undefined,
     phone: undefined,
-    registrationDate: undefined,
-    accountId: undefined,
-    certification: undefined,
-    role: '',
+    mailbox: undefined,
+    isManager: undefined,
   }),
 
   getters: {
-    userInfo(state: UserState): UserState {
+    userInfo(state: Manager): Manager {
       return { ...state };
     },
   },
@@ -37,8 +29,7 @@ const useUserStore = defineStore('user', {
   actions: {
     switchRoles() {
       return new Promise((resolve) => {
-        this.role = this.role === 'user' ? 'admin' : 'user';
-        resolve(this.role);
+
       });
     },
     // Set user's information
@@ -70,10 +61,13 @@ const useUserStore = defineStore('user', {
 
     // Logout
     async logout() {
-      await userLogout();
-
+      const router = useRouter();
+       // await userLogout();
       this.resetInfo();
       clearToken();
+      router.push({
+        name: 'login'
+      })
     },
   },
 });

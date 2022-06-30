@@ -125,6 +125,15 @@ export interface Notice {
 }
 
 export const ManagerType = {
-  superAdmin: 0,
-  normalAdmin: 1,
+  superAdmin: 1,
+  normalAdmin: 0,
 };
+
+export interface Manager {
+  id?: number;
+  username?: string;
+  password?: string;
+  phone?: string;
+  mailbox?: string;
+  isManager?: number;
+}

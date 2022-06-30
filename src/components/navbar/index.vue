@@ -115,7 +115,7 @@
       <li>
         <a-dropdown trigger="click">
           <a-avatar :size="32" :style="{ marginRight: '8px' }">
-            <img alt="avatar" :src="avatar" />
+            <img alt="avatar" :src="adminPng" style="background: white;" />
           </a-avatar>
           <template #content>
 <!--            <a-doption>-->
@@ -171,6 +171,7 @@ import { useAppStore, useUserStore } from '@/store';
 import { LOCALE_OPTIONS } from '@/locale';
 import useLocale from '@/hooks/locale';
 import useUser from '@/hooks/user';
+import adminPng from '@/assets/images/admin.png'
 import MessageBox from '../message-box/index.vue';
 
 export default defineComponent({
@@ -183,9 +184,6 @@ export default defineComponent({
     const { logout } = useUser();
     const { changeLocale } = useLocale();
     const locales = [...LOCALE_OPTIONS];
-    const avatar = computed(() => {
-      return userStore.avatar;
-    });
     const theme = computed(() => {
       return appStore.theme;
     });
@@ -225,17 +223,13 @@ export default defineComponent({
       });
       triggerBtn.value.dispatchEvent(event);
     };
-    const switchRoles = async () => {
-      const res = await userStore.switchRoles();
-      Message.success(res as string);
-    };
     const switchGit = () => {
       window.open('https://github.com/chuzhixin');
     };
     return {
       locales,
       theme,
-      avatar,
+      adminPng,
       changeLocale,
       toggleTheme,
       setVisible,
@@ -244,7 +238,6 @@ export default defineComponent({
       triggerBtn,
       handleLogout,
       setDropDownVisible,
-      switchRoles,
       switchGit,
     };
   },
