@@ -122,12 +122,14 @@
           </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-button>
-            <template #icon>
-              <icon-download />
-            </template>
-            {{ $t('searchRec.operation.download') }}
-          </a-button>
+          <a-tooltip content="数据量大时导出需要较长时间">
+            <a-button @click="handleClickDownload">
+              <template #icon>
+                <icon-download />
+              </template>
+              {{ $t('searchRec.operation.download') }}
+            </a-button>
+          </a-tooltip>
         </a-col>
       </a-row>
       <a-table
@@ -307,7 +309,14 @@ import { Modal, Message  } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
 import { Recruitment } from '@/types/global';
 import {cutString} from "@/utils/stringUtils";
-import { RecListParams, queryRecList, addRecruitment, setRecruitInfo,deleteRecruit} from '@/api/recruitment';
+import {
+  RecListParams,
+  queryRecList,
+  addRecruitment,
+  setRecruitInfo,
+  deleteRecruit,
+  exportExcel,
+} from '@/api/recruitment';
 
 const generateFormModel = () => {
   return {
@@ -329,6 +338,8 @@ export default defineComponent({
   components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
+    const { loading: downloadLoading, setLoading: setDownloadLoading } =
+        useLoading(false);
     const recModalVisible = ref<boolean>(false);
     const viewRecCreate = ref<boolean>(false);
     const recForm = ref<Recruitment>(generateCreateRecFormModel());
@@ -469,12 +480,35 @@ export default defineComponent({
     const handleCreateCancel = () => {
       recModalVisible.value = false;
     };
+    const handleClickDownload = async () => {
+      setDownloadLoading(true)
+      const res = await exportExcel({
+        size: basePagination.pageSize,
+        pageNum: basePagination.current,
+        ...formModel.value,
+      });
+      // @ts-ignore
+      const blob = new Blob([res], { type: 'application/x-xls' });
+      const a = document.createElement('a');
+      // 创建URL
+      const blobUrl = window.URL.createObjectURL(blob);
+      a.download = '招聘信息表.xlsx';
+      a.href = blobUrl;
+      document.body.appendChild(a);
+      // 下载文件
+      a.click();
+      // 释放内存
+      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+      setDownloadLoading(false);
+    };
     return {
       loading,
       search,
       onPageChange,
       renderData,
       pagination,
+      regionOptions,
       formModel,
       reset,
       cutString,
@@ -488,7 +522,7 @@ export default defineComponent({
       handleCreateRec,
       handleCreateRecOk,
       handleCreateCancel,
-      regionOptions,
+      handleClickDownload,
     };
   },
 });

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 import { Recruitment } from '@/types/global';
+import {OrgListParams} from "@/api/organization";
 
 export interface RecListParams {
   orgName?: string;
@@ -38,6 +39,19 @@ export function setRecruitInfo(params: Recruitment) {
 
 export function deleteRecruit(params: { recruitmentId: number }) {
   return axios.get('/Recruitment/deleteRecruit', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
+
+export function exportExcel(params: RecListParams) {
+  return axios.get('/Recruitment/exportExcel', {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    responseType: 'blob',
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);
