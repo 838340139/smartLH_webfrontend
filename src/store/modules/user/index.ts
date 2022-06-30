@@ -61,13 +61,10 @@ const useUserStore = defineStore('user', {
 
     // Logout
     async logout() {
-      const router = useRouter();
        // await userLogout();
       this.resetInfo();
       clearToken();
-      router.push({
-        name: 'login'
-      })
+      window.location.href = 'vue-admin-arco#/login?redirect=dashboard';
     },
   },
 });
