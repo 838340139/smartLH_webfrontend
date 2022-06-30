@@ -79,7 +79,6 @@ export interface Personnel {
 
 export interface Recruitment {
   id?: number;
-  orgId?: number;
   orgName?: string;
   position?: string;
   number?: number;
