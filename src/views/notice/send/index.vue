@@ -102,7 +102,7 @@ export default defineComponent({
           .join('');
         noticeForm.value.notice.receiverInfo = cutString(
           noticeForm.value.notice.receiverInfo,
-          500
+          2900
         );
         if (type === 'org') {
           noticeForm.value.notice.type = NoticeType.privateOrg;

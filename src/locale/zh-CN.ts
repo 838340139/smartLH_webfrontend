@@ -4,16 +4,20 @@ import localeLogin from '@/views/login/locale/zh-CN';
 import localeWorkplace from '@/views/dashboard/locale/zh-CN';
 /** simple */
 
-import localeSearchTable from '@/views/personnel/locale/zh-CN';
+import localePersonnelSearch from '@/views/personnel/search/locale/zh-CN';
+import localePersonnelAnalysis from '@/views/personnel/analysis/locale/zh-CN';
+
+import localeOrgSearch from '@/views/organization/search/locale/zh-CN';
+import localeOrgAnalysis from '@/views/organization/analysis/locale/zh-CN';
+import localeOrgAudit from '@/views/organization/audit/locale/zh-CN';
+
+import localeRecruitmentSearch from '@/views/recruitment/search/locale/zh-CN';
+import localeRecruitmentAnalysis from '@/views/recruitment/analysis/locale/zh-CN';
 
 import localeStepForm from '@/views/form/step/locale/zh-CN';
 import localeGroupForm from '@/views/form/group/locale/zh-CN';
 
 import localeBasicProfile from '@/views/profile/basic/locale/zh-CN';
-
-import localeDataAnalysis from '@/views/visualization/user-info-analysis/locale/zh-CN';
-import localeMultiDAnalysis from '@/views/visualization/org-info-analysis/locale/zh-CN';
-import localeRecruitDAnalysis from '@/views/visualization/recruit-info-analysis/locale/zh-CN';
 
 import localeSuccess from '@/views/result/success/locale/zh-CN';
 import localeError from '@/views/result/error/locale/zh-CN';
@@ -25,11 +29,6 @@ import locale500 from '@/views/exception/500/locale/zh-CN';
 import localeSettingAdmin from '@/views/setting/admin/locale/zh-CN';
 import localeSettingSetting from '@/views/setting/setting/locale/zh-CN';
 
-import localeOrgSearchTable from '@/views/organization/search-org/locale/zh-CN';
-import localeOrgCardList from '@/views/organization/audit/locale/zh-CN';
-
-import localeOrgRecruitment from '@/views/recruitment/locale/zh-CN';
-
 import localeNoticeSend from '@/views/notice/send/locale/zh-CN'
 import localeNoticeSuccess from '@/views/notice/success/locale/zh-CN'
 import localeNoticeList from '@/views/notice/list/locale/zh-CN'
@@ -40,7 +39,7 @@ import localeSettings from './zh-CN/settings';
 
 export default {
   'menu.dashboard': '工作台',
-  'menu.personnel': '人才信息查询',
+  'menu.personnel': '人才信息管理',
   'menu.organization': '单位信息管理',
   'menu.recruitment': '招聘信息管理',
   'menu.result': '结果页',
@@ -57,13 +56,17 @@ export default {
   ...localeLogin,
   ...localeWorkplace,
   /** simple */
-  ...localeSearchTable,
+  ...localePersonnelAnalysis,
+  ...localePersonnelSearch,
+  ...localeOrgSearch,
+  ...localeOrgAnalysis,
+  ...localeOrgAudit,
+  ...localeOrgSearch,
+  ...localeRecruitmentAnalysis,
+  ...localeRecruitmentSearch,
   ...localeStepForm,
   ...localeGroupForm,
   ...localeBasicProfile,
-  ...localeDataAnalysis,
-  ...localeMultiDAnalysis,
-  ...localeRecruitDAnalysis,
   ...localeSuccess,
   ...localeError,
   ...locale403,
@@ -71,12 +74,9 @@ export default {
   ...locale500,
   ...localeSettingAdmin,
   ...localeSettingSetting,
-  ...localeOrgCardList,
-  ...localeOrgSearchTable,
   ...localeNoticeSend,
   ...localeNoticeSuccess,
   ...localeNoticeList,
-  ...localeOrgRecruitment,
   ...localeGlobal
   /** simple end */
 };

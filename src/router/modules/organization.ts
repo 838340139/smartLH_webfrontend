@@ -19,11 +19,11 @@ export default {
       },
     },
     {
-      path: 'search-org', // The midline path complies with SEO specifications
-      name: 'searchOrg',
-      component: () => import('@/views/organization/search-org/index.vue'),
+      path: 'search', // The midline path complies with SEO specifications
+      name: 'search',
+      component: () => import('@/views/organization/search/index.vue'),
       meta: {
-        locale: 'menu.organization.searchOrg',
+        locale: 'menu.organization.search',
         requiresAuth: true,
         roles: ['*'],
       },

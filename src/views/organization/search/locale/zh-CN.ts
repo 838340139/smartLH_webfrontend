@@ -1,5 +1,5 @@
 export default {
-  'menu.organization.searchOrg': '查询单位信息',
+  'menu.organization.search': '查询单位信息',
   'searchOrg.form.orgName': '单位名称',
   'searchOrg.form.orgName.placeholder': '请输入单位名称',
   'searchOrg.form.orgAddress': '单位地点',

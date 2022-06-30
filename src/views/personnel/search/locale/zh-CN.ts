@@ -1,5 +1,5 @@
 export default {
-  'menu.list.searchTable': '信息查询',
+  'menu.personnel.search': '信息查询',
   'searchTable.form.number': '姓名',
   'searchTable.form.number.placeholder': '请输入用户姓名',
   'searchTable.form.name': '专业名称',

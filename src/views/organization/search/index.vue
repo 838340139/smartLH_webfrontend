@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.organization', 'menu.organization.searchOrg']" />
-    <a-card class="general-card" :title="$t('menu.organization.searchOrg')">
+    <Breadcrumb :items="['menu.organization', 'menu.organization.search']" />
+    <a-card class="general-card" :title="$t('menu.organization.search')">
       <a-row>
         <a-col :flex="1">
           <a-form
@@ -91,12 +91,14 @@
           </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-button @click="handleClickDownload" :loading="downloadLoading">
-            <template #icon>
-              <icon-download />
-            </template>
-            {{ $t('searchOrg.operation.download') }}
-          </a-button>
+          <a-tooltip content="数据量大时导出需要较长时间">
+            <a-button @click="handleClickDownload" :loading="downloadLoading">
+              <template #icon>
+                <icon-download />
+              </template>
+              {{ $t('searchOrg.operation.download') }}
+            </a-button>
+          </a-tooltip>
         </a-col>
       </a-row>
       <a-table
@@ -323,7 +325,7 @@ export default defineComponent({
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       'current': 1,
-      'pageSize': 2,
+      'pageSize': 10,
       'show-total': true,
       'show-jumper': true,
     };
@@ -387,7 +389,7 @@ export default defineComponent({
     const search = () => {
       fetchData({
         size: pagination.pageSize,
-        pageNum: pagination.current,
+        pageNum: basePagination.current,
         ...formModel.value,
       } as unknown as OrgListParams);
     };
@@ -398,6 +400,7 @@ export default defineComponent({
     fetchData();
     const reset = () => {
       formModel.value = generateFormModel();
+      search();
     };
 
     const handleClickView = (record: Organization) => {

@@ -1,5 +1,5 @@
 export default {
-  'menu.visualization.userInfoAnalysis': '人才信息分析',
+  'menu.personnel.analysis': '人才信息分析',
   'dataAnalysis.title.generalSituation': '总体情况',
   'dataAnalysis.card.title.totalUserCount': '人才信息总数',
   'dataAnalysis.card.title.contentPublished': '内容发布量',

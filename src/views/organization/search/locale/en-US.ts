@@ -1,5 +1,5 @@
 export default {
-  'menu.organization.searchOrg': 'Search Org',
+  'menu.organization.search': 'Search Org',
   'searchOrg.form.orgName': 'Set Number',
   'searchOrg.form.orgName.placeholder': 'Please enter Set Number',
   'searchOrg.form.orgAddress': 'Set Name',

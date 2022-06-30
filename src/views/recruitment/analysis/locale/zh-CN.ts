@@ -1,5 +1,5 @@
 export default {
-  'menu.visualization.recruitInfoAnalysis': '招聘信息分析',
+  'menu.recruitment.analysis': '招聘信息分析',
   'dataAnalysis.title.publicOpinion': '舆情分析',
   'dataAnalysis.card.title.allVisitors': '访问总人次',
   'dataAnalysis.card.title.contentPublished': '内容发布量',

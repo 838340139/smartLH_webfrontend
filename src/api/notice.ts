@@ -1,29 +1,29 @@
 import axios from 'axios';
 import qs from 'query-string';
-import {Notice, Organization, Personnel} from '@/types/global';
+import { Notice, Personnel } from '@/types/global';
 
 export interface SendNoticeParams{
-  notice: Notice,
-  receiverIds?: number[]
-};
+  notice: Notice;
+  receiverIds?: number[];
+}
 
 export function sendMessage(params: SendNoticeParams) {
   return axios.post('/Notice/sendMessage', {
-    ...params
+    ...params,
   });
 }
 
-export interface QueryPersonnelParams{
+export interface QueryPersonnelParams {
   size: number;
   pageNum: number;
   userName?: string;
   phone?: string;
-};
+}
 
-export interface QueryPersonnelRes{
+export interface QueryPersonnelRes {
   list: Personnel[];
   total: number;
-  hasNextPage: boolean
+  hasNextPage: boolean;
 };
 
 export function getUserBySearch(params: QueryPersonnelParams) {
@@ -33,7 +33,7 @@ export function getUserBySearch(params: QueryPersonnelParams) {
       return qs.stringify(obj);
     },
   });
-};
+}
 
 export interface QueryNoticeParams{
   size: number;
@@ -46,7 +46,7 @@ export interface QueryNoticeRes{
   total: number;
   hasNextPage: boolean;
   pages: number;
-};
+}
 
 export function getNotices(params: QueryNoticeParams) {
   return axios.get<QueryNoticeRes>('/Notice/getNotices', {
@@ -55,7 +55,7 @@ export function getNotices(params: QueryNoticeParams) {
       return qs.stringify(obj);
     },
   });
-};
+}
 
 export function deleteNotices(params: { noticeId: number }) {
   return axios.get<QueryNoticeRes>('/Notice/delete', {
@@ -64,4 +64,4 @@ export function deleteNotices(params: { noticeId: number }) {
       return qs.stringify(obj);
     },
   });
-};
+}

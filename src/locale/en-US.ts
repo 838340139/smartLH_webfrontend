@@ -4,16 +4,11 @@ import localeLogin from '@/views/login/locale/en-US';
 import localeWorkplace from '@/views/dashboard/locale/en-US';
 /** simple */
 
-import localeSearchTable from '@/views/personnel/locale/en-US';
 
 import localeStepForm from '@/views/form/step/locale/en-US';
 import localeGroupForm from '@/views/form/group/locale/en-US';
 
 import localeBasicProfile from '@/views/profile/basic/locale/en-US';
-
-import localeDataAnalysis from '@/views/visualization/user-info-analysis/locale/en-US';
-import localeMultiDAnalysis from '@/views/visualization/org-info-analysis/locale/en-US';
-import localeRecruitDAnalysis from '@/views/visualization/recruit-info-analysis/locale/en-US';
 
 import localeSuccess from '@/views/result/success/locale/en-US';
 import localeError from '@/views/result/error/locale/en-US';
@@ -47,13 +42,9 @@ export default {
   ...localeLogin,
   ...localeWorkplace,
   /** simple */
-  ...localeSearchTable,
   ...localeStepForm,
   ...localeGroupForm,
   ...localeBasicProfile,
-  ...localeDataAnalysis,
-  ...localeMultiDAnalysis,
-  ...localeRecruitDAnalysis,
   ...localeSuccess,
   ...localeError,
   ...locale403,

@@ -36,7 +36,7 @@ export type TimeRanger = [string, string];
 export interface GeneralChart {
   xAxis: string[];
   data: Array<{ name: string; value: number[] }>;
-};
+}
 
 export interface Organization {
   id?: number;
@@ -50,11 +50,11 @@ export interface Organization {
   introduction?: string;
   auditTime?: string;
   isDeleted?: number;
-};
+}
 
 export interface Personnel {
   id?: number;
-  wx_account?: string;
+  wxAccount?: string;
   name?: string;
   sex?: string;
   home?: string;
@@ -79,8 +79,8 @@ export interface Personnel {
 
 export interface Recruitment {
   id?: number;
-  org_id?: number;
-  org_name?: string;
+  orgId?: number;
+  orgName?: string;
   position?: string;
   number?: number;
   age?: number;
@@ -99,4 +99,32 @@ export const AuditEnum = {
   toAudit: 0,
   passAudit: 1,
   notPassAudit: 2,
+};
+export const NoticeType = {
+  massPersonnel: 1,
+  massOrg: 2,
+  massAll: 5,
+  privatePersonnel: 3,
+  privateOrg: 4,
+};
+
+export const PopularTypeEnum = {
+  lastWeek: 0,
+  lastMonth: 1,
+  total: 2,
+};
+
+export interface Notice {
+  id?: number;
+  managerId?: number;
+  type?: number;
+  sendTime?: string;
+  title?: string;
+  receiverInfo?: string;
+  content?: string;
+}
+
+export const ManagerType = {
+  superAdmin: 0,
+  normalAdmin: 1,
 };
