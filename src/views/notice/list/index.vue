@@ -69,7 +69,6 @@
           <a-table-column title="操作" data-index="operations">
             <template #cell="{ record }">
               <a-button
-                v-permission="['admin']"
                 type="text"
                 size="small"
                 @click="
@@ -81,7 +80,6 @@
                 详情
               </a-button>
               <a-button
-                v-permission="['admin']"
                 type="text"
                 status="danger"
                 size="small"

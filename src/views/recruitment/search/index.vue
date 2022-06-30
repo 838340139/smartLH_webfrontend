@@ -224,7 +224,7 @@
           >
             <template #cell="{ record }">
               <a-button
-                v-permission="['admin']"
+
                 type="text"
                 size="small"
                 @click="
@@ -236,7 +236,7 @@
                 {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
               <a-button
-                v-permission="['admin']"
+
                 type="text"
                 status="danger"
                 size="small"
