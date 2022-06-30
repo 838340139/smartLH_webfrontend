@@ -26,13 +26,13 @@ export function queryRecList(params: RecListParams) {
 
 export function addRecruitment(params: Recruitment) {
   return axios.post('/Recruitment/addRecruitment', {
-    ...params,
+    ...params
   });
 }
 
 export function setRecruitInfo(params: Recruitment) {
   return axios.post('/Recruitment/setRecruitInfo', {
-    ...params,
+    ...params
   });
 }
 
