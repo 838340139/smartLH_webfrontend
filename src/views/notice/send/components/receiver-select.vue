@@ -204,7 +204,7 @@ export default defineComponent({
         // }
         const newData = data.list.map((item) => {
           return {
-            label: `${item.name} ( 编号: ${item.id} )`,
+            label: `${item.name}`,
             value: item.id,
             // @ts-ignore
             checked: selectReceiverMap.value[item.id] !== undefined,
@@ -217,7 +217,7 @@ export default defineComponent({
         } else {
           dataList.value = newData;
         }
-        pagination.current = params.pageNum;
+        pagination.current = data.pageNum;
         pagination.total = data.total;
         pagination.hasNextPage = data.hasNextPage;
       } catch (err) {
@@ -233,7 +233,7 @@ export default defineComponent({
         const { data } = await getUserBySearch(params);
         const newData = data.list.map((item) => {
           return {
-            label: `${item.name} ( 编号: ${item.id} ; 电话: ${item.phone} )`,
+            label: `${item.name} ( 电话: ${item.phone} )`,
             value: item.id,
             // @ts-ignore
             checked: selectReceiverMap.value[item.id] !== undefined,
