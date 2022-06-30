@@ -25,27 +25,15 @@
     <a-form-item
       field="email"
       :label="$t('admin.basicInfo.form.label.email')"
-      :rules="[
-        {
-          required: true,
-          message: $t('admin.form.error.email.required'),
-        },
-      ]"
     >
       <a-input
-        v-model="formData.email"
+        v-model="formData.mailbox"
         :placeholder="$t('admin.basicInfo.placeholder.email')"
       />
     </a-form-item>
     <a-form-item
       field="phone"
       :label="$t('admin.basicInfo.form.label.phone')"
-      :rules="[
-        {
-          required: true,
-          message: $t('admin.form.error.phone.required'),
-        },
-      ]"
     >
       <a-input
         v-model="formData.phone"
@@ -66,12 +54,12 @@
         type="text"
         style="margin-left: 10px; width: 8em"
         @click="handleClickChangePassword"
-        >{{changePasswordDisable?'修改':'取消修改'}}</a-button
+        >{{ changePasswordDisable ? '修改' : '取消修改' }}</a-button
       >
     </a-form-item>
     <a-form-item>
       <a-space>
-        <a-button type="primary" @click="validate">
+        <a-button type="primary" :loading="loading" @click="validate">
           {{ $t('admin.save') }}
         </a-button>
         <!--        <a-button type="secondary" @click="reset">-->
@@ -86,32 +74,49 @@
 import { defineComponent, ref } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { Manager, ManagerType } from '@/types/global';
+import { setInfo } from '@/api/manager';
+import useLoading from '@/hooks/loading';
+import { Modal, Message } from '@arco-design/web-vue';
+import {useUserStore} from "@/store";
 
 export default defineComponent({
   setup() {
+    const { loading, setLoading } = useLoading(false);
     const formRef = ref<FormInstance>();
+    const userStore = useUserStore();
     const formData = ref<Manager>({
-      mailbox: '',
-      username: '',
-      phone: '',
+      mailbox: userStore.mailbox,
+      username: userStore.username,
+      phone: userStore.phone,
       password: '',
-      isManager: ManagerType.superAdmin,
+      isManager: userStore.isManager,
     });
     const changePasswordDisable = ref<boolean>(true);
     const validate = async () => {
       const res = await formRef.value?.validate();
       if (!res) {
-        // do some thing
-        // you also can use html-type to submit
+        setLoading(true);
+        try {
+          if (changePasswordDisable.value) {
+            formData.value.password = undefined;
+          }
+          await setInfo(formData.value);
+          Message.success({
+            content: '修改成功',
+          });
+        } finally {
+          setLoading(false);
+        }
       }
     };
     const handleClickChangePassword = () => {
-      if(changePasswordDisable.value === false){
+      if (changePasswordDisable.value === false) {
         formData.value.password = undefined;
       }
       changePasswordDisable.value = !changePasswordDisable.value;
-    }
+    };
     return {
+      loading,
       formRef,
       formData,
       changePasswordDisable,

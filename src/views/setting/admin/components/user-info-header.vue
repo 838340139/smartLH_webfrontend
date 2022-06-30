@@ -2,30 +2,30 @@
   <div class="header">
     <a-space :size="12" direction="vertical" align="center">
       <a-avatar :size="64">
-        <template #trigger-icon>
-          <icon-camera />
-        </template>
-        <img :src="userInfo.avatar" />
+<!--        <template #trigger-icon>-->
+<!--          <icon-camera />-->
+<!--        </template>-->
+        <img :src="adminPng" style="background: white"/>
       </a-avatar>
       <a-typography-title :heading="6" style="margin: 0">
-        {{ userInfo.name }}
+        {{ userInfo.username }}
       </a-typography-title>
       <div class="user-msg">
         <a-space :size="18">
           <div>
             <icon-user />
-            <a-typography-text>{{ userInfo.jobName }}</a-typography-text>
+            <a-typography-text>{{ userInfo.phone }}</a-typography-text>
           </div>
           <div>
             <icon-home />
             <a-typography-text>
-              {{ userInfo.organizationName }}
+              {{ userInfo.mailbox }}
             </a-typography-text>
           </div>
-          <div>
-            <icon-location />
-            <a-typography-text>{{ userInfo.locationName }}</a-typography-text>
-          </div>
+<!--          <div>-->
+<!--            <icon-location />-->
+<!--            <a-typography-text>{{ userInfo.locationName }}</a-typography-text>-->
+<!--          </div>-->
         </a-space>
       </div>
     </a-space>
@@ -35,12 +35,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/store';
+import adminPng from '@/assets/images/admin.png'
 
 export default defineComponent({
   setup() {
     const userStore = useUserStore();
     return {
       userInfo: userStore,
+      adminPng
     };
   },
 });

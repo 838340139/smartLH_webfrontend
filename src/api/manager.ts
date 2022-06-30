@@ -24,3 +24,15 @@ export function logout() {
 export function getUserInfo() {
   return axios.get<Manager>('/Manager/getInfo', {});
 }
+
+export function setInfo(data: Manager) {
+  return axios.post('/Manager/setInfo', {
+    ...data
+  });
+}
+
+export function addManager(data: Manager) {
+  return axios.post('/Manager/addManager', {
+    ...data
+  });
+}

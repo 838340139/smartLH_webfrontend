@@ -4,7 +4,7 @@ import {
   logout as userLogout,
   getUserInfo,
   LoginData,
-} from '@/api/user';
+} from '@/api/manager';
 import { setToken, clearToken } from '@/utils/auth';
 import { Manager } from '@/types/global';
 import { useRouter } from 'vue-router';
@@ -61,7 +61,7 @@ const useUserStore = defineStore('user', {
 
     // Logout
     async logout() {
-       // await userLogout();
+      // await userLogout();
       this.resetInfo();
       clearToken();
       window.location.href = 'vue-admin-arco#/login?redirect=dashboard';

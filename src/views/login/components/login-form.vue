@@ -69,7 +69,7 @@ import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/store';
 import useLoading from '@/hooks/loading';
-import { LoginData } from '@/api/user';
+import { LoginData } from '@/api/manager';
 
 export default defineComponent({
   setup() {
