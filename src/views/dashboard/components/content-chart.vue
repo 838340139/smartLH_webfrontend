@@ -233,26 +233,15 @@ export default defineComponent({
         } = await getRecentVisit();
         const fromDate = from.split(' ')[0];
         const toDate = to.split(' ')[0];
-        const dateList = periodDate(fromDate, toDate, intervalDay);
+        // const dateList = periodDate(fromDate, toDate, intervalDay);
         // console.log(dateList);
         list.sort((v1, v2) => {
           return v1.visitTime > v2.visitTime ? 1 : -1;
         });
-        let index = 0;
-        dateList.forEach((item) => {
-          if (
-            list.length > index &&
-            new Date(list[index].visitTime).toLocaleDateString() === item
-          ) {
-            xAxis.value.push(item);
-            orgChartsData.value.push(list[index].orgVisit);
-            perChartsData.value.push(list[index].userVisit);
-            index += 1;
-          } else {
-            xAxis.value.push(item);
-            orgChartsData.value.push(0);
-            perChartsData.value.push(0);
-          }
+        list.forEach((item) => {
+          xAxis.value.push(item.visitTime);
+          orgChartsData.value.push(item.orgVisit);
+          perChartsData.value.push(item.userVisit);
         });
         // console.log(xAxis.value);
         // console.log(orgChartsData.value);

@@ -7,49 +7,54 @@
         <a-col :span="24">
           <a-tabs default-active-key="1" type="rounded">
             <a-tab-pane key="1" :title="$t('admin.tab.basicInformation')">
-              <BasicInformation />
+              <BasicInformation
+                :init-value="userStore"
+                :on-submit="handleOnSubmit"
+              />
             </a-tab-pane>
-            <a-tab-pane key="2" :title="$t('admin.tab.member')" >
-              <MyProject />
+            <a-tab-pane
+              v-if="userStore.isManager === ManagerType.superAdmin"
+              key="2"
+              :title="$t('admin.tab.member')"
+            >
+              <Member />
             </a-tab-pane>
           </a-tabs>
         </a-col>
       </a-row>
-<!--      <div class="content-left">-->
-<!--        <a-space direction="vertical" :size="16" fill>-->
-<!--          <LatestActivity />-->
-<!--        </a-space>-->
-<!--      </div>-->
-<!--      <div class="content-right">-->
-<!--        <a-space :size="16" direction="vertical" fill>-->
-<!--          <Myteam />-->
-<!--          <LatestNotification />-->
-<!--        </a-space>-->
-<!--      </div>-->
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { Modal, Message } from '@arco-design/web-vue';
+import { useUserStore } from '@/store';
+import { Manager, ManagerType } from '@/types/global';
+import { setInfo } from '@/api/manager';
 import UserInfoHeader from './components/user-info-header.vue';
-import LatestNotification from './components/latest-notification.vue';
-import MyProject from './components/member.vue';
-import LatestActivity from './components/latest-activity.vue';
-import Myteam from './components/my-team.vue';
-import BasicInformation from './components/basic-information.vue';
+import Member from './components/member.vue';
+import BasicInformation from './components/manager-form.vue';
 
 export default defineComponent({
   components: {
     UserInfoHeader,
     BasicInformation,
-    MyProject,
+    Member,
   },
   setup() {
-    const { t } = useI18n();
+    const userStore = useUserStore();
+    const handleOnSubmit = async (formData: Manager) => {
+      const data = await setInfo(formData);
+      // @ts-ignore
+      if (data.code === 6) {
+        Message.success('保存成功');
+      }
+    };
     return {
-
+      userStore,
+      ManagerType,
+      handleOnSubmit,
     };
   },
 });

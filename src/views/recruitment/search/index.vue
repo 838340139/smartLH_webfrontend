@@ -255,6 +255,7 @@
       </a-table>
     </a-card>
     <a-modal
+      :key="recModalVisible"
       v-model:visible="recModalVisible"
       width="80%"
       :mask-closable="false"

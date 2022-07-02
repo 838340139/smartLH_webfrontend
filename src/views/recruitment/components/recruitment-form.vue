@@ -2,6 +2,11 @@
   <div class="container">
     <a-space direction="vertical" :size="16" fill>
       <a-card class="general-card" title="招聘标题">
+        <template #extra>
+          <span v-if="recruitmentForm.publishTime">发布时间：{{
+              recruitmentForm.publishTime
+            }}</span>
+        </template>
         <a-input
           v-model="recruitmentForm.title"
           placeholder="请输入招聘标题"
@@ -141,6 +146,18 @@
           </a-row>
           <a-row>
             <a-col :span="8">
+              <a-form-item field="endTime" label="截止时间">
+                <a-date-picker
+                  v-model="recruitmentForm.endTime"
+                  placeholder="截止时间"
+                  style="width: 90%"
+                  size="medium"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="8">
               <a-form-item field="age" label="年龄要求">
                 <a-input
                   v-model="recruitmentForm.age"
@@ -209,6 +226,8 @@ const generateRecForm = () => {
     content: undefined,
     salaryFloor: undefined,
     salaryCell: undefined,
+    publishTime: undefined,
+    endTime: undefined,
   };
 };
 const validate = (form: Recruitment) => {
@@ -293,7 +312,7 @@ export default defineComponent({
   },
   setup(props) {
     const { loading, setLoading } = useLoading(false);
-    const recruitmentForm = ref<Recruitment>(generateRecForm());
+    const recruitmentForm = ref<Recruitment>(props.initValue);
     watch(
       () => props.initValue,
       () => {

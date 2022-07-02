@@ -25,6 +25,9 @@ export default defineComponent({
     const { loading, setLoading } = useLoading(false);
     const router = useRouter();
     const handleSubmit = async (item: Recruitment) => {
+      // console.log(item);
+      // if(!item.id)
+      // return;
       const data = await addRecruitment(item);
       // @ts-ignore
       if (data.code === 6) {
