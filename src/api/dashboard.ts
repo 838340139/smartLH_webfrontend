@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'query-string';
-import {Notice, Recruitment} from '@/types/global';
+import { Notice, Recruitment } from '@/types/global';
 
 export interface ContentDataRecord {
   x: string;

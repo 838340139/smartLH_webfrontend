@@ -38,6 +38,15 @@ export function queryOrgList(params: OrgListParams) {
   });
 }
 
+export function getOrgInfo(params: { orgId: number }) {
+  return axios.get<Organization>('/Organization/getOrgInfo', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
+
 export function addOrg(params: Organization) {
   return axios.post('/Organization/addOrg', {
     ...params,

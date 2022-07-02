@@ -79,10 +79,11 @@ export interface Personnel {
 
 export interface Recruitment {
   id?: number;
+  orgId?: number;
   orgName?: string;
   position?: string;
-  number?: number;
-  age?: number;
+  number?: string;
+  age?: string;
   subject?: string;
   fresh?: string;
   education?: string;
@@ -90,6 +91,10 @@ export interface Recruitment {
   politics?: string;
   remark?: string;
   publishTime?: string;
+  title?: string;
+  content?: string;
+  salaryFloor?: string;
+  salaryCell?: string;
 }
 export const AuditEnum = {
   0: '未审核',
@@ -136,3 +141,34 @@ export interface Manager {
   mailbox?: string;
   isManager?: number;
 }
+
+export const educationType = [
+  {
+    label: '小学',
+    value: '小学',
+  },
+  {
+    label: '初中',
+    value: '初中',
+  },
+  {
+    label: '高中(中专、职高、中技等)',
+    value: '高中(中专、职高、中技等)',
+  },
+  {
+    label: '专科',
+    value: '专科',
+  },
+  {
+    label: '本科',
+    value: '本科',
+  },
+  {
+    label: '硕士',
+    value: '硕士',
+  },
+  {
+    label: '博士',
+    value: '博士',
+  },
+];

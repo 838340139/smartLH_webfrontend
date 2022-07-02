@@ -5,7 +5,7 @@ export default {
   meta: {
     locale: 'menu.notice',
     requiresAuth: true,
-    icon: 'icon-file',
+    icon: 'icon-message',
   },
   children: [
     {
@@ -35,8 +35,8 @@ export default {
       meta: {
         locale: 'menu.notice.success',
         requiresAuth: true,
-        roles: ['admin'],
-        hideInMenu: true
+        roles: ['*'],
+        hideInMenu: true,
       },
     },
   ],

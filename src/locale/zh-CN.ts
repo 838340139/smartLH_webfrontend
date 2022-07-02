@@ -11,8 +11,10 @@ import localeOrgSearch from '@/views/organization/search/locale/zh-CN';
 import localeOrgAnalysis from '@/views/organization/analysis/locale/zh-CN';
 import localeOrgAudit from '@/views/organization/audit/locale/zh-CN';
 
+import localeRecruitmentPublish from '@/views/recruitment/publish/locale/zh-CN';
 import localeRecruitmentSearch from '@/views/recruitment/search/locale/zh-CN';
 import localeRecruitmentAnalysis from '@/views/recruitment/analysis/locale/zh-CN';
+import localeRecruitmentSuccess from '@/views/recruitment/success/locale/zh-CN';
 
 import localeStepForm from '@/views/form/step/locale/zh-CN';
 import localeGroupForm from '@/views/form/group/locale/zh-CN';
@@ -29,13 +31,12 @@ import locale500 from '@/views/exception/500/locale/zh-CN';
 import localeSettingAdmin from '@/views/setting/admin/locale/zh-CN';
 import localeSettingSetting from '@/views/setting/setting/locale/zh-CN';
 
-import localeNoticeSend from '@/views/notice/send/locale/zh-CN'
-import localeNoticeSuccess from '@/views/notice/success/locale/zh-CN'
-import localeNoticeList from '@/views/notice/list/locale/zh-CN'
+import localeNoticeSend from '@/views/notice/send/locale/zh-CN';
+import localeNoticeSuccess from '@/views/notice/success/locale/zh-CN';
+import localeNoticeList from '@/views/notice/list/locale/zh-CN';
 /** simple end */
 import localeGlobal from './zh-CN/global';
 import localeSettings from './zh-CN/settings';
-
 
 export default {
   'menu.dashboard': '工作台',
@@ -62,8 +63,10 @@ export default {
   ...localeOrgAnalysis,
   ...localeOrgAudit,
   ...localeOrgSearch,
+  ...localeRecruitmentPublish,
   ...localeRecruitmentAnalysis,
   ...localeRecruitmentSearch,
+  ...localeRecruitmentSuccess,
   ...localeStepForm,
   ...localeGroupForm,
   ...localeBasicProfile,
@@ -77,6 +80,6 @@ export default {
   ...localeNoticeSend,
   ...localeNoticeSuccess,
   ...localeNoticeList,
-  ...localeGlobal
+  ...localeGlobal,
   /** simple end */
 };

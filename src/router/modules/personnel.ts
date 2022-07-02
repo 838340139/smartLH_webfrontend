@@ -6,7 +6,7 @@ export default {
     locale: 'menu.personnel',
     requiresAuth: true,
     roles: ['*'],
-    icon: 'icon-list',
+    icon: 'icon-user',
   },
   children: [
     {

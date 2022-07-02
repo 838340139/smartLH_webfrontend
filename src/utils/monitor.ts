@@ -10,7 +10,7 @@ export default function handleError(Vue: App, baseUrl: string) {
     instance: ComponentPublicInstance | null,
     info: string
   ) => {
-    // send error info
+    // publish error info
     axios.post(`${baseUrl}/report-error`, {
       err,
       instance,
