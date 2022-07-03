@@ -260,7 +260,7 @@
       @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
-      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
+      <template #title> {{ viewOrCreate ? '详情' : '编辑' }} </template>
       <div>
         <a-form :model="recForm" auto-label-width>
           <a-form-item field="orgName" label="招聘单位名称">
@@ -345,7 +345,7 @@ export default defineComponent({
     const recForm = ref<Recruitment>(generateCreateRecFormModel());
     const { t } = useI18n();
     const renderData = ref<Recruitment[]>([]);
-    const typeOptions = ref<{ label: string; value: string }[]>([]);
+    // const typeOptions = ref<{ label: string; value: string }[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       'current': 1,
@@ -369,28 +369,21 @@ export default defineComponent({
     //   }
     // };
     // fetchTypeData();
-    // const typeOptions = computed<Options[]>(() => [
-    //   {
-    //     label: t('organization.orgType.state-enterprise'),
-    //     value: t('organization.orgType.state-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.foreign-enterprise'),
-    //     value: t('organization.orgType.foreign-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.joint-venture'),
-    //     value: t('organization.orgType.joint-venture'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.private-enterprise'),
-    //     value: t('organization.orgType.private-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.government-affiliated-institution'),
-    //     value: t('organization.orgType.government-affiliated-institution'),
-    //   },
-    // ]);
+    const typeOptions = computed<Options[]>(() => [
+      {
+        label: t('本科'),
+        value: t('recruitment.recType.undergraduate'),
+      },
+      {
+        label: t('硕士研究生'),
+        value: t('recruitment.recType.master'),
+      },
+      {
+        label: t('博士研究生'),
+        value: t('recruitment.recType.phd'),
+      },
+
+    ]);
     const fetchData = async (
       params: RecListParams = { pageNum: 1, size: 20 }
     ) => {

@@ -33,6 +33,23 @@ export function setUserInfo(params: Personnel) {
   });
 }
 
+export function addUser(params: Personnel) {
+  return axios.post('/User/addUser', {
+    ...params
+  });
+}
+export function exportExcel(params: PerListParams) {
+  return axios.get('/User/exportExcel', {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    responseType: 'blob',
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
 export function deleteUser(params: { userId: number }) {
   return axios.get('/User/deleteUser', {
     params,

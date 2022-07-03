@@ -21,6 +21,7 @@
     "dayjs": "^1.10.7",
     "echarts": "^5.2.2",
     "element-china-area-data": "^5.0.2",
+    "esbuild-windows-64": "^0.14.48",
     "file-saver": "^2.0.5",
     "js-xlsx": "^0.8.22",
     "lodash": "^4.17.21",

@@ -36,11 +36,11 @@
               <a-col :span="8">
                 <a-form-item
                   field="academic"
-                  :label="$t('searchTable.form.contentType')"
+                  :label="$t('searchTable.form.academic')"
                 >
                   <a-select
-                    v-model="formModel.contentType"
-                    :options="contentTypeOptions"
+                    v-model="formModel.academic"
+                    :options="typeOptions"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -64,7 +64,7 @@
                 >
                   <a-select
                     v-model="formModel.politicsType"
-                    :options="contentTypeOptions"
+                    :options="politicsTypeOptions"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -85,10 +85,9 @@
                   field="fresh"
                   :label="$t('searchTable.form.status')"
                 >
-                  <a-select
+                  <a-input
                     v-model="formModel.status"
-                    :options="statusOptions"
-                    :placeholder="$t('searchTable.form.selectDefault')"
+                    :placeholder="$t('searchTable.form.status.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -133,12 +132,14 @@
           </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a-button>
-            <template #icon>
-              <icon-download />
-            </template>
-            {{ $t('searchTable.operation.download') }}
-          </a-button>
+          <a-tooltip content="数据量大时导出需要较长时间">
+            <a-button @click="handleClickDownload">
+              <template #icon>
+                <icon-download />
+              </template>
+              {{ $t('searchRec.operation.download') }}
+            </a-button>
+          </a-tooltip>
         </a-col>
       </a-row>
       <a-table
@@ -170,10 +171,10 @@
             :title="$t('searchTable.columns.subject')"
             data-index="subject"
           />
-          <!-- <a-table-column
+          <a-table-column
             :title="$t('searchTable.columns.academic')"
             data-index="academic"
-          /> -->
+          />
           <a-table-column
             :title="$t('searchTable.columns.education')"
             data-index="education"
@@ -231,10 +232,10 @@
             data-index="undergo"
           />  -->
 
-          <a-table-column
+          <!-- <a-table-column
             :title="$t('searchTable.columns.contentType')"
             data-index="academic"
-          >
+          > -->
             <!-- <template #cell="{ record }">
               <a-space>
                 <a-avatar
@@ -266,7 +267,7 @@
                 {{ $t(`searchTable.form.contentType.${record.contentType}`) }}
               </a-space>
             </template> -->
-          </a-table-column>
+          <!-- </a-table-column> -->
           <a-table-column
             :title="$t('searchTable.columns.filterType')"
             data-index="sex"
@@ -335,7 +336,7 @@
       @ok="handleCreatePerOk"
       @cancel="handleCreateCancel"
     >
-      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
+      <template #title> {{ viewOrCreate ? '详情' : '编辑' }} </template>
       <div>
         <a-form :model="perForm" auto-label-width>
           <a-form-item field="wxAccount" label="用户账号">
@@ -384,6 +385,42 @@
           <a-form-item field="status" label="状态">
             <a-input v-model="perForm.status" placeholder="请输入" />
           </a-form-item>
+          <a-form-item field="nation" label="民族">
+            <a-input v-model="perForm.nation" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="politics" label="政治面貌">
+            <a-input v-model="perForm.politics" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="photo" label="照片">
+            <a-input v-model="perForm.photo" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="post" label="职称职务">
+            <a-input v-model="perForm.post" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="graduation" label="状态">
+            <a-input v-model="perForm.status" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="birthday" label="生日">
+            <a-input v-model="perForm.status" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="fresh" label="是否应届">
+            <a-input v-model="perForm.fresh" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="mailbox" label="邮箱">
+            <a-input v-model="perForm.mailbox" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="work" label="现工作单位">
+            <a-input v-model="perForm.status" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="prize" label="获奖情况">
+            <a-input v-model="perForm.prize" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="introduction" label="简介">
+            <a-input v-model="perForm.introduction" placeholder="请输入" />
+          </a-form-item>
+          <a-form-item field="undergo" label="个人经历">
+            <a-input v-model="perForm.undergo" placeholder="请输入" />
+          </a-form-item>
           <!-- <a-form-item field="type" label="介绍">
             <a-textarea
               v-model="recForm.introduction"
@@ -409,7 +446,9 @@ import {
   PerListParams,
   queryPerList,
   setUserInfo,
+  addUser,
   deleteUser,
+  exportExcel,
 } from '@/api/personnel';
 import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
@@ -438,18 +477,32 @@ const generateCreatePerFormModel = () => {
     marriage: '',
     academic: '',
     sex: '',
+    nation: '',
+    phone: '',
+    politics: '',
+    photo: '',
+    post: '',
+    fresh: '',
+    mailbox: '',
+    work: '',
+    prize: '',
+    introduction: '',
+    undergo: '',
+    status: '',
   };
 };
 export default defineComponent({
   components: {},
   setup() {
     const { loading, setLoading } = useLoading(true);
+    const { loading: downloadLoading, setLoading: setDownloadLoading } =
+        useLoading(false);
     const perModalVisible = ref<boolean>(false);
     const viewPerCreate = ref<boolean>(false);
     const perForm = ref<Personnel>(generateCreatePerFormModel());
     const { t } = useI18n();
     const renderData = ref<Personnel[]>([]);
-    const typeOptions = ref<{ label: string; value: string }[]>([]);
+    // const typeOptions = ref<{ label: string; value: string }[]>([]);
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       'current': 1,
@@ -473,40 +526,45 @@ export default defineComponent({
     //   }
     // };
     // fetchTypeData();
-    //  const typeOptions = computed<Options[]>(() => [
-    //   {
-    //     label: t('organization.orgType.state-enterprise'),
-    //     value: t('organization.orgType.state-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.foreign-enterprise'),
-    //     value: t('organization.orgType.foreign-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.joint-venture'),
-    //     value: t('organization.orgType.joint-venture'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.private-enterprise'),
-    //     value: t('organization.orgType.private-enterprise'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.government-affiliated-institution'),
-    //     value: t('organization.orgType.government-affiliated-institution'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.state-administrative-organs'),
-    //     value: t('organization.orgType.state-administrative-organs'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.government'),
-    //     value: t('organization.orgType.government'),
-    //   },
-    //   {
-    //     label: t('organization.orgType.others'),
-    //     value: t('organization.orgType.others'),
-    //   },
-    //  ]);
+     const typeOptions = computed<Options[]>(() => [
+      {
+        label: t('本科'),
+        value: t('personnel.academic.undergraduate'),
+      },
+      {
+        label: t('硕士研究生'),
+        value: t('personnel.academic.master'),
+      },
+      {
+        label: t('博士研究生'),
+        value: t('personnel.academic.phd'),
+      },
+     ]);
+    const filterTypeOptions = computed<Options[]>(() => [
+      {
+        label: t('男'),
+        value: t('personnel.filterType.boy'),
+      },
+      {
+        label: t('女'),
+        value: t('personnel.filterType.girl'),
+      },
+     ]); 
+      const politicsTypeOptions = computed<Options[]>(() => [
+      {
+        label: t('共青团员'),
+        value: t('personnel.politicsType.gqty'),
+      },
+      {
+        label: t('群众'),
+        value: t('personnel.politicsType.qz'),
+      },
+      {
+        label: t('共产党员（含预备党员）'),
+        value: t('personnel.politicsType.zgdy'),
+      },
+     ]); 
+   
     const fetchData = async (
       params: PerListParams = { pageNum: 1, size: 20 }
     ) => {
@@ -577,6 +635,7 @@ export default defineComponent({
       viewPerCreate.value = false;
       perForm.value = generateCreatePerFormModel();
     };
+
     const handleCreatePerOk = async () => {
       setLoading(true);
       if (viewPerCreate.value) {
@@ -585,7 +644,7 @@ export default defineComponent({
         Message.success('修改成功');
       } else {
         perForm.value.place = codeToText(perForm.value.place).join('/');
-        // await addRecruitment(perForm.value);
+       await addUser(perForm.value);
         Message.success('添加成功');
       }
       perModalVisible.value = false;
@@ -594,6 +653,29 @@ export default defineComponent({
     };
     const handleCreateCancel = () => {
       perModalVisible.value = false;
+    };
+
+    const handleClickDownload = async () => {
+      setDownloadLoading(true)
+      const res = await exportExcel({
+        size: basePagination.pageSize,
+        pageNum: basePagination.current,
+        ...formModel.value,
+      });
+      // @ts-ignore
+      const blob = new Blob([res], { type: 'application/x-xls' });
+      const a = document.createElement('a');
+      // 创建URL
+      const blobUrl = window.URL.createObjectURL(blob);
+      a.download = '人才信息表.xlsx';
+      a.href = blobUrl;
+      document.body.appendChild(a);
+      // 下载文件
+      a.click();
+      // 释放内存
+      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+      setDownloadLoading(false);
     };
     return {
       loading,
@@ -605,6 +687,8 @@ export default defineComponent({
       reset,
       cutString,
       typeOptions,
+      filterTypeOptions,
+      politicsTypeOptions,
       handleClickDelete,
       handleDeleteOk,
       viewPerCreate,
@@ -615,6 +699,7 @@ export default defineComponent({
       handleCreatePerOk,
       handleCreateCancel,
       regionOptions,
+      handleClickDownload,
     };
   },
 });
