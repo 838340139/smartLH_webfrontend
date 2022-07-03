@@ -96,7 +96,7 @@
               <a-form-item field="content" label="岗位职责" required>
                 <a-textarea
                   v-model="recruitmentForm.content"
-                  :max-length="300"
+                  :max-length="800"
                   :placeholder="contentPlaceholder"
                   allow-clear
                   style="height: 200px"
@@ -158,6 +158,17 @@
           </a-row>
           <a-row>
             <a-col :span="8">
+              <a-form-item field="experience" label="工作经验">
+                <a-select
+                  v-model="recruitmentForm.experience"
+                  :options="experienceType"
+                  placeholder="请选择"
+                >
+                  <a-option value="不限">不限</a-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
               <a-form-item field="age" label="年龄要求">
                 <a-input
                   v-model="recruitmentForm.age"
@@ -174,7 +185,7 @@
                 <a-textarea
                   v-model="recruitmentForm.remark"
                   :placeholder="remarkPlaceholder"
-                  :max-length="300"
+                  :max-length="800"
                   allow-clear
                   style="height: 200px"
                   show-word-limit
@@ -205,7 +216,7 @@ import { defineComponent, ref, computed, watch } from 'vue';
 import useLoading from '@/hooks/loading';
 import editor from '@/components/editor/index.vue';
 import { Message } from '@arco-design/web-vue';
-import { Recruitment, educationType, Organization } from '@/types/global';
+import { Recruitment, educationType, Organization, experienceType } from '@/types/global';
 import { IconMinus } from '@arco-design/web-vue/es/icon';
 import orgSelect from './org-select.vue';
 
@@ -228,6 +239,7 @@ const generateRecForm = () => {
     salaryCell: undefined,
     publishTime: undefined,
     endTime: undefined,
+    experience: undefined,
   };
 };
 const validate = (form: Recruitment) => {
@@ -341,6 +353,7 @@ export default defineComponent({
     return {
       loading,
       educationType,
+      experienceType,
       remarkPlaceholder,
       contentPlaceholder,
       recruitmentForm,

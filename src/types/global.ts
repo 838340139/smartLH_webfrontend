@@ -96,6 +96,7 @@ export interface Recruitment {
   content?: string;
   salaryFloor?: string;
   salaryCell?: string;
+  experience?: string;
 }
 export const AuditEnum = {
   0: '未审核',
@@ -173,3 +174,30 @@ export const educationType = [
     value: '博士',
   },
 ];
+
+export const experienceType = [
+  {
+    label: '1年工作经验',
+    value: '1年工作经验',
+  },
+  {
+    label: '2年工作经验',
+    value: '2年工作经验',
+  },
+  {
+    label: '3年工作经验',
+    value: '3年工作经验',
+  },
+  {
+    label: '5年工作经验',
+    value: '5年工作经验',
+  },
+  {
+    label: '8年工作经验',
+    value: '8年工作经验',
+  },
+  {
+    label: '10年工作经验',
+    value: '10年工作经验',
+  },
+]
