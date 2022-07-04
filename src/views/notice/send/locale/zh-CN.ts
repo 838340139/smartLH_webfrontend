@@ -1,5 +1,5 @@
 export default {
-  'menu.notice.send': '发布消息',
+  'menu.notice.send': '发送消息',
   'notice.form.title': '标题',
   'notice.form.content': '正文',
   'notice.form.receiver': '发送给',

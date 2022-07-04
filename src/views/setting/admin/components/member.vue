@@ -1,75 +1,153 @@
 <template>
   <a-card class="general-card" :title="$t('admin.member.title')">
-        <template #extra>
-          <a-button type="primary">
-            <template #icon>
-              <icon-plus />
-            </template>
-            添加管理员
-          </a-button>
+    <template #extra>
+      <a-button type="primary" @click="handleClickCreate">
+        <template #icon>
+          <icon-plus />
         </template>
-    <a-row :gutter="16">
-      <a-col
-        v-for="(member, index) in memberList"
-        :key="index"
-        :span="8"
-        class="my-project-item"
+        创建管理员
+      </a-button>
+    </template>
+    <a-empty v-if="memberList.length === 0"></a-empty>
+    <a-card :loading="loading" :bordered="false">
+      <a-row :gutter="16">
+        <a-col
+          v-for="(member, index) in memberList"
+          :key="index"
+          :span="8"
+          class="my-project-item"
+        >
+          <a-card :body-style="{ padding: '10px 20px', minHeight: '50px' }">
+            <template #actions>
+              <a-button type="text" @click="handleClickChange(member)"
+                >修改</a-button
+              >
+              <a-button
+                type="text"
+                status="danger"
+                @click="handleClickDelete(member)"
+                >删除</a-button
+              >
+            </template>
+            <a-skeleton v-if="loading" :loading="loading" :animation="true">
+              <a-skeleton-line :rows="3" />
+            </a-skeleton>
+            <a-space direction="vertical">
+              <a-typography-text type="secondary">
+                用户名：{{ member.username }}
+              </a-typography-text>
+              <a-typography-text type="secondary">
+                邮箱：{{ member.mailbox }}
+              </a-typography-text>
+              <a-typography-text type="secondary">
+                电话：{{ member.phone }}
+              </a-typography-text>
+              <a-typography-text type="secondary">
+                密码：******
+              </a-typography-text>
+            </a-space>
+          </a-card>
+        </a-col>
+      </a-row>
+    </a-card>
+    <a-modal v-model:visible="modalVisible" width="50%" :mask-closable="false">
+      <template #title>{{
+        form.id || form.id === 0 ? '修改' : '创建管理员'
+      }}</template>
+      <template #footer><span></span></template>
+      <manager-form
+        :init-value="form"
+        submit-text="保存"
+        :on-submit="handleOnSubmit"
+        :password-input-state="
+          form.id || form.id === 0 ? 'selective' : 'enable'
+        "
       >
-        <a-card :body-style="{padding:'10px 20px', minHeight: '50px'}">
-          <template #actions>
-            <a-button type="text">修改</a-button>
-            <a-button type="text" status="danger">删除</a-button>
-          </template>
-          <a-skeleton v-if="loading" :loading="loading" :animation="true">
-            <a-skeleton-line :rows="3" />
-          </a-skeleton>
-<!--          <a-descriptions v-else :data="data" title="User Info" :column="{xs:1, md:3, lg:4}">-->
-<!--            <a-descriptions-item v-for="item of data" :label="item.label">-->
-<!--              <a-tag>{{ item.value }}</a-tag>-->
-<!--            </a-descriptions-item>-->
-<!--          </a-descriptions>-->
-          <a-space direction="vertical">
-            <a-typography-text type="secondary">
-              用户名：{{ member.username }}
-            </a-typography-text>
-            <a-typography-text type="secondary">
-              邮箱：{{ member.mailbox }}
-            </a-typography-text>
-            <a-typography-text type="secondary">
-              电话：{{ member.phone }}
-            </a-typography-text>
-            <a-typography-text type="secondary">
-              密码：******
-            </a-typography-text>
-          </a-space>
-        </a-card>
-      </a-col>
-    </a-row>
+      </manager-form>
+    </a-modal>
   </a-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import { Manager, ManagerType } from '@/types/global';
-import useLoading from "@/hooks/loading";
+import useLoading from '@/hooks/loading';
 import { IconPlus } from '@arco-design/web-vue/es/icon';
+import { addManager, deleteManager, getAll, setInfo } from '@/api/manager';
+import { useUserStore } from '@/store';
+import { Modal, Message } from '@arco-design/web-vue';
+import ManagerForm from '@/views/setting/admin/components/manager-form.vue';
 
 export default defineComponent({
-  components:{ IconPlus },
+  components: { ManagerForm, IconPlus },
   setup() {
     const memberList = ref<Manager[]>([]);
     const { loading, setLoading } = useLoading(false);
-    memberList.value.push({
-      id: 1,
-      mailbox: '838340139@qq.com',
-      username: '罗小超',
-      phone: '7879',
-      password: '',
-      isManager: ManagerType.normalAdmin,
-    });
+    const modalVisible = ref<boolean>(false);
+    const form = ref<Manager>({});
+    const userStore = useUserStore();
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { data } = await getAll();
+        memberList.value = data.filter((item) => {
+          return item.id !== userStore.id;
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+    const handleClickCreate = () => {
+      form.value = {};
+      modalVisible.value = true;
+    };
+    const handleClickChange = (item: Manager) => {
+      form.value = item;
+      modalVisible.value = true;
+    };
+    const handleClickDelete = async (item: any) => {
+      Modal.info({
+        title: '提醒',
+        content: '是否确认删除？',
+        onOk: async () => {
+          const data = await deleteManager({ id: item.id });
+          // @ts-ignore
+          if (data.code === 6) {
+            Message.success('删除成功');
+            fetchData();
+          }
+        },
+      });
+    };
+    const handleOnSubmit = async (item: Manager) => {
+      if (item.id || item.id === 0) {
+        const data = await setInfo(item);
+        // @ts-ignore
+        if (data.code === 6) {
+          Message.success('保存成功');
+          modalVisible.value = false;
+          fetchData();
+        }
+      } else {
+        const data = await addManager(item);
+        // @ts-ignore
+        if (data.code === 6) {
+          Message.success('创建成功');
+          modalVisible.value = false;
+          fetchData();
+        }
+      }
+    };
     return {
       loading,
+      modalVisible,
       memberList,
+      form,
+      handleClickCreate,
+      handleClickChange,
+      handleClickDelete,
+      handleOnSubmit,
     };
   },
 });

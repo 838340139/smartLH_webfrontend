@@ -4,7 +4,7 @@ export default {
   component: () => import('@/views/setting/index.vue'),
   meta: {
     locale: 'menu.setting',
-    icon: 'icon-user',
+    icon: 'icon-settings',
     requiresAuth: true,
   },
   children: [

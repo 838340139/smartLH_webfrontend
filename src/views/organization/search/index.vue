@@ -81,18 +81,12 @@
               </template>
               {{ $t('searchOrg.operation.create') }}
             </a-button>
-            <a-upload action="/">
-              <template #upload-button>
-                <a-button>
-                  {{ $t('searchOrg.operation.import') }}
-                </a-button>
-              </template>
-            </a-upload>
+            <a-button @click="handleClickImport"> 批量导入 </a-button>
           </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
           <a-tooltip content="数据量大时导出需要较长时间">
-            <a-button @click="handleClickDownload" :loading="downloadLoading">
+            <a-button :loading="downloadLoading" @click="handleClickDownload">
               <template #icon>
                 <icon-download />
               </template>
@@ -140,7 +134,6 @@
           >
             <template #cell="{ record }">
               <a-button
-
                 type="text"
                 size="small"
                 @click="
@@ -152,7 +145,6 @@
                 {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
               <a-button
-
                 type="text"
                 status="danger"
                 size="small"
@@ -169,6 +161,17 @@
         </template>
       </a-table>
     </a-card>
+    <a-modal
+      v-model:visible="importModalVisible"
+      :width="500"
+      :mask-closable="false"
+      unmount-on-close
+      hide-cancel
+      @ok="importModalVisible=false"
+    >
+      <template #title> 批量导入 </template>
+      <import-excel url="/Organization/importExcel"> </import-excel>
+    </a-modal>
     <a-modal
       v-model:visible="orgModalVisible"
       :width="1000"
@@ -290,6 +293,9 @@ import { regionData } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
 import { cutString } from '@/utils/stringUtils';
+import { getToken } from '@/utils/auth';
+import config from '@/config/settings.json';
+import importExcel from "@/components/importExcel/index.vue";
 
 const generateFormModel = () => {
   return {
@@ -311,12 +317,13 @@ const generateCreateOrgFormModel = () => {
   };
 };
 export default defineComponent({
-  components: {},
+  components: { importExcel },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
       useLoading(false);
     const orgModalVisible = ref<boolean>(false);
+    const importModalVisible = ref<boolean>(false);
     const viewOrCreate = ref<boolean>(false);
     const orgForm = ref<Organization>(generateCreateOrgFormModel());
     const { t } = useI18n();
@@ -493,8 +500,11 @@ export default defineComponent({
       console.log(orgModalVisible.value);
       orgModalVisible.value = false;
     };
+    const handleClickImport = () => {
+      importModalVisible.value = true;
+    };
     const handleClickDownload = async () => {
-      setDownloadLoading(true)
+      setDownloadLoading(true);
       const res = await exportExcel({
         size: basePagination.pageSize,
         pageNum: basePagination.current,
@@ -531,12 +541,14 @@ export default defineComponent({
       handleDeleteOk,
       viewOrCreate,
       orgModalVisible,
+      importModalVisible,
       orgForm,
       handleClickView,
       handleCreateOrg,
       handleBeforeOk,
       handleCreateOrgOk,
       handleCreateCancel,
+      handleClickImport,
       handleClickDownload,
     };
   },

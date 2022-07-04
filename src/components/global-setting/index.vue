@@ -3,9 +3,10 @@
     :width="300"
     unmount-on-close
     :visible="visible"
+    :hide-cancel="true"
     :cancel-text="$t('settings.close')"
-    :ok-text="$t('settings.copySettings')"
-    @ok="copySettings"
+    ok-text="确定"
+    @ok="cancel"
     @cancel="cancel"
   >
     <template #title> {{ $t('settings.title') }} </template>

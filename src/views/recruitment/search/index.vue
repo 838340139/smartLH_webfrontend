@@ -12,7 +12,10 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item field="orgName" :label="$t('searchRec.form.recName')">
+                <a-form-item
+                  field="orgName"
+                  :label="$t('searchRec.form.recName')"
+                >
                   <a-input
                     v-model="formModel.name"
                     :placeholder="$t('searchRec.form.recName.placeholder')"
@@ -106,12 +109,12 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="16">
           <a-space>
-            <a-button type="primary" @click="handleCreateRec">
-              <template #icon>
-                <icon-plus />
-              </template>
-              {{ $t('searchRec.operation.create') }}
-            </a-button>
+            <!--            <a-button type="primary" @click="handleCreateRec">-->
+            <!--              <template #icon>-->
+            <!--                <icon-plus />-->
+            <!--              </template>-->
+            <!--              {{ $t('searchRec.operation.create') }}-->
+            <!--            </a-button>-->
             <a-upload action="/">
               <template #upload-button>
                 <a-button>
@@ -149,10 +152,10 @@
             :title="$t('searchRec.columns.name')"
             data-index="orgName"
           />
-         <a-table-column
+          <a-table-column
             :title="$t('searchRec.columns.num')"
             data-index="number"
-          /> 
+          />
           <!-- <a-table-column
             :title="$t('searchRec.columns.phone')"
             data-index="phone"
@@ -249,52 +252,61 @@
                 {{ $t('searchOrg.columns.operations.delete') }}
               </a-button>
             </template>
-            </a-table-column>
+          </a-table-column>
         </template>
       </a-table>
     </a-card>
     <a-modal
+      :key="recModalVisible"
       v-model:visible="recModalVisible"
-      width="40%"
+      width="80%"
       :mask-closable="false"
       @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
-      <template #title> {{ viewOrCreate ? '详情' : '编辑' }} </template>
-      <div>
-        <a-form :model="recForm" auto-label-width>
-          <a-form-item field="orgName" label="招聘单位名称">
-            <a-input v-model="recForm.orgName" placeholder="请输入" />
-          </a-form-item>
-          <a-form-item field="number" label="招聘人数">
-           <a-input v-model="recForm.number" placeholder="请输入" />
-          </a-form-item>
-          <a-form-item field="place" label="工作地点">
-            <a-cascader
-              v-model="recForm.place"
-              size="large"
-              class="large-cascader"
-              check-strictly
-              :options="regionOptions"
-              placeholder="请选择"
-              allow-search
-            />
-          </a-form-item>
-          <a-form-item field="education" label="学历要求">
-            <a-input v-model="recForm.education" placeholder="请输入" />
-          </a-form-item>
-          <!-- <a-form-item field="type" label="介绍">
-            <a-textarea
-              v-model="recForm.introduction"
-              placeholder="请输入"
-              :max-length="255"
-              allow-clear
-              style="height: 100px"
-              show-word-limit
-            />
-          </a-form-item> -->
-        </a-form>
-      </div>
+      <template #title>详情</template>
+      <template #footer><span></span></template>
+      <recruitment-form
+        style="height: 450px"
+        :init-value="recForm"
+        submit-text="保存"
+        :on-submit="handleSetRecOk"
+      >
+      </recruitment-form>
+      <!--      <div>-->
+      <!--        <a-form :model="recForm" auto-label-width>-->
+      <!--          <a-form-item field="orgName" label="招聘单位名称">-->
+      <!--            <a-input v-model="recForm.orgName" placeholder="请输入" />-->
+      <!--          </a-form-item>-->
+      <!--          <a-form-item field="number" label="招聘人数">-->
+      <!--           <a-input v-model="recForm.number" placeholder="请输入" />-->
+      <!--          </a-form-item>-->
+      <!--          <a-form-item field="place" label="工作地点">-->
+      <!--            <a-cascader-->
+      <!--              v-model="recForm.place"-->
+      <!--              size="large"-->
+      <!--              class="large-cascader"-->
+      <!--              check-strictly-->
+      <!--              :options="regionOptions"-->
+      <!--              placeholder="请选择"-->
+      <!--              allow-search-->
+      <!--            />-->
+      <!--          </a-form-item>-->
+      <!--          <a-form-item field="education" label="学历要求">-->
+      <!--            <a-input v-model="recForm.education" placeholder="请输入" />-->
+      <!--          </a-form-item>-->
+      <!--          &lt;!&ndash; <a-form-item field="type" label="介绍">-->
+      <!--            <a-textarea-->
+      <!--              v-model="recForm.introduction"-->
+      <!--              placeholder="请输入"-->
+      <!--              :max-length="255"-->
+      <!--              allow-clear-->
+      <!--              style="height: 100px"-->
+      <!--              show-word-limit-->
+      <!--            />-->
+      <!--          </a-form-item> &ndash;&gt;-->
+      <!--        </a-form>-->
+      <!--      </div>-->
     </a-modal>
   </div>
 </template>
@@ -303,12 +315,11 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options } from '@/types/global';
+import { Pagination, Options, Recruitment } from '@/types/global';
 import { regionData, CodeToText } from 'element-china-area-data';
-import { Modal, Message  } from '@arco-design/web-vue';
+import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
-import { Recruitment } from '@/types/global';
-import {cutString} from "@/utils/stringUtils";
+import { cutString } from '@/utils/stringUtils';
 import {
   RecListParams,
   queryRecList,
@@ -317,6 +328,7 @@ import {
   deleteRecruit,
   exportExcel,
 } from '@/api/recruitment';
+import RecruitmentForm from '@/views/recruitment/components/recruitment-form.vue';
 
 const generateFormModel = () => {
   return {
@@ -335,11 +347,11 @@ const generateCreateRecFormModel = () => {
   };
 };
 export default defineComponent({
-  components: {},
+  components: { RecruitmentForm },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
-        useLoading(false);
+      useLoading(false);
     const recModalVisible = ref<boolean>(false);
     const viewRecCreate = ref<boolean>(false);
     const recForm = ref<Recruitment>(generateCreateRecFormModel());
@@ -349,7 +361,7 @@ export default defineComponent({
     const formModel = ref(generateFormModel());
     const basePagination: Pagination = {
       'current': 1,
-      'pageSize': 20,
+      'pageSize': 10,
       'show-total': true,
       'show-jumper': true,
     };
@@ -422,7 +434,7 @@ export default defineComponent({
       recModalVisible.value = true;
       viewRecCreate.value = true;
       recForm.value = record;
-      recForm.value.place = textToCode(recForm.value.place);
+      // recForm.value.place = textToCode(recForm.value.place);
     };
 
     const handleDeleteOk = async (item: { id: number }) => {
@@ -455,26 +467,22 @@ export default defineComponent({
       viewRecCreate.value = false;
       recForm.value = generateCreateRecFormModel();
     };
-    const handleCreateRecOk = async () => {
+    const handleSetRecOk = async (item: Recruitment) => {
       setLoading(true);
-      if (viewRecCreate.value) {
-        recForm.value.place = codeToText(recForm.value.place).join('/');
-        await setRecruitInfo(recForm.value);
+      try {
+        await setRecruitInfo(item);
         Message.success('修改成功');
-      } else {
-        recForm.value.place = codeToText(recForm.value.place).join('/');
-        await addRecruitment(recForm.value);
-        Message.success('添加成功');
+        recModalVisible.value = false;
+        search();
+      } finally {
+        setLoading(false);
       }
-      recModalVisible.value = false;
-      setLoading(false);
-      search();
     };
     const handleCreateCancel = () => {
       recModalVisible.value = false;
     };
     const handleClickDownload = async () => {
-      setDownloadLoading(true)
+      setDownloadLoading(true);
       const res = await exportExcel({
         size: basePagination.pageSize,
         pageNum: basePagination.current,
@@ -513,7 +521,7 @@ export default defineComponent({
       recForm,
       handleClickView,
       handleCreateRec,
-      handleCreateRecOk,
+      handleSetRecOk,
       handleCreateCancel,
       handleClickDownload,
     };
