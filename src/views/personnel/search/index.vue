@@ -17,7 +17,7 @@
                   :label="$t('searchTable.form.number')"
                 >
                   <a-input
-                    v-model="formModel.number"
+                    v-model="formModel.userName"
                     :placeholder="$t('searchTable.form.number.placeholder')"
                   />
                 </a-form-item>
@@ -28,7 +28,7 @@
                   :label="$t('searchTable.form.name')"
                 >
                   <a-input
-                    v-model="formModel.name"
+                    v-model="formModel.subject"
                     :placeholder="$t('searchTable.form.name.placeholder')"
                   />
                 </a-form-item>
@@ -40,7 +40,7 @@
                 >
                   <a-select
                     v-model="formModel.academic"
-                    :options="typeOptions"
+                    :options="educationType"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -51,8 +51,8 @@
                   :label="$t('searchTable.form.filterType')"
                 >
                   <a-select
-                    v-model="formModel.filterType"
-                    :options="filterTypeOptions"
+                    v-model="formModel.sex"
+                    :options="sexType"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -63,8 +63,8 @@
                   :label="$t('searchTable.form.politicsType')"
                 >
                   <a-select
-                    v-model="formModel.politicsType"
-                    :options="politicsTypeOptions"
+                    v-model="formModel.politics"
+                    :options="politicsType"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -80,7 +80,7 @@
                   />
                 </a-form-item>
               </a-col> -->
-              <a-col :span="8">
+              <!-- <a-col :span="8">
                 <a-form-item
                   field="fresh"
                   :label="$t('searchTable.form.status')"
@@ -88,6 +88,18 @@
                   <a-input
                     v-model="formModel.status"
                     :placeholder="$t('searchTable.form.status.placeholder')"
+                  />
+                </a-form-item>
+              </a-col> -->
+              <a-col :span="8">
+                <a-form-item
+                  field="fresh"
+                  :label="$t('searchTable.form.fresh')"
+                >
+                  <a-select
+                    v-model="formModel.fresh"
+                    :options="freshType"
+                    :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
               </a-col>
@@ -114,7 +126,7 @@
       </a-row>
       <a-divider style="margin-top: 0" />
       <a-row style="margin-bottom: 16px">
-        <a-col :span="16">
+        <!-- <a-col :span="16">
           <a-space>
             <a-button type="primary" @click="handleCreatePer">
               <template #icon>
@@ -130,10 +142,21 @@
               </template>
             </a-upload>
           </a-space>
+        </a-col> -->
+        <a-col :span="16">
+          <a-space>
+            <a-button type="primary" @click="handleCreatePer">
+              <template #icon>
+                <icon-plus />
+              </template>
+              {{ $t('searchOrg.operation.create') }}
+            </a-button>
+            <a-button @click="handleClickImport"> 批量导入 </a-button>
+          </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
           <a-tooltip content="数据量大时导出需要较长时间">
-            <a-button @click="handleClickDownload">
+            <a-button :loading="downloadLoading" @click="handleClickDownload">
               <template #icon>
                 <icon-download />
               </template>
@@ -330,6 +353,251 @@
       </a-table>
     </a-card>
     <a-modal
+      v-model:visible="importModalVisible"
+      :width="500"
+      :mask-closable="false"
+      unmount-on-close
+      hide-cancel
+      @ok="importModalVisible=false"
+    >
+      <template #title> 批量导入 </template>
+      <import-excel url="/Personnel/importExcel"> </import-excel>
+    </a-modal>
+    <a-modal
+      v-model:visible="perModalVisible"
+      :width="1000"
+      :mask-closable="false"
+      :on-before-ok="handleBeforeOk"
+      @ok="handleCreatePerOk"
+      @cancel="handleCreateCancel"
+    >
+      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
+      <!-- <a-row style="height: 450px" :gutter="20">
+        <a-col v-if="viewOrCreate" :span="12">
+          <a-carousel
+            v-if="orgForm.material && orgForm.material.length > 0"
+            :style="{
+              width: '480px',
+              height: '400px',
+            }"
+          >
+            <a-carousel-item
+              v-for="(image, index) in orgForm.material"
+              :key="index"
+            >
+              <a-image width="480px" height="400px" :src="image" />
+            </a-carousel-item>
+          </a-carousel>
+          <div
+            v-else
+            style="
+              width: 480px;
+              height: 400px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <a-empty />
+          </div>
+          <div style="text-align: center; padding-top: 10px">审核材料</div>
+        </a-col> -->
+        <a-col :span="viewOrCreate ? 20 : 24">
+          <div>
+            <a-form
+              :model="perForm"
+              auto-label-width
+              @submit="handleCreatePerOk"
+            >
+              <a-form-item
+                field="wxAccount"
+                label="微信号"
+                required
+                :rules="[{ required: true, message: '微信号必填' }]"
+              >
+                <a-input v-model="perForm.wxAccount" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="name"
+                label="姓名"
+                required
+                :rules="[{ required: true, message: '姓名必填' }]"
+              >
+                <a-input v-model="perForm.name" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="phone"
+                label="电话"
+                required
+                :rules="[{ required: true, message: '电话必填' }]"
+              >
+                <a-input v-model="perForm.phone" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="sex"
+                label="性别"
+                required
+                :rules="[{ required: true, message: '性别必填' }]"
+              >
+                <a-select
+                  v-model="perForm.sex"
+                  :options="sexType"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+              <a-form-item
+                field="home"
+                label="籍贯"
+                required
+                :rules="[{ required: true, message: '籍贯必填' }]"
+              >
+                <a-input v-model="perForm.home" placeholder="请输入" />
+              </a-form-item>
+               <a-form-item
+                field="place"
+                label="现居地"
+                required
+                :rules="[{ required: true, message: '现居地必填' }]"
+              >
+                <a-cascader
+                  v-model="perForm.place"
+                  size="large"
+                  class="large-cascader"
+                  check-strictly
+                  :options="regionOptions"
+                  placeholder="请选择"
+                  allow-search
+                />
+              </a-form-item>
+              <a-form-item
+                field="subject"
+                label="专业"
+                required
+                :rules="[{ required: true, message: '专业必填' }]"
+              >
+                <a-input v-model="perForm.subject" placeholder="请输入" />
+              </a-form-item>
+               <a-form-item
+                field="academic"
+                label="学历"
+                required
+                :rules="[{ required: true, message: '学历必填' }]"
+              >
+                <a-select
+                  v-model="perForm.academic"
+                  :options="educationType"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+              
+              <a-form-item
+                field="education"
+                label="教育经历"
+                required
+                :rules="[{ required: true, message: '教育经历必填' }]"
+              >
+                <a-input v-model="perForm.education" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="marriage"
+                label="婚姻状况"
+                required
+                :rules="[{ required: true, message: '婚姻状况必填' }]"
+              >
+                <a-input v-model="perForm.marriage" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="nation"
+                label="民族"
+                required
+                :rules="[{ required: true, message: '民族必填' }]"
+              >
+                <a-input v-model="perForm.nation" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="politics"
+                label="政治面貌"
+                required
+                :rules="[{ required: true, message: '政治面貌必填' }]"
+              >
+                <a-select
+                  v-model="perForm.politics"
+                  :options="politicsType"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+              <a-form-item
+                field="post"
+                label="职称职务"
+                required
+                :rules="[{ required: true, message: '职称职务必填' }]"
+              >
+                <a-input v-model="perForm.post" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="fresh"
+                label="是否应届"
+                required
+                :rules="[{ required: true, message: '是否应届必填' }]"
+              >
+                <a-input v-model="perForm.fresh" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="mailbox"
+                label="邮箱"
+                required
+                :rules="[{ required: true, message: '邮箱必填' }]"
+              >
+                <a-input v-model="perForm.mailbox" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="work"
+                label="现工作单位"
+                required
+                :rules="[{ required: true, message: '现工作单位必填' }]"
+              >
+                <a-input v-model="perForm.work" placeholder="请输入" />
+              </a-form-item>
+
+              <a-form-item
+                field="prize"
+                label="获奖情况"
+                required
+                :rules="[{ required: true, message: '获奖情况必填' }]"
+              >
+                <a-input v-model="perForm.prize" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item field="introduction" label="自我简介">
+                <a-textarea
+                  v-model="perForm.introduction"
+                  placeholder="请输入"
+                  :max-length="255"
+                  allow-clear
+                  style="height: 200px"
+                  show-word-limit
+                />
+              </a-form-item>
+              <a-form-item
+                field="undergo"
+                label="个人经历"
+                required
+                :rules="[{ required: true, message: '个人经历必填' }]"
+              >
+                <a-input v-model="perForm.undergo" placeholder="请输入" />
+              </a-form-item>
+              
+            </a-form>
+          </div>
+        </a-col>
+      <!-- </a-row> -->
+    </a-modal>
+    <!-- <a-modal
       v-model:visible="perModalVisible"
       width="40%"
       :mask-closable="false"
@@ -421,7 +689,7 @@
           <a-form-item field="undergo" label="个人经历">
             <a-input v-model="perForm.undergo" placeholder="请输入" />
           </a-form-item>
-          <!-- <a-form-item field="type" label="介绍">
+           <a-form-item field="type" label="介绍">
             <a-textarea
               v-model="recForm.introduction"
               placeholder="请输入"
@@ -430,10 +698,10 @@
               style="height: 100px"
               show-word-limit
             />
-          </a-form-item> -->
+          </a-form-item>
         </a-form>
       </div>
-    </a-modal>
+    </a-modal> -->
   </div>
 </template>
 
@@ -441,7 +709,7 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options, Personnel } from '@/types/global';
+import { Pagination, Options, Personnel, educationType, politicsType, sexType, experienceType,freshType } from '@/types/global';
 import {
   PerListParams,
   queryPerList,
@@ -454,6 +722,7 @@ import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
 import { cutString } from '@/utils/stringUtils';
+import importExcel from "@/components/importExcel/index.vue";
 
 const generateFormModel = () => {
   return {
@@ -492,13 +761,14 @@ const generateCreatePerFormModel = () => {
   };
 };
 export default defineComponent({
-  components: {},
+  components: {importExcel},
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
         useLoading(false);
     const perModalVisible = ref<boolean>(false);
-    const viewPerCreate = ref<boolean>(false);
+    const importModalVisible = ref<boolean>(false);
+    const viewOrCreate = ref<boolean>(false);
     const perForm = ref<Personnel>(generateCreatePerFormModel());
     const { t } = useI18n();
     const renderData = ref<Personnel[]>([]);
@@ -526,44 +796,44 @@ export default defineComponent({
     //   }
     // };
     // fetchTypeData();
-     const typeOptions = computed<Options[]>(() => [
-      {
-        label: t('本科'),
-        value: t('personnel.academic.undergraduate'),
-      },
-      {
-        label: t('硕士研究生'),
-        value: t('personnel.academic.master'),
-      },
-      {
-        label: t('博士研究生'),
-        value: t('personnel.academic.phd'),
-      },
-     ]);
-    const filterTypeOptions = computed<Options[]>(() => [
-      {
-        label: t('男'),
-        value: t('personnel.filterType.boy'),
-      },
-      {
-        label: t('女'),
-        value: t('personnel.filterType.girl'),
-      },
-     ]); 
-      const politicsTypeOptions = computed<Options[]>(() => [
-      {
-        label: t('共青团员'),
-        value: t('personnel.politicsType.gqty'),
-      },
-      {
-        label: t('群众'),
-        value: t('personnel.politicsType.qz'),
-      },
-      {
-        label: t('共产党员（含预备党员）'),
-        value: t('personnel.politicsType.zgdy'),
-      },
-     ]); 
+    //  const academicOptions = computed<Options[]>(() => [
+    //   {
+    //     label: t('本科'),
+    //     value: t('personnel.academic.undergraduate'),
+    //   },
+    //   {
+    //     label: t('硕士研究生'),
+    //     value: t('personnel.academic.master'),
+    //   },
+    //   {
+    //     label: t('博士研究生'),
+    //     value: t('personnel.academic.phd'),
+    //   },
+    //  ]);
+    // const sexOptions = computed<Options[]>(() => [
+    //   {
+    //     label: t('男'),
+    //     value: t('personnel.filterType.boy'),
+    //   },
+    //   {
+    //     label: t('女'),
+    //     value: t('personnel.filterType.girl'),
+    //   },
+    //  ]); 
+    //   const politicsTypeOptions = computed<Options[]>(() => [
+    //   {
+    //     label: t('共青团员'),
+    //     value: t('personnel.politicsType.gqty'),
+    //   },
+    //   {
+    //     label: t('群众'),
+    //     value: t('personnel.politicsType.qz'),
+    //   },
+    //   {
+    //     label: t('共产党员（含预备党员）'),
+    //     value: t('personnel.politicsType.zgdy'),
+    //   },
+    //  ]); 
    
     const fetchData = async (
       params: PerListParams = { pageNum: 1, size: 20 }
@@ -592,16 +862,18 @@ export default defineComponent({
     const onPageChange = (pageNum: number) => {
       fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
     };
+  
 
     fetchData();
     const reset = () => {
       formModel.value = generateFormModel();
+      search();
     };
 
     const handleClickView = (record: Personnel) => {
       perModalVisible.value = true;
-      viewPerCreate.value = true;
-      perForm.value = record;
+      viewOrCreate.value = true;
+      perForm.value = JSON.parse(JSON.stringify(record));
       perForm.value.place = textToCode(perForm.value.place);
     };
 
@@ -611,7 +883,11 @@ export default defineComponent({
         userId: item.id,
       })
         .then(async () => {
-          await fetchData();
+          fetchData({
+            size: pagination.pageSize,
+            pageNum: pagination.current,
+            ...formModel.value,
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -632,31 +908,157 @@ export default defineComponent({
 
     const handleCreatePer = () => {
       perModalVisible.value = true;
-      viewPerCreate.value = false;
+      viewOrCreate.value = false;
       perForm.value = generateCreatePerFormModel();
     };
-
+    const isBlank = (s?: string) => {
+      return !s || s.trim() === '';
+    };
+    const handleBeforeOk = (done: any): boolean => {
+      if (isBlank(perForm.value.wxAccount)) {
+        Message.info('微信号必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.name)) {
+        Message.info('姓名必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.home)) {
+        Message.info('籍贯必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.home)) {
+        Message.info('工作地点必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.academic)) {
+        Message.info('专业必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.education)) {
+        Message.info('教育经历必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.marriage)) {
+        Message.info('婚姻状况必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.sex)) {
+        Message.info('性别必填');
+        done(false);
+        return false;
+      }
+      if (perForm.value.nation==null) {
+        Message.info('民族必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.phone)) {
+        Message.info('电话必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.politics)) {
+        Message.info('政治面貌必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.photo)) {
+        Message.info('照片必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.post)) {
+        Message.info('职称职务必填');
+        done(false);
+        return false;
+      }
+      if (perForm.value.fresh==null) {
+        Message.info('是否应届必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.mailbox)) {
+        Message.info('邮箱必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.work)) {
+        Message.info('现工作单位必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.prize)) {
+        Message.info('获奖情况必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.introduction)) {
+        Message.info('自我介绍必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.undergo)) {
+        Message.info('个人经历必填');
+        done(false);
+        return false;
+      }
+      return true;
+    };
     const handleCreatePerOk = async () => {
       setLoading(true);
-      if (viewPerCreate.value) {
-        perForm.value.place = codeToText(perForm.value.place).join('/');
-        await setUserInfo(perForm.value);
-        Message.success('修改成功');
-      } else {
-        perForm.value.place = codeToText(perForm.value.place).join('/');
-       await addUser(perForm.value);
-        Message.success('添加成功');
+      // if (Array.isArray(perForm.value.material)) {
+      //   perForm.value.material = perForm.value.material.join('');
+      // }
+      perForm.value.place = codeToText(perForm.value.place).join('/');
+      try {
+        let data;
+        if (viewOrCreate.value) {
+          data = await setUserInfo(perForm.value);
+          Message.success('修改成功');
+        } else {
+          data = await addUser(perForm.value);
+          Message.success('添加成功');
+        }
+        // fetchData({
+        //   size: pagination.pageSize,
+        //   pageNum: pagination.current,
+        //   ...formModel.value,
+        // });
+      } finally {
+        setLoading(false);
       }
-      perModalVisible.value = false;
-      setLoading(false);
-      search();
     };
+    // const handleCreatePerOk = async () => {
+    //   setLoading(true);
+    //   if (viewOrCreate.value) {
+    //     perForm.value.place = codeToText(perForm.value.place).join('/');
+    //     await setUserInfo(perForm.value);
+    //     Message.success('修改成功');
+    //   } else {
+    //     perForm.value.place = codeToText(perForm.value.place).join('/');
+    //    await addUser(perForm.value);
+    //     Message.success('添加成功');
+    //   }
+    //   perModalVisible.value = false;
+    //   setLoading(false);
+    //   search();
+    // };
     const handleCreateCancel = () => {
       perModalVisible.value = false;
     };
-
+    const handleClickImport = () => {
+      importModalVisible.value = true;
+    };
     const handleClickDownload = async () => {
-      setDownloadLoading(true)
+      setDownloadLoading(true);
       const res = await exportExcel({
         size: basePagination.pageSize,
         pageNum: basePagination.current,
@@ -679,6 +1081,7 @@ export default defineComponent({
     };
     return {
       loading,
+      downloadLoading,
       search,
       onPageChange,
       renderData,
@@ -686,19 +1089,24 @@ export default defineComponent({
       formModel,
       reset,
       cutString,
-      typeOptions,
-      filterTypeOptions,
-      politicsTypeOptions,
+      educationType,
+      sexType,
+      experienceType,
+      politicsType,
+      freshType,
       handleClickDelete,
       handleDeleteOk,
-      viewPerCreate,
+      viewOrCreate,
       perModalVisible,
+      importModalVisible,
       perForm,
       handleClickView,
       handleCreatePer,
+      handleBeforeOk,
       handleCreatePerOk,
       handleCreateCancel,
       regionOptions,
+      handleClickImport,
       handleClickDownload,
     };
   },

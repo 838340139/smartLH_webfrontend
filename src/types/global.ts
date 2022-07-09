@@ -94,8 +94,8 @@ export interface Recruitment {
   endTime?: string;
   title?: string;
   content?: string;
-  salaryFloor?: string;
-  salaryCell?: string;
+  salaryFloor?: number;
+  salaryCell?: number;
   experience?: string;
 }
 export const AuditEnum = {
@@ -173,7 +173,49 @@ export const educationType = [
     label: '博士',
     value: '博士',
   },
+  {
+    label: '不限',
+    value: '不限',
+  },
 ];
+
+export const sexType = [
+  {
+    label: '男',
+    value: '男',
+  },
+  {
+    label: '女',
+    value: '女',
+  },
+]
+
+export const freshType = [
+  {
+    label: '是',
+    value: '是',
+  },
+  {
+    label: '否',
+    value: '否',
+  },
+]
+
+export const politicsType = [
+  {
+    label: '共青团员',
+    value: '共青团员',
+  },
+  {
+    label: '群众',
+    value: '群众',
+  },
+  {
+    label: '中共党员（含预备党员）',
+    value: '中共党员（含预备党员）',
+  },
+
+]
 
 export const experienceType = [
   {
@@ -199,5 +241,108 @@ export const experienceType = [
   {
     label: '10年工作经验',
     value: '10年工作经验',
+  },
+]
+
+export const countryType = [
+  {
+    label: '桃花坪街道',
+    value: '桃花坪街道',
+  },
+  {
+    label: '花门街道',
+    value: '花门街道',
+  },
+  {
+    label: '小沙江镇',
+    value: '小沙江镇',
+  },
+  {
+    label: '金石桥镇',
+    value: '金石桥镇',
+  },
+  {
+    label: '司门前镇',
+    value: '司门前镇',
+  },
+  {
+    label: '高平镇',
+    value: '高平镇',
+  },
+  {
+    label: '六督寨镇',
+    value: '六督寨镇',
+  },
+  {
+    label: '荷香桥镇',
+    value: '荷香桥镇',
+  },
+  {
+    label: '横板桥镇',
+    value: '横板桥镇',
+  },
+  {
+    label: '周旺镇',
+    value: '周旺镇',
+  },
+  {
+    label: '滩头镇',
+    value: '滩头镇',
+  },
+  {
+    label: '鸭田镇',
+    value: '鸭田镇',
+  },
+  {
+    label: '西洋江镇',
+    value: '西洋江镇',
+  },
+  {
+    label: '岩口镇',
+    value: '岩口镇',
+  },
+  {
+    label: '北山镇',
+    value: '北山镇',
+  },
+  {
+    label: '三阁司镇',
+    value: '三阁司镇',
+  },
+  {
+    label: '南岳庙镇',
+    value: '南岳庙镇',
+  },
+  {
+    label: '七江镇',
+    value: '七江镇',
+  },
+  {
+    label: '羊古坳镇',
+    value: '羊古坳镇',
+  },
+  {
+    label: '罗洪镇',
+    value: '罗洪镇',
+  },
+  {
+    label: '麻塘山乡',
+    value: '麻塘山乡',
+  },
+  {
+    label: '虎形山瑶族乡',
+    value: '虎形山瑶族乡',
+  },
+  {
+    label: '大水田乡',
+    value: '大水田乡',
+  },
+  {
+    label: '和田乡',
+    value: '和田乡',
+  },
+  {
+    label: '山界回族乡',
+    value: '山界回族乡',
   },
 ]

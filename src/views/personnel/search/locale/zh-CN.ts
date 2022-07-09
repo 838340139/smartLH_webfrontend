@@ -5,6 +5,7 @@ export default {
   'searchTable.form.name': '专业名称',
   'searchTable.form.name.placeholder': '请输入专业名称',
   'searchTable.form.academic': '学历',
+  'searchTable.form.fresh': '应届情况',
   'searchTable.form.academic.undergraduate': '本科',
   'searchTable.form.academic.master': '硕士',
   'searchTable.form.academic.phd': '博士',

@@ -17,7 +17,7 @@
                   :label="$t('searchRec.form.recName')"
                 >
                   <a-input
-                    v-model="formModel.name"
+                    v-model="formModel.orgName"
                     :placeholder="$t('searchRec.form.recName.placeholder')"
                   />
                 </a-form-item>
@@ -28,7 +28,7 @@
                   :label="$t('searchRec.form.recAddress')"
                 >
                   <a-cascader
-                    v-model="formModel.address"
+                    v-model="formModel.place"
                     size="large"
                     class="large-cascader"
                     :options="regionOptions"
@@ -43,8 +43,8 @@
                   :label="$t('searchRec.form.recType')"
                 >
                   <a-select
-                    v-model="formModel.recType"
-                    :options="typeOptions"
+                    v-model="formModel.education"
+                    :options="educationType"
                     :placeholder="$t('searchRec.form.selectDefault')"
                   />
                 </a-form-item>
@@ -107,14 +107,14 @@
       </a-row>
       <a-divider style="margin-top: 0" />
       <a-row style="margin-bottom: 16px">
-        <a-col :span="16">
+        <!-- <a-col :span="16">
           <a-space>
-            <!--            <a-button type="primary" @click="handleCreateRec">-->
+                       <a-button type="primary" @click="handleCreateRec">-->
             <!--              <template #icon>-->
             <!--                <icon-plus />-->
             <!--              </template>-->
             <!--              {{ $t('searchRec.operation.create') }}-->
-            <!--            </a-button>-->
+            <!--            </a-button>
             <a-upload action="/">
               <template #upload-button>
                 <a-button>
@@ -123,10 +123,21 @@
               </template>
             </a-upload>
           </a-space>
+        </a-col> -->
+        <a-col :span="16">
+          <a-space>
+            <a-button type="primary" @click="handleCreateRec">
+              <template #icon>
+                <icon-plus />
+              </template>
+              {{ $t('searchOrg.operation.create') }}
+            </a-button>
+            <a-button @click="handleClickImport"> 批量导入 </a-button>
+          </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
           <a-tooltip content="数据量大时导出需要较长时间">
-            <a-button @click="handleClickDownload">
+             <a-button :loading="downloadLoading" @click="handleClickDownload">
               <template #icon>
                 <icon-download />
               </template>
@@ -257,6 +268,216 @@
       </a-table>
     </a-card>
     <a-modal
+      v-model:visible="importModalVisible"
+      :width="500"
+      :mask-closable="false"
+      unmount-on-close
+      hide-cancel
+      @ok="importModalVisible=false"
+    >
+      <template #title> 批量导入 </template>
+      <import-excel url="/Recruitment/importExcel"> </import-excel>
+    </a-modal>
+
+     <a-modal
+      v-model:visible="recModalVisible"
+      :width="1000"
+      :mask-closable="false"
+      :on-before-ok="handleBeforeOk"
+      @ok="handleCreateORecOk"
+      @cancel="handleCreateCancel"
+    >
+      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
+      <a-row style="height: 450px" :gutter="20">
+        <!-- <a-col v-if="viewRecCreate" :span="12">
+          <a-carousel
+            v-if="orgForm.material && orgForm.material.length > 0"
+            :style="{
+              width: '480px',
+              height: '400px',
+            }"
+          >
+            <a-carousel-item
+              v-for="(image, index) in orgForm.material"
+              :key="index"
+            >
+              <a-image width="480px" height="400px" :src="image" />
+            </a-carousel-item>
+          </a-carousel>
+          <div
+            v-else
+            style="
+              width: 480px;
+              height: 400px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <a-empty />
+          </div>
+          <div style="text-align: center; padding-top: 10px">审核材料</div>
+        </a-col> -->
+    
+        <a-col :span="viewRecCreate ? 20 : 24" >
+          <div>
+            <a-form
+              :model="recForm"
+              auto-label-width
+              @submit="handleCreateRecOk"
+            >
+              <a-form-item
+                field="orgName"
+                label="单位名称"
+                required
+                :rules="[{ required: true, message: '单位名称必填' }]"
+              >
+                <a-input v-model="recForm.orgName" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="number"
+                label="招聘人数"
+                required
+                :rules="[{ required: true, message: '招聘人数必填' }]"
+              >
+                <a-input v-model="recForm.number" placeholder="请输入" />
+              </a-form-item>
+               <a-form-item
+                field="position"
+                label="职位名称"
+                required
+                :rules="[{ required: true, message: '职位名称必填' }]"
+              >
+                <a-input v-model="recForm.position" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="subject"
+                label="专业名称"
+                required
+                :rules="[{ required: true, message: '专业名称必填' }]"
+              >
+                <a-input v-model="recForm.subject" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="fresh"
+                label="是否应届"
+                required
+                :rules="[{ required: true, message: '是否应届必填' }]"
+              >
+                <a-select
+                  v-model="recForm.fresh"
+                  :options="freshType"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+              <a-form-item
+                field="age"
+                label="年龄"
+                required
+                :rules="[{ required: true, message: '年龄必填' }]"
+              >
+                <a-input v-model="recForm.age" placeholder="请输入" />
+
+              </a-form-item>
+              <a-form-item
+                field="education"
+                label="最低学历要求"
+                required
+                :rules="[{ required: true, message: '最低学历要求必填' }]"
+              >
+                <a-select
+                  v-model="recForm.education"
+                  :options="educationType"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+              <a-form-item
+                field="place"
+                label="单位地址"
+                required
+                :rules="[{ required: true, message: '单位地址必填' }]"
+              >
+                <a-cascader
+                  v-model="recForm.place"
+                  size="large"
+                  class="large-cascader"
+                  check-strictly
+                  :options="regionOptions"
+                  placeholder="请选择"
+                  allow-search
+                />
+              </a-form-item>
+              <a-form-item
+                field="politics"
+                label="政治面貌"
+                required
+                :rules="[{ required: true, message: '政治面貌必填' }]"
+              >
+                <a-select
+                  v-model="recForm.politics"
+                  :options="politicsType"
+                  :placeholder="$t('searchOrg.form.selectDefault')"
+                />
+              </a-form-item>
+               <a-form-item
+                field="remark"
+                label="岗位要求"
+                required
+                :rules="[{ required: true, message: '岗位要求必填' }]"
+              >
+                <a-input v-model="recForm.remark" placeholder="请输入" />
+              </a-form-item>
+
+               <a-form-item
+                field="salaryFloor"
+                label="薪资下限"
+                required
+                :rules="[{ required: true, message: '薪资下线必填' }]"
+              >
+                <a-input v-model="recForm.salaryFloor" placeholder="请输入" />
+              </a-form-item>
+              <a-form-item
+                field="salaryCell"
+                label="薪资上限"
+                required
+                :rules="[{ required: true, message: '薪资上线必填' }]"
+              >
+                <a-input v-model="recForm.salaryCell" placeholder="请输入" />
+              </a-form-item>
+
+               <a-form-item
+                field="content"
+                label="岗位职责"
+                required
+                :rules="[{ required: true, message: '岗位职责必填' }]"
+              >
+                <a-input v-model="recForm.content" placeholder="请输入" />
+              </a-form-item>
+             <a-form-item
+                field="title"
+                label="招聘标题"
+                required
+                :rules="[{ required: true, message: '招聘标题必填' }]"
+              >
+                <a-input v-model="recForm.title" placeholder="请输入" />
+              </a-form-item>
+             
+              <a-form-item field="experience" label="个人经历">
+                <a-textarea
+                  v-model="recForm.experience"
+                  placeholder="请输入"
+                  :max-length="255"
+                  allow-clear
+                  style="height: 200px"
+                  show-word-limit
+                />
+              </a-form-item>
+            </a-form>
+          </div>
+        </a-col>
+        </a-row>
+    </a-modal>
+    <!-- <a-modal
       :key="recModalVisible"
       v-model:visible="recModalVisible"
       width="80%"
@@ -264,6 +485,7 @@
       @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
+
       <template #title>详情</template>
       <template #footer><span></span></template>
       <recruitment-form
@@ -272,7 +494,7 @@
         submit-text="保存"
         :on-submit="handleSetRecOk"
       >
-      </recruitment-form>
+      </recruitment-form> -->
       <!--      <div>-->
       <!--        <a-form :model="recForm" auto-label-width>-->
       <!--          <a-form-item field="orgName" label="招聘单位名称">-->
@@ -307,7 +529,7 @@
       <!--          </a-form-item> &ndash;&gt;-->
       <!--        </a-form>-->
       <!--      </div>-->
-    </a-modal>
+    <!-- </a-modal> -->
   </div>
 </template>
 
@@ -315,7 +537,7 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options, Recruitment } from '@/types/global';
+import { Pagination, Options, Recruitment, educationType, freshType, sexType, politicsType, experienceType } from '@/types/global';
 import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
@@ -328,7 +550,8 @@ import {
   deleteRecruit,
   exportExcel,
 } from '@/api/recruitment';
-import RecruitmentForm from '@/views/recruitment/components/recruitment-form.vue';
+// import RecruitmentForm from '@/views/recruitment/components/recruitment-form.vue';
+import importExcel from "@/components/importExcel/index.vue";
 
 const generateFormModel = () => {
   return {
@@ -341,18 +564,31 @@ const generateFormModel = () => {
 const generateCreateRecFormModel = () => {
   return {
     orgName: '',
-    num: '',
-    place: '',
+    number: '',
+    position: '',
+    age: '',
+    subject: '',
+    fresh: '',
     education: '',
+    place: '',
+    politics: '',
+    remark: '',
+    title:'',
+    content:'',
+    salaryFloor: '',
+    salaryCell: '',
+    experience:'',
   };
 };
 export default defineComponent({
-  components: { RecruitmentForm },
+  // components: { RecruitmentForm },
+  components: { importExcel },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
       useLoading(false);
     const recModalVisible = ref<boolean>(false);
+    const importModalVisible = ref<boolean>(false);
     const viewRecCreate = ref<boolean>(false);
     const recForm = ref<Recruitment>(generateCreateRecFormModel());
     const { t } = useI18n();
@@ -381,21 +617,21 @@ export default defineComponent({
     //   }
     // };
     // fetchTypeData();
-    const typeOptions = computed<Options[]>(() => [
-      {
-        label: t('本科'),
-        value: t('recruitment.recType.undergraduate'),
-      },
-      {
-        label: t('硕士研究生'),
-        value: t('recruitment.recType.master'),
-      },
-      {
-        label: t('博士研究生'),
-        value: t('recruitment.recType.phd'),
-      },
+    // const typeOptions = computed<Options[]>(() => [
+    //   {
+    //     label: t('本科'),
+    //     value: t('recruitment.recType.undergraduate'),
+    //   },
+    //   {
+    //     label: t('硕士研究生'),
+    //     value: t('recruitment.recType.master'),
+    //   },
+    //   {
+    //     label: t('博士研究生'),
+    //     value: t('recruitment.recType.phd'),
+    //   },
 
-    ]);
+    // ]);
     const fetchData = async (
       params: RecListParams = { pageNum: 1, size: 20 }
     ) => {
@@ -422,19 +658,21 @@ export default defineComponent({
       } as unknown as RecListParams);
     };
     const onPageChange = (pageNum: number) => {
-      fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
+      fetchData({ ...formModel.value, size: pagination.pageSize, pageNum });
     };
 
     fetchData();
     const reset = () => {
       formModel.value = generateFormModel();
+      search();
     };
 
     const handleClickView = (record: Recruitment) => {
       recModalVisible.value = true;
       viewRecCreate.value = true;
-      recForm.value = record;
-      // recForm.value.place = textToCode(recForm.value.place);
+      recForm.value = JSON.parse(JSON.stringify(record));
+      // recForm.value = record;
+      recForm.value.place = textToCode(recForm.value.place);
     };
 
     const handleDeleteOk = async (item: { id: number }) => {
@@ -442,8 +680,15 @@ export default defineComponent({
       deleteRecruit({
         recruitmentId: item.id,
       })
+        // .then(async () => {
+        //   await fetchData();
+        // })
         .then(async () => {
-          await fetchData();
+          fetchData({
+            size: pagination.pageSize,
+            pageNum: pagination.current,
+            ...formModel.value,
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -461,25 +706,129 @@ export default defineComponent({
         },
       });
     };
-
     const handleCreateRec = () => {
       recModalVisible.value = true;
       viewRecCreate.value = false;
       recForm.value = generateCreateRecFormModel();
     };
-    const handleSetRecOk = async (item: Recruitment) => {
+    const isBlank = (s?: string) => {
+      return !s || s.trim() === '';
+    };
+    const handleBeforeOk = (done: any): boolean => {
+      if (isBlank(recForm.value.orgName)) {
+        Message.info('单位名称必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.number)) {
+        Message.info('招聘人数必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.position)) {
+        Message.info('招聘职位必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.age)) {
+        Message.info('年龄必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.subject)) {
+        Message.info('专业必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.fresh)) {
+        Message.info('是否应届必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.education)) {
+        Message.info('教育经历必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.place)) {
+        Message.info('工作地点必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.politics)) {
+        Message.info('政治面貌必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.remark)) {
+        Message.info('岗位要求必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.content)) {
+        Message.info('岗位职责必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.title)) {
+        Message.info('招聘标题必填');
+        done(false);
+        return false;
+      }
+      if (recForm.value.salaryFloor==null) {
+        Message.info('薪资下限必填');
+        done(false);
+        return false;
+      }
+      if (recForm.value.salaryCell==null) {
+        Message.info('薪资上限必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.experience)) {
+        Message.info('工作经验必填');
+        done(false);
+        return false;
+      }
+      return true;
+    };
+    const handleCreateRecOk = async () => {
       setLoading(true);
+      recForm.value.place = codeToText(recForm.value.place).join('/');
       try {
-        await setRecruitInfo(item);
-        Message.success('修改成功');
-        recModalVisible.value = false;
-        search();
+        let data;
+        if (viewRecCreate.value) {
+          data = await setRecruitInfo(recForm.value);
+          Message.success('修改成功');
+        } else {
+          data = await addRecruitment(recForm.value);
+          Message.success('添加成功');
+        }
+        // fetchData({
+        //   size: pagination.pageSize,
+        //   pageNum: pagination.current,
+        //   ...formModel.value,
+        // });
       } finally {
         setLoading(false);
       }
     };
+    // const handleSetRecOk = async (item: Recruitment) => {
+    //   setLoading(true);
+    //   try {
+    //     await setRecruitInfo(item);
+    //     Message.success('修改成功');
+    //     recModalVisible.value = false;
+    //     search();
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
     const handleCreateCancel = () => {
       recModalVisible.value = false;
+    };
+    const handleClickImport = () => {
+      importModalVisible.value = true;
     };
     const handleClickDownload = async () => {
       setDownloadLoading(true);
@@ -505,6 +854,7 @@ export default defineComponent({
     };
     return {
       loading,
+      downloadLoading,
       search,
       onPageChange,
       renderData,
@@ -513,16 +863,22 @@ export default defineComponent({
       formModel,
       reset,
       cutString,
-      typeOptions,
+      educationType,
+      freshType,
+      politicsType,
       handleClickDelete,
       handleDeleteOk,
       viewRecCreate,
       recModalVisible,
+      importModalVisible,
       recForm,
       handleClickView,
       handleCreateRec,
-      handleSetRecOk,
+      handleCreateRecOk,
+      // handleSetRecOk,
+      handleBeforeOk,
       handleCreateCancel,
+      handleClickImport,
       handleClickDownload,
     };
   },
