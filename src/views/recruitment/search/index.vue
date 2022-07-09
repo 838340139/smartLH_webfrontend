@@ -6,15 +6,15 @@
         <a-col :flex="1">
           <a-form
             :model="formModel"
-            :label-col-props="{ span: 6 }"
-            :wrapper-col-props="{ span: 18 }"
+            :label-col-props="{ span: 7 }"
+            :wrapper-col-props="{ span: 17 }"
             label-align="left"
           >
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
                   field="orgName"
-                  :label="$t('searchRec.form.recName')"
+                  label="招聘单位"
                 >
                   <a-input
                     v-model="formModel.orgName"
@@ -25,7 +25,7 @@
               <a-col :span="8">
                 <a-form-item
                   field="place"
-                  :label="$t('searchRec.form.recAddress')"
+                  label="工作地点"
                 >
                   <a-cascader
                     v-model="formModel.place"
@@ -160,6 +160,10 @@
             data-index="id"
           />
           <a-table-column
+              title="标题"
+              data-index="title"
+          />
+          <a-table-column
             :title="$t('searchRec.columns.name')"
             data-index="orgName"
           />
@@ -175,47 +179,15 @@
             :title="$t('searchRec.columns.address')"
             data-index="place"
           >
-            <!--            <template #cell="{ record }">-->
-            <!--              <a-space>-->
-            <!--                <a-avatar-->
-            <!--                  v-if="record.contentType === 'img'"-->
-            <!--                  :size="16"-->
-            <!--                  shape="square"-->
-            <!--                >-->
-            <!--                  <img-->
-            <!--                    alt="avatar"-->
-            <!--                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/581b17753093199839f2e327e726b157.svg~tplv-49unhts6dw-image.image"-->
-            <!--                  />-->
-            <!--                </a-avatar>-->
-            <!--                <a-avatar-->
-            <!--                  v-else-if="record.contentType === 'horizontalVideo'"-->
-            <!--                  :size="16"-->
-            <!--                  shape="square"-->
-            <!--                >-->
-            <!--                  <img-->
-            <!--                    alt="avatar"-->
-            <!--                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/77721e365eb2ab786c889682cbc721c1.svg~tplv-49unhts6dw-image.image"-->
-            <!--                  />-->
-            <!--                </a-avatar>-->
-            <!--                <a-avatar v-else :size="16" shape="square">-->
-            <!--                  <img-->
-            <!--                    alt="avatar"-->
-            <!--                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/ea8b09190046da0ea7e070d83c5d1731.svg~tplv-49unhts6dw-image.image"-->
-            <!--                  />-->
-            <!--                </a-avatar>-->
-            <!--                {{ $t(`searchOrg.form.orgType.${record.contentType}`) }}-->
-            <!--              </a-space>-->
-            <!--            </template>-->
           </a-table-column>
           <a-table-column
             :title="$t('searchRec.columns.education')"
             data-index="education"
+          />
+          <a-table-column
+            title="发布时间"
+            data-index="publishTime"
           >
-            <template #cell="{ record }">
-              <p style="text-overflow: ellipsis; white-space: nowrap">
-                {{ record.education }}
-              </p>
-            </template>
           </a-table-column>
           <!--          <a-table-column-->
           <!--            :title="$t('searchOrg.columns.createdTime')"-->

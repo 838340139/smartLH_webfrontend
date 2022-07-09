@@ -123,9 +123,21 @@
             data-index="introduction"
           >
             <template #cell="{ record }">
-              <p style="text-overflow: ellipsis; white-space: nowrap">
-                {{ cutString(record.introduction, 25) }}
-              </p>
+              <a-typography-paragraph
+                :ellipsis="{
+                  rows: 1,
+                  expandable: false,
+                  showTooltip: {
+                    type: 'tooltip',
+                    props: {
+                      'mouse-enter-delay': 800,
+                      'style': { maxWidth: `500px` },
+                    },
+                  },
+                }"
+              >
+                {{ record.introduction }}
+              </a-typography-paragraph>
             </template>
           </a-table-column>
           <a-table-column
@@ -167,7 +179,7 @@
       :mask-closable="false"
       unmount-on-close
       hide-cancel
-      @ok="importModalVisible=false"
+      @ok="importModalVisible = false"
     >
       <template #title> 批量导入 </template>
       <import-excel url="/Organization/importExcel"> </import-excel>
@@ -295,7 +307,7 @@ import { codeToText, textToCode } from '@/utils/region';
 import { cutString } from '@/utils/stringUtils';
 import { getToken } from '@/utils/auth';
 import config from '@/config/settings.json';
-import importExcel from "@/components/importExcel/index.vue";
+import importExcel from '@/components/importExcel/index.vue';
 
 const generateFormModel = () => {
   return {
