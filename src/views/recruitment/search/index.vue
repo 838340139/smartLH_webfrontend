@@ -126,12 +126,12 @@
         </a-col> -->
         <a-col :span="16">
           <a-space>
-            <a-button type="primary" @click="handleCreateRec">
-              <template #icon>
-                <icon-plus />
-              </template>
-              {{ $t('searchOrg.operation.create') }}
-            </a-button>
+<!--            <a-button type="primary" @click="handleCreateRec">-->
+<!--              <template #icon>-->
+<!--                <icon-plus />-->
+<!--              </template>-->
+<!--              {{ $t('searchOrg.operation.create') }}-->
+<!--            </a-button>-->
             <a-button @click="handleClickImport"> 批量导入 </a-button>
           </a-space>
         </a-col>
@@ -207,7 +207,6 @@
             <!--              </a-space>-->
             <!--            </template>-->
           </a-table-column>
-         
           <a-table-column
             :title="$t('searchRec.columns.education')"
             data-index="education"
@@ -279,205 +278,205 @@
       <import-excel url="/Recruitment/importExcel"> </import-excel>
     </a-modal>
 
-     <a-modal
-      v-model:visible="recModalVisible"
-      :width="1000"
-      :mask-closable="false"
-      :on-before-ok="handleBeforeOk"
-      @ok="handleCreateORecOk"
-      @cancel="handleCreateCancel"
-    >
-      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>
-      <a-row style="height: 450px" :gutter="20">
-        <!-- <a-col v-if="viewRecCreate" :span="12">
-          <a-carousel
-            v-if="orgForm.material && orgForm.material.length > 0"
-            :style="{
-              width: '480px',
-              height: '400px',
-            }"
-          >
-            <a-carousel-item
-              v-for="(image, index) in orgForm.material"
-              :key="index"
-            >
-              <a-image width="480px" height="400px" :src="image" />
-            </a-carousel-item>
-          </a-carousel>
-          <div
-            v-else
-            style="
-              width: 480px;
-              height: 400px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            <a-empty />
-          </div>
-          <div style="text-align: center; padding-top: 10px">审核材料</div>
-        </a-col> -->
-    
-        <a-col :span="viewRecCreate ? 20 : 24" >
-          <div>
-            <a-form
-              :model="recForm"
-              auto-label-width
-              @submit="handleCreateRecOk"
-            >
-              <a-form-item
-                field="orgName"
-                label="单位名称"
-                required
-                :rules="[{ required: true, message: '单位名称必填' }]"
-              >
-                <a-input v-model="recForm.orgName" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="number"
-                label="招聘人数"
-                required
-                :rules="[{ required: true, message: '招聘人数必填' }]"
-              >
-                <a-input v-model="recForm.number" placeholder="请输入" />
-              </a-form-item>
-               <a-form-item
-                field="position"
-                label="职位名称"
-                required
-                :rules="[{ required: true, message: '职位名称必填' }]"
-              >
-                <a-input v-model="recForm.position" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="subject"
-                label="专业名称"
-                required
-                :rules="[{ required: true, message: '专业名称必填' }]"
-              >
-                <a-input v-model="recForm.subject" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="fresh"
-                label="是否应届"
-                required
-                :rules="[{ required: true, message: '是否应届必填' }]"
-              >
-                <a-select
-                  v-model="recForm.fresh"
-                  :options="freshType"
-                  :placeholder="$t('searchOrg.form.selectDefault')"
-                />
-              </a-form-item>
-              <a-form-item
-                field="age"
-                label="年龄"
-                required
-                :rules="[{ required: true, message: '年龄必填' }]"
-              >
-                <a-input v-model="recForm.age" placeholder="请输入" />
+<!--     <a-modal-->
+<!--      v-model:visible="recModalVisible"-->
+<!--      :width="1000"-->
+<!--      :mask-closable="false"-->
+<!--      :on-before-ok="handleBeforeOk"-->
+<!--      @ok="handleCreateORecOk"-->
+<!--      @cancel="handleCreateCancel"-->
+<!--    >-->
+<!--      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>-->
+<!--      <a-row style="height: 450px" :gutter="20">-->
+<!--        &lt;!&ndash; <a-col v-if="viewRecCreate" :span="12">-->
+<!--          <a-carousel-->
+<!--            v-if="orgForm.material && orgForm.material.length > 0"-->
+<!--            :style="{-->
+<!--              width: '480px',-->
+<!--              height: '400px',-->
+<!--            }"-->
+<!--          >-->
+<!--            <a-carousel-item-->
+<!--              v-for="(image, index) in orgForm.material"-->
+<!--              :key="index"-->
+<!--            >-->
+<!--              <a-image width="480px" height="400px" :src="image" />-->
+<!--            </a-carousel-item>-->
+<!--          </a-carousel>-->
+<!--          <div-->
+<!--            v-else-->
+<!--            style="-->
+<!--              width: 480px;-->
+<!--              height: 400px;-->
+<!--              display: flex;-->
+<!--              justify-content: center;-->
+<!--              align-items: center;-->
+<!--            "-->
+<!--          >-->
+<!--            <a-empty />-->
+<!--          </div>-->
+<!--          <div style="text-align: center; padding-top: 10px">审核材料</div>-->
+<!--        </a-col> &ndash;&gt;-->
+<!--    -->
+<!--        <a-col :span="viewRecCreate ? 20 : 24" >-->
+<!--          <div>-->
+<!--            <a-form-->
+<!--              :model="recForm"-->
+<!--              auto-label-width-->
+<!--              @submit="handleCreateRecOk"-->
+<!--            >-->
+<!--              <a-form-item-->
+<!--                field="orgName"-->
+<!--                label="单位名称"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '单位名称必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.orgName" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="number"-->
+<!--                label="招聘人数"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '招聘人数必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.number" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--               <a-form-item-->
+<!--                field="position"-->
+<!--                label="职位名称"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '职位名称必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.position" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="subject"-->
+<!--                label="专业名称"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '专业名称必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.subject" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="fresh"-->
+<!--                label="是否应届"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '是否应届必填' }]"-->
+<!--              >-->
+<!--                <a-select-->
+<!--                  v-model="recForm.fresh"-->
+<!--                  :options="freshType"-->
+<!--                  :placeholder="$t('searchOrg.form.selectDefault')"-->
+<!--                />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="age"-->
+<!--                label="年龄"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '年龄必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.age" placeholder="请输入" />-->
 
-              </a-form-item>
-              <a-form-item
-                field="education"
-                label="最低学历要求"
-                required
-                :rules="[{ required: true, message: '最低学历要求必填' }]"
-              >
-                <a-select
-                  v-model="recForm.education"
-                  :options="educationType"
-                  :placeholder="$t('searchOrg.form.selectDefault')"
-                />
-              </a-form-item>
-              <a-form-item
-                field="place"
-                label="单位地址"
-                required
-                :rules="[{ required: true, message: '单位地址必填' }]"
-              >
-                <a-cascader
-                  v-model="recForm.place"
-                  size="large"
-                  class="large-cascader"
-                  check-strictly
-                  :options="regionOptions"
-                  placeholder="请选择"
-                  allow-search
-                />
-              </a-form-item>
-              <a-form-item
-                field="politics"
-                label="政治面貌"
-                required
-                :rules="[{ required: true, message: '政治面貌必填' }]"
-              >
-                <a-select
-                  v-model="recForm.politics"
-                  :options="politicsType"
-                  :placeholder="$t('searchOrg.form.selectDefault')"
-                />
-              </a-form-item>
-               <a-form-item
-                field="remark"
-                label="岗位要求"
-                required
-                :rules="[{ required: true, message: '岗位要求必填' }]"
-              >
-                <a-input v-model="recForm.remark" placeholder="请输入" />
-              </a-form-item>
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="education"-->
+<!--                label="最低学历要求"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '最低学历要求必填' }]"-->
+<!--              >-->
+<!--                <a-select-->
+<!--                  v-model="recForm.education"-->
+<!--                  :options="educationType"-->
+<!--                  :placeholder="$t('searchOrg.form.selectDefault')"-->
+<!--                />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="place"-->
+<!--                label="单位地址"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '单位地址必填' }]"-->
+<!--              >-->
+<!--                <a-cascader-->
+<!--                  v-model="recForm.place"-->
+<!--                  size="large"-->
+<!--                  class="large-cascader"-->
+<!--                  check-strictly-->
+<!--                  :options="regionOptions"-->
+<!--                  placeholder="请选择"-->
+<!--                  allow-search-->
+<!--                />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="politics"-->
+<!--                label="政治面貌"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '政治面貌必填' }]"-->
+<!--              >-->
+<!--                <a-select-->
+<!--                  v-model="recForm.politics"-->
+<!--                  :options="politicsType"-->
+<!--                  :placeholder="$t('searchOrg.form.selectDefault')"-->
+<!--                />-->
+<!--              </a-form-item>-->
+<!--               <a-form-item-->
+<!--                field="remark"-->
+<!--                label="岗位要求"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '岗位要求必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.remark" placeholder="请输入" />-->
+<!--              </a-form-item>-->
 
-               <a-form-item
-                field="salaryFloor"
-                label="薪资下限"
-                required
-                :rules="[{ required: true, message: '薪资下线必填' }]"
-              >
-                <a-input v-model="recForm.salaryFloor" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="salaryCell"
-                label="薪资上限"
-                required
-                :rules="[{ required: true, message: '薪资上线必填' }]"
-              >
-                <a-input v-model="recForm.salaryCell" placeholder="请输入" />
-              </a-form-item>
+<!--               <a-form-item-->
+<!--                field="salaryFloor"-->
+<!--                label="薪资下限"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '薪资下线必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.salaryFloor" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--              <a-form-item-->
+<!--                field="salaryCell"-->
+<!--                label="薪资上限"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '薪资上线必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.salaryCell" placeholder="请输入" />-->
+<!--              </a-form-item>-->
 
-               <a-form-item
-                field="content"
-                label="岗位职责"
-                required
-                :rules="[{ required: true, message: '岗位职责必填' }]"
-              >
-                <a-input v-model="recForm.content" placeholder="请输入" />
-              </a-form-item>
-             <a-form-item
-                field="title"
-                label="招聘标题"
-                required
-                :rules="[{ required: true, message: '招聘标题必填' }]"
-              >
-                <a-input v-model="recForm.title" placeholder="请输入" />
-              </a-form-item>
-             
-              <a-form-item field="experience" label="个人经历">
-                <a-textarea
-                  v-model="recForm.experience"
-                  placeholder="请输入"
-                  :max-length="255"
-                  allow-clear
-                  style="height: 200px"
-                  show-word-limit
-                />
-              </a-form-item>
-            </a-form>
-          </div>
-        </a-col>
-        </a-row>
-    </a-modal>
-    <!-- <a-modal
+<!--               <a-form-item-->
+<!--                field="content"-->
+<!--                label="岗位职责"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '岗位职责必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.content" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--             <a-form-item-->
+<!--                field="title"-->
+<!--                label="招聘标题"-->
+<!--                required-->
+<!--                :rules="[{ required: true, message: '招聘标题必填' }]"-->
+<!--              >-->
+<!--                <a-input v-model="recForm.title" placeholder="请输入" />-->
+<!--              </a-form-item>-->
+<!--             -->
+<!--              <a-form-item field="experience" label="个人经历">-->
+<!--                <a-textarea-->
+<!--                  v-model="recForm.experience"-->
+<!--                  placeholder="请输入"-->
+<!--                  :max-length="255"-->
+<!--                  allow-clear-->
+<!--                  style="height: 200px"-->
+<!--                  show-word-limit-->
+<!--                />-->
+<!--              </a-form-item>-->
+<!--            </a-form>-->
+<!--          </div>-->
+<!--        </a-col>-->
+<!--        </a-row>-->
+<!--    </a-modal>-->
+    <a-modal
       :key="recModalVisible"
       v-model:visible="recModalVisible"
       width="80%"
@@ -485,7 +484,6 @@
       @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
-
       <template #title>详情</template>
       <template #footer><span></span></template>
       <recruitment-form
@@ -494,7 +492,8 @@
         submit-text="保存"
         :on-submit="handleSetRecOk"
       >
-      </recruitment-form> -->
+      </recruitment-form>
+    </a-modal>
       <!--      <div>-->
       <!--        <a-form :model="recForm" auto-label-width>-->
       <!--          <a-form-item field="orgName" label="招聘单位名称">-->
@@ -552,6 +551,7 @@ import {
 } from '@/api/recruitment';
 // import RecruitmentForm from '@/views/recruitment/components/recruitment-form.vue';
 import importExcel from "@/components/importExcel/index.vue";
+import RecruitmentForm from '../components/recruitment-form.vue'
 
 const generateFormModel = () => {
   return {
@@ -582,7 +582,7 @@ const generateCreateRecFormModel = () => {
 };
 export default defineComponent({
   // components: { RecruitmentForm },
-  components: { importExcel },
+  components: { importExcel, RecruitmentForm },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
@@ -813,17 +813,17 @@ export default defineComponent({
         setLoading(false);
       }
     };
-    // const handleSetRecOk = async (item: Recruitment) => {
-    //   setLoading(true);
-    //   try {
-    //     await setRecruitInfo(item);
-    //     Message.success('修改成功');
-    //     recModalVisible.value = false;
-    //     search();
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
+    const handleSetRecOk = async (item: Recruitment) => {
+      setLoading(true);
+      try {
+        await setRecruitInfo(item);
+        Message.success('修改成功');
+        recModalVisible.value = false;
+        search();
+      } finally {
+        setLoading(false);
+      }
+    };
     const handleCreateCancel = () => {
       recModalVisible.value = false;
     };
@@ -875,7 +875,7 @@ export default defineComponent({
       handleClickView,
       handleCreateRec,
       handleCreateRecOk,
-      // handleSetRecOk,
+      handleSetRecOk,
       handleBeforeOk,
       handleCreateCancel,
       handleClickImport,
