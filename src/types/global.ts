@@ -50,6 +50,7 @@ export interface Organization {
   introduction?: string;
   auditTime?: string;
   isDeleted?: number;
+  detail?: string;
 }
 
 export interface Personnel {
@@ -68,6 +69,8 @@ export interface Personnel {
   politics?: string;
   photo?: string;
   post?: string;
+  graduation?: Date;
+  birthday?: Date;
   fresh?: number;
   mailbox?: string;
   work?: string;
@@ -75,6 +78,7 @@ export interface Personnel {
   introduction?: string;
   undergo?: string;
   status?: number;
+  detail?: string;
 }
 
 export interface Recruitment {
@@ -97,6 +101,7 @@ export interface Recruitment {
   salaryFloor?: number;
   salaryCell?: number;
   experience?: string;
+  detail?: string;
 }
 export const AuditEnum = {
   0: '未审核',

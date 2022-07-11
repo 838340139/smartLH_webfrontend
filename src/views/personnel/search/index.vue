@@ -361,7 +361,7 @@
       @ok="importModalVisible=false"
     >
       <template #title> 批量导入 </template>
-      <import-excel url="/Personnel/importExcel"> </import-excel>
+      <import-excel url="/User/importExcel"> </import-excel>
     </a-modal>
     <a-modal
       v-model:visible="perModalVisible"
@@ -469,6 +469,16 @@
                   allow-search
                 />
               </a-form-item>
+
+              <a-form-item
+                field="detail"
+                label="详细地址"
+                required
+                :rules="[{ required: true, message: '详细地址必填' }]"
+              >
+                <a-input v-model="perForm.detail" placeholder="请输入" />
+              </a-form-item>
+              
               <a-form-item
                 field="subject"
                 label="专业"
@@ -536,6 +546,24 @@
                 :rules="[{ required: true, message: '职称职务必填' }]"
               >
                 <a-input v-model="perForm.post" placeholder="请输入" />
+              </a-form-item>
+              
+              <a-form-item field="graduation" label="毕业时间">
+                <a-date-picker
+                  v-model="perForm.graduation"
+                  placeholder="毕业时间"
+                  style="width: 90%"
+                  size="medium"
+                />
+              </a-form-item>
+           
+              <a-form-item field="birthday" label="生日">
+                <a-date-picker
+                  v-model="perForm.birthday"
+                  placeholder="毕业时间"
+                  style="width: 90%"
+                  size="medium"
+                />
               </a-form-item>
 
               <a-form-item
@@ -741,6 +769,7 @@ const generateCreatePerFormModel = () => {
     name: '',
     home: '',
     place: '',
+    detail:'',
     subject: '',
     education: '',
     marriage: '',
@@ -751,6 +780,8 @@ const generateCreatePerFormModel = () => {
     politics: '',
     photo: '',
     post: '',
+    graduation:'',
+    birthday:'',
     fresh: '',
     mailbox: '',
     work: '',
@@ -761,7 +792,7 @@ const generateCreatePerFormModel = () => {
   };
 };
 export default defineComponent({
-  components: {importExcel},
+  components: { importExcel },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
@@ -854,7 +885,7 @@ export default defineComponent({
 
     const search = () => {
       fetchData({
-        size: basePagination.pageSize,
+        size: pagination.pageSize,
         pageNum: basePagination.current,
         ...formModel.value,
       } as unknown as PerListParams);
@@ -930,8 +961,13 @@ export default defineComponent({
         done(false);
         return false;
       }
-      if (isBlank(perForm.value.home)) {
+      if (isBlank(perForm.value.place)) {
         Message.info('工作地点必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(perForm.value.detail)) {
+        Message.info('详细地址必填');
         done(false);
         return false;
       }

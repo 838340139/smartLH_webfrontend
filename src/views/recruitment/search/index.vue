@@ -550,6 +550,7 @@ const generateCreateRecFormModel = () => {
     salaryFloor: '',
     salaryCell: '',
     experience:'',
+    detail:'',
   };
 };
 export default defineComponent({
@@ -724,6 +725,11 @@ export default defineComponent({
       }
       if (isBlank(recForm.value.place)) {
         Message.info('工作地点必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(recForm.value.detail)) {
+        Message.info('详细地址必填');
         done(false);
         return false;
       }

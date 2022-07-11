@@ -266,6 +266,15 @@
                   allow-search
                 />
               </a-form-item>
+              <a-form-item
+                field="detail"
+                label="详细地址"
+                required
+                :rules="[{ required: true, message: '详细地址必填' }]"
+              >
+                <a-input v-model="orgForm.detail" placeholder="请输入" />
+              </a-form-item>
+
               <a-form-item field="phone" label="联系电话">
                 <a-input v-model="orgForm.phone" placeholder="请输入" />
               </a-form-item>
@@ -326,6 +335,7 @@ const generateCreateOrgFormModel = () => {
     material: '',
     serialNumber: '',
     introduction: '',
+    detail: '',
   };
 };
 export default defineComponent({
@@ -479,6 +489,11 @@ export default defineComponent({
       }
       if (isBlank(orgForm.value.address)) {
         Message.info('单位地址必填');
+        done(false);
+        return false;
+      }
+      if (isBlank(orgForm.value.detail)) {
+        Message.info('详细地址必填');
         done(false);
         return false;
       }
