@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 import { Recruitment } from '@/types/global';
-import {OrgListParams} from "@/api/organization";
+import { OrgListParams } from "@/api/organization";
 
 export interface RecListParams {
   orgName?: string;

@@ -436,8 +436,6 @@
               <a-form-item
                 field="sex"
                 label="性别"
-                required
-                :rules="[{ required: true, message: '性别必填' }]"
               >
                 <a-select
                   v-model="perForm.sex"
@@ -448,16 +446,13 @@
               <a-form-item
                 field="home"
                 label="籍贯"
-                required
-                :rules="[{ required: true, message: '籍贯必填' }]"
               >
                 <a-input v-model="perForm.home" placeholder="请输入" />
               </a-form-item>
                <a-form-item
                 field="place"
                 label="现居地"
-                required
-                :rules="[{ required: true, message: '现居地必填' }]"
+
               >
                 <a-cascader
                   v-model="perForm.place"
@@ -473,8 +468,7 @@
               <a-form-item
                 field="detail"
                 label="详细地址"
-                required
-                :rules="[{ required: true, message: '详细地址必填' }]"
+
               >
                 <a-input v-model="perForm.detail" placeholder="请输入" />
               </a-form-item>
@@ -482,16 +476,14 @@
               <a-form-item
                 field="subject"
                 label="专业"
-                required
-                :rules="[{ required: true, message: '专业必填' }]"
+
               >
                 <a-input v-model="perForm.subject" placeholder="请输入" />
               </a-form-item>
                <a-form-item
                 field="academic"
                 label="学历"
-                required
-                :rules="[{ required: true, message: '学历必填' }]"
+
               >
                 <a-select
                   v-model="perForm.academic"
@@ -502,18 +494,16 @@
               
               <a-form-item
                 field="education"
+                id="education"
                 label="教育经历"
-                required
-                :rules="[{ required: true, message: '教育经历必填' }]"
               >
                 <a-input v-model="perForm.education" placeholder="请输入" />
               </a-form-item>
-
+              
               <a-form-item
                 field="marriage"
                 label="婚姻状况"
-                required
-                :rules="[{ required: true, message: '婚姻状况必填' }]"
+
               >
                 <a-input v-model="perForm.marriage" placeholder="请输入" />
               </a-form-item>
@@ -521,8 +511,7 @@
               <a-form-item
                 field="nation"
                 label="民族"
-                required
-                :rules="[{ required: true, message: '民族必填' }]"
+
               >
                 <a-input v-model="perForm.nation" placeholder="请输入" />
               </a-form-item>
@@ -530,8 +519,7 @@
               <a-form-item
                 field="politics"
                 label="政治面貌"
-                required
-                :rules="[{ required: true, message: '政治面貌必填' }]"
+
               >
                 <a-select
                   v-model="perForm.politics"
@@ -542,8 +530,7 @@
               <a-form-item
                 field="post"
                 label="职称职务"
-                required
-                :rules="[{ required: true, message: '职称职务必填' }]"
+
               >
                 <a-input v-model="perForm.post" placeholder="请输入" />
               </a-form-item>
@@ -566,20 +553,19 @@
                 />
               </a-form-item>
 
-              <a-form-item
+              <!-- <a-form-item
                 field="fresh"
                 label="是否应届"
                 required
                 :rules="[{ required: true, message: '是否应届必填' }]"
               >
                 <a-input v-model="perForm.fresh" placeholder="请输入" />
-              </a-form-item>
+              </a-form-item> -->
 
               <a-form-item
                 field="mailbox"
                 label="邮箱"
-                required
-                :rules="[{ required: true, message: '邮箱必填' }]"
+
               >
                 <a-input v-model="perForm.mailbox" placeholder="请输入" />
               </a-form-item>
@@ -587,8 +573,7 @@
               <a-form-item
                 field="work"
                 label="现工作单位"
-                required
-                :rules="[{ required: true, message: '现工作单位必填' }]"
+
               >
                 <a-input v-model="perForm.work" placeholder="请输入" />
               </a-form-item>
@@ -596,8 +581,7 @@
               <a-form-item
                 field="prize"
                 label="获奖情况"
-                required
-                :rules="[{ required: true, message: '获奖情况必填' }]"
+
               >
                 <a-input v-model="perForm.prize" placeholder="请输入" />
               </a-form-item>
@@ -614,8 +598,7 @@
               <a-form-item
                 field="undergo"
                 label="个人经历"
-                required
-                :rules="[{ required: true, message: '个人经历必填' }]"
+
               >
                 <a-input v-model="perForm.undergo" placeholder="请输入" />
               </a-form-item>
@@ -1087,6 +1070,22 @@ export default defineComponent({
     //   setLoading(false);
     //   search();
     // };
+    const getEducation = () => {
+      const educationElement = document.getElementById('education');
+      if (educationElement) {
+        const education = JSON.parse(educationElement.innerHTML);
+        educationElement.innerHTML = education
+          .map((item: any) => {
+            const inDate = item.inDate ? item.inDate : '';
+            const outDate = item.outDate ? item.outDate : '';
+            const school = item.school ? item.school : '';
+            return `${inDate}~${outDate}~${school}`;
+          })
+          .join('\n');
+      }
+    };
+    
+
     const handleCreateCancel = () => {
       perModalVisible.value = false;
     };
@@ -1136,6 +1135,7 @@ export default defineComponent({
       perModalVisible,
       importModalVisible,
       perForm,
+      getEducation,
       handleClickView,
       handleCreatePer,
       handleBeforeOk,

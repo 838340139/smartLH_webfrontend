@@ -94,8 +94,8 @@ export interface Recruitment {
   place?: string;
   politics?: string;
   remark?: string;
-  publishTime?: string;
-  endTime?: string;
+  publishTime?: Date;
+  endTime?: Date;
   title?: string;
   content?: string;
   salaryFloor?: number;

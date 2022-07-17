@@ -218,7 +218,9 @@ import editor from '@/components/editor/index.vue';
 import { Message } from '@arco-design/web-vue';
 import { Recruitment, educationType, Organization, experienceType } from '@/types/global';
 import { IconMinus } from '@arco-design/web-vue/es/icon';
+import { number } from 'echarts/core';
 import orgSelect from './org-select.vue';
+
 
 const generateRecForm = () => {
   return {
@@ -242,7 +244,9 @@ const generateRecForm = () => {
     experience: undefined,
   };
 };
+
 const validate = (form: Recruitment) => {
+ 
   if (!form.title || !form.title.trim()) {
     Message.info({
       content: '请填写标题',
@@ -291,6 +295,12 @@ const validate = (form: Recruitment) => {
     });
     return false;
   }
+  // if (form.salaryFloor.toString()>form.salaryCell.toString()) {
+  //   Message.info({
+  //     content: '请填写岗位要求',
+  //   });
+  //   return false;
+  // }
   if (!form.remark || !form.remark.trim()) {
     Message.info({
       content: '请填写岗位要求',

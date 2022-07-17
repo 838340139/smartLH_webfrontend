@@ -50,6 +50,7 @@ export function exportExcel(params: PerListParams) {
     },
   });
 }
+
 export function deleteUser(params: { userId: number }) {
   return axios.get('/User/deleteUser', {
     params,
