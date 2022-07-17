@@ -201,7 +201,28 @@
           <a-table-column
             :title="$t('searchTable.columns.education')"
             data-index="education"
-          />
+            ellipsis
+            width="320"
+            :tooltip="true"
+          >
+            <template #cell="{ record }">
+              <a-space direction="vertical">
+                <span v-if="isString(parseEducation(record.education))">
+                  {{ record.education }}
+                </span>
+                <template v-else>
+                  <span
+                    v-for="(item, index) in parseEducation(record.education)"
+                    :key="index"
+                  >
+                    {{
+                      item.inDate + '~' + item.outDate + ':' + item.schoolName
+                    }}
+                  </span>
+                </template>
+              </a-space>
+            </template>
+          </a-table-column>
           <a-table-column
             :title="$t('searchTable.columns.marriage')"
             data-index="marriage"
@@ -259,7 +280,7 @@
             :title="$t('searchTable.columns.contentType')"
             data-index="academic"
           > -->
-            <!-- <template #cell="{ record }">
+          <!-- <template #cell="{ record }">
               <a-space>
                 <a-avatar
                   v-if="record.contentType === 'img'"
@@ -308,22 +329,11 @@
             data-index="createdTime"
           /> -->
           <a-table-column
-            :title="$t('searchTable.columns.status')"
-            data-index="status"
-          >
-            <template #cell="{ record }">
-              <!-- <span v-if="record.status === 'offline'" class="circle"></span>
-              <span v-else class="circle pass"></span> -->
-              {{ record.status }}
-            </template>
-          </a-table-column>
-          <a-table-column
             :title="$t('searchTable.columns.operations')"
             data-index="operations"
           >
             <template #cell="{ record }">
               <a-button
-
                 type="text"
                 size="small"
                 @click="
@@ -335,7 +345,6 @@
                 {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
               <a-button
-
                 type="text"
                 status="danger"
                 size="small"
@@ -358,7 +367,7 @@
       :mask-closable="false"
       unmount-on-close
       hide-cancel
-      @ok="importModalVisible=false"
+      @ok="importModalVisible = false"
     >
       <template #title> 批量导入 </template>
       <import-excel url="/User/importExcel"> </import-excel>
@@ -402,158 +411,136 @@
           </div>
           <div style="text-align: center; padding-top: 10px">审核材料</div>
         </a-col> -->
-        <a-col :span="viewOrCreate ? 20 : 24">
-          <div>
-            <a-form
-              :model="perForm"
-              auto-label-width
-              @submit="handleCreatePerOk"
+      <a-col :span="viewOrCreate ? 20 : 24">
+        <div>
+          <a-form :model="perForm" auto-label-width @submit="handleCreatePerOk">
+            <a-form-item
+              field="wxAccount"
+              label="微信号"
+              required
+              :rules="[{ required: true, message: '微信号必填' }]"
             >
-              <a-form-item
-                field="wxAccount"
-                label="微信号"
-                required
-                :rules="[{ required: true, message: '微信号必填' }]"
-              >
-                <a-input v-model="perForm.wxAccount" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="name"
-                label="姓名"
-                required
-                :rules="[{ required: true, message: '姓名必填' }]"
-              >
-                <a-input v-model="perForm.name" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="phone"
-                label="电话"
-                required
-                :rules="[{ required: true, message: '电话必填' }]"
-              >
-                <a-input v-model="perForm.phone" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item
-                field="sex"
-                label="性别"
-              >
-                <a-select
-                  v-model="perForm.sex"
-                  :options="sexType"
-                  :placeholder="$t('searchOrg.form.selectDefault')"
-                />
-              </a-form-item>
-              <a-form-item
-                field="home"
-                label="籍贯"
-              >
-                <a-input v-model="perForm.home" placeholder="请输入" />
-              </a-form-item>
-               <a-form-item
-                field="place"
-                label="现居地"
+              <a-input v-model="perForm.wxAccount" placeholder="请输入" />
+            </a-form-item>
+            <a-form-item
+              field="name"
+              label="姓名"
+              required
+              :rules="[{ required: true, message: '姓名必填' }]"
+            >
+              <a-input v-model="perForm.name" placeholder="请输入" />
+            </a-form-item>
+            <a-form-item
+              field="phone"
+              label="电话"
+              required
+              :rules="[{ required: true, message: '电话必填' }]"
+            >
+              <a-input v-model="perForm.phone" placeholder="请输入" />
+            </a-form-item>
+            <a-form-item field="sex" label="性别">
+              <a-select
+                v-model="perForm.sex"
+                :options="sexType"
+                :placeholder="$t('searchOrg.form.selectDefault')"
+              />
+            </a-form-item>
+            <a-form-item field="home" label="籍贯">
+              <a-input v-model="perForm.home" placeholder="请输入" />
+            </a-form-item>
+            <a-form-item field="place" label="现居地">
+              <a-cascader
+                v-model="perForm.place"
+                size="large"
+                class="large-cascader"
+                check-strictly
+                :options="regionOptions"
+                placeholder="请选择"
+                allow-search
+              />
+            </a-form-item>
 
-              >
-                <a-cascader
-                  v-model="perForm.place"
-                  size="large"
-                  class="large-cascader"
-                  check-strictly
-                  :options="regionOptions"
-                  placeholder="请选择"
-                  allow-search
-                />
-              </a-form-item>
+            <a-form-item field="detail" label="详细地址">
+              <a-input v-model="perForm.detail" placeholder="请输入" />
+            </a-form-item>
 
-              <a-form-item
-                field="detail"
-                label="详细地址"
+            <a-form-item field="subject" label="专业">
+              <a-input v-model="perForm.subject" placeholder="请输入" />
+            </a-form-item>
+            <a-form-item field="academic" label="学历">
+              <a-select
+                v-model="perForm.academic"
+                :options="educationType"
+                :placeholder="$t('searchOrg.form.selectDefault')"
+              />
+            </a-form-item>
 
-              >
-                <a-input v-model="perForm.detail" placeholder="请输入" />
-              </a-form-item>
-              
-              <a-form-item
-                field="subject"
-                label="专业"
+            <a-form-item id="education" field="education" label="教育经历">
+              <a-space direction="vertical">
+                <div v-for="(item, index) in educationForm" :key="index">
+                  <a-date-picker
+                    v-model="item.inDate"
+                    @change="forceSet"
+                    style="width: 200px; margin-right: 20px"
+                  />
+                  <a-date-picker
+                    v-model="item.outDate"
+                    @change="forceSet"
+                    style="width: 200px; margin-right: 20px"
+                  />
+                  <a-input
+                    v-model="item.schoolName"
+                    @input="forceSet"
+                    placeholder="请输入"
+                    style="width: 200px; display: inline-block"
+                  />
+                </div>
+                <a-button @click="handleClickAddEducation">
+                  <template #icon>
+                    <icon-plus />
+                  </template>
+                </a-button>
+              </a-space>
+            </a-form-item>
 
-              >
-                <a-input v-model="perForm.subject" placeholder="请输入" />
-              </a-form-item>
-               <a-form-item
-                field="academic"
-                label="学历"
+            <a-form-item field="marriage" label="婚姻状况">
+              <a-input v-model="perForm.marriage" placeholder="请输入" />
+            </a-form-item>
 
-              >
-                <a-select
-                  v-model="perForm.academic"
-                  :options="educationType"
-                  :placeholder="$t('searchOrg.form.selectDefault')"
-                />
-              </a-form-item>
-              
-              <a-form-item
-                field="education"
-                id="education"
-                label="教育经历"
-              >
-                <a-input v-model="perForm.education" placeholder="请输入" />
-              </a-form-item>
-              
-              <a-form-item
-                field="marriage"
-                label="婚姻状况"
+            <a-form-item field="nation" label="民族">
+              <a-input v-model="perForm.nation" placeholder="请输入" />
+            </a-form-item>
 
-              >
-                <a-input v-model="perForm.marriage" placeholder="请输入" />
-              </a-form-item>
+            <a-form-item field="politics" label="政治面貌">
+              <a-select
+                v-model="perForm.politics"
+                :options="politicsType"
+                :placeholder="$t('searchOrg.form.selectDefault')"
+              />
+            </a-form-item>
+            <a-form-item field="post" label="职称职务">
+              <a-input v-model="perForm.post" placeholder="请输入" />
+            </a-form-item>
 
-              <a-form-item
-                field="nation"
-                label="民族"
+            <a-form-item field="graduation" label="毕业时间">
+              <a-date-picker
+                v-model="perForm.graduation"
+                placeholder="毕业时间"
+                style="width: 90%"
+                size="medium"
+              />
+            </a-form-item>
 
-              >
-                <a-input v-model="perForm.nation" placeholder="请输入" />
-              </a-form-item>
+            <a-form-item field="birthday" label="生日">
+              <a-date-picker
+                v-model="perForm.birthday"
+                placeholder="毕业时间"
+                style="width: 90%"
+                size="medium"
+              />
+            </a-form-item>
 
-              <a-form-item
-                field="politics"
-                label="政治面貌"
-
-              >
-                <a-select
-                  v-model="perForm.politics"
-                  :options="politicsType"
-                  :placeholder="$t('searchOrg.form.selectDefault')"
-                />
-              </a-form-item>
-              <a-form-item
-                field="post"
-                label="职称职务"
-
-              >
-                <a-input v-model="perForm.post" placeholder="请输入" />
-              </a-form-item>
-              
-              <a-form-item field="graduation" label="毕业时间">
-                <a-date-picker
-                  v-model="perForm.graduation"
-                  placeholder="毕业时间"
-                  style="width: 90%"
-                  size="medium"
-                />
-              </a-form-item>
-           
-              <a-form-item field="birthday" label="生日">
-                <a-date-picker
-                  v-model="perForm.birthday"
-                  placeholder="毕业时间"
-                  style="width: 90%"
-                  size="medium"
-                />
-              </a-form-item>
-
-              <!-- <a-form-item
+            <!-- <a-form-item
                 field="fresh"
                 label="是否应届"
                 required
@@ -562,50 +549,33 @@
                 <a-input v-model="perForm.fresh" placeholder="请输入" />
               </a-form-item> -->
 
-              <a-form-item
-                field="mailbox"
-                label="邮箱"
+            <a-form-item field="mailbox" label="邮箱">
+              <a-input v-model="perForm.mailbox" placeholder="请输入" />
+            </a-form-item>
 
-              >
-                <a-input v-model="perForm.mailbox" placeholder="请输入" />
-              </a-form-item>
+            <a-form-item field="work" label="现工作单位">
+              <a-input v-model="perForm.work" placeholder="请输入" />
+            </a-form-item>
 
-              <a-form-item
-                field="work"
-                label="现工作单位"
-
-              >
-                <a-input v-model="perForm.work" placeholder="请输入" />
-              </a-form-item>
-
-              <a-form-item
-                field="prize"
-                label="获奖情况"
-
-              >
-                <a-input v-model="perForm.prize" placeholder="请输入" />
-              </a-form-item>
-              <a-form-item field="introduction" label="自我简介">
-                <a-textarea
-                  v-model="perForm.introduction"
-                  placeholder="请输入"
-                  :max-length="255"
-                  allow-clear
-                  style="height: 200px"
-                  show-word-limit
-                />
-              </a-form-item>
-              <a-form-item
-                field="undergo"
-                label="个人经历"
-
-              >
-                <a-input v-model="perForm.undergo" placeholder="请输入" />
-              </a-form-item>
-              
-            </a-form>
-          </div>
-        </a-col>
+            <a-form-item field="prize" label="获奖情况">
+              <a-input v-model="perForm.prize" placeholder="请输入" />
+            </a-form-item>
+            <a-form-item field="introduction" label="自我简介">
+              <a-textarea
+                v-model="perForm.introduction"
+                placeholder="请输入"
+                :max-length="255"
+                allow-clear
+                style="height: 200px"
+                show-word-limit
+              />
+            </a-form-item>
+            <a-form-item field="undergo" label="个人经历">
+              <a-input v-model="perForm.undergo" placeholder="请输入" />
+            </a-form-item>
+          </a-form>
+        </div>
+      </a-col>
       <!-- </a-row> -->
     </a-modal>
     <!-- <a-modal
@@ -720,7 +690,16 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options, Personnel, educationType, politicsType, sexType, experienceType,freshType } from '@/types/global';
+import {
+  Pagination,
+  Options,
+  Personnel,
+  educationType,
+  politicsType,
+  sexType,
+  experienceType,
+  freshType,
+} from '@/types/global';
 import {
   PerListParams,
   queryPerList,
@@ -732,8 +711,8 @@ import {
 import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
-import { cutString } from '@/utils/stringUtils';
-import importExcel from "@/components/importExcel/index.vue";
+import { cutString, isString } from '@/utils/stringUtils';
+import importExcel from '@/components/importExcel/index.vue';
 
 const generateFormModel = () => {
   return {
@@ -752,7 +731,7 @@ const generateCreatePerFormModel = () => {
     name: '',
     home: '',
     place: '',
-    detail:'',
+    detail: '',
     subject: '',
     education: '',
     marriage: '',
@@ -763,8 +742,8 @@ const generateCreatePerFormModel = () => {
     politics: '',
     photo: '',
     post: '',
-    graduation:'',
-    birthday:'',
+    graduation: '',
+    birthday: '',
     fresh: '',
     mailbox: '',
     work: '',
@@ -779,7 +758,7 @@ export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
-        useLoading(false);
+      useLoading(false);
     const perModalVisible = ref<boolean>(false);
     const importModalVisible = ref<boolean>(false);
     const viewOrCreate = ref<boolean>(false);
@@ -798,6 +777,24 @@ export default defineComponent({
       ...basePagination,
     });
     const regionOptions = ref(regionData);
+    const educationForm = computed({
+      get: () => {
+        try {
+          if (perForm.value && perForm.value.education) {
+            return JSON.parse(perForm.value.education);
+          }
+          return [];
+        } catch {
+          return [];
+        }
+      },
+      set: (val) => {
+        perForm.value.education = JSON.stringify(val);
+      },
+    });
+    const forceSet = () => {
+      perForm.value.education = JSON.stringify(educationForm.value);
+    }
     // const fetchTypeData = async () => {
     //   const data = await getTypes();
     //   if(data.data){
@@ -833,7 +830,7 @@ export default defineComponent({
     //     label: t('女'),
     //     value: t('personnel.filterType.girl'),
     //   },
-    //  ]); 
+    //  ]);
     //   const politicsTypeOptions = computed<Options[]>(() => [
     //   {
     //     label: t('共青团员'),
@@ -847,8 +844,8 @@ export default defineComponent({
     //     label: t('共产党员（含预备党员）'),
     //     value: t('personnel.politicsType.zgdy'),
     //   },
-    //  ]); 
-   
+    //  ]);
+
     const fetchData = async (
       params: PerListParams = { pageNum: 1, size: 20 }
     ) => {
@@ -876,7 +873,6 @@ export default defineComponent({
     const onPageChange = (pageNum: number) => {
       fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
     };
-  
 
     fetchData();
     const reset = () => {
@@ -974,7 +970,7 @@ export default defineComponent({
         done(false);
         return false;
       }
-      if (perForm.value.nation==null) {
+      if (perForm.value.nation == null) {
         Message.info('民族必填');
         done(false);
         return false;
@@ -999,7 +995,7 @@ export default defineComponent({
         done(false);
         return false;
       }
-      if (perForm.value.fresh==null) {
+      if (perForm.value.fresh == null) {
         Message.info('是否应届必填');
         done(false);
         return false;
@@ -1070,22 +1066,22 @@ export default defineComponent({
     //   setLoading(false);
     //   search();
     // };
-    const getEducation = () => {
-      const educationElement = document.getElementById('education');
-      if (educationElement) {
-        const education = JSON.parse(educationElement.innerHTML);
-        educationElement.innerHTML = education
-          .map((item: any) => {
-            const inDate = item.inDate ? item.inDate : '';
-            const outDate = item.outDate ? item.outDate : '';
-            const school = item.school ? item.school : '';
-            return `${inDate}~${outDate}~${school}`;
-          })
-          .join('\n');
+    const parseEducation = (education: string) => {
+      try {
+        return JSON.parse(education);
+      } catch {
+        return education;
       }
     };
-    
 
+    const handleClickAddEducation = () => {
+      educationForm.value.push({
+        inDate:undefined,
+        outDate:undefined,
+        schoolName:undefined
+      });
+      forceSet();
+    }
     const handleCreateCancel = () => {
       perModalVisible.value = false;
     };
@@ -1124,6 +1120,7 @@ export default defineComponent({
       formModel,
       reset,
       cutString,
+      isString,
       educationType,
       sexType,
       experienceType,
@@ -1135,7 +1132,10 @@ export default defineComponent({
       perModalVisible,
       importModalVisible,
       perForm,
-      getEducation,
+      educationForm,
+      forceSet,
+      parseEducation,
+      handleClickAddEducation,
       handleClickView,
       handleCreatePer,
       handleBeforeOk,

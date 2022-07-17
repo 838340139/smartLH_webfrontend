@@ -185,6 +185,11 @@
             data-index="education"
           />
           <a-table-column
+              title="点击量"
+              data-index="view"
+          >
+          </a-table-column>
+          <a-table-column
             title="发布时间"
             data-index="publishTime"
           >
@@ -459,7 +464,7 @@
       <template #title>详情</template>
       <template #footer><span></span></template>
       <recruitment-form
-        style="height: 450px"
+        style="height: 70vh"
         :init-value="recForm"
         submit-text="保存"
         :on-submit="handleSetRecOk"
@@ -577,6 +582,20 @@ export default defineComponent({
     const pagination = reactive({
       ...basePagination,
     });
+    const getEducation = () => {
+      const educationElement = document.getElementById('education');
+      if (educationElement) {
+        const education = JSON.parse(educationElement.innerHTML);
+        educationElement.innerHTML = education
+          .map((item: any) => {
+            const inDate = item.inDate ? item.inDate : '';
+            const outDate = item.outDate ? item.outDate : '';
+            const school = item.school ? item.school : '';
+            return `${inDate}~${outDate}~${school}`;
+          })
+          .join('\n');
+      }
+    };
     const regionOptions = ref(regionData);
     // const fetchTypeData = async () => {
     //   const data = await getTypes();

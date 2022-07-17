@@ -3,9 +3,15 @@
     <a-space direction="vertical" :size="16" fill>
       <a-card class="general-card" title="招聘标题">
         <template #extra>
-          <span v-if="recruitmentForm.publishTime">发布时间：{{
-              recruitmentForm.publishTime
-            }}</span>
+          <a-space :size="25" fill>
+            <span v-if="recruitmentForm.view">点击量：{{
+                recruitmentForm.view
+              }}</span>
+            <span v-if="recruitmentForm.publishTime">发布时间：{{
+                recruitmentForm.publishTime
+              }}</span>
+          </a-space>
+
         </template>
         <a-input
           v-model="recruitmentForm.title"

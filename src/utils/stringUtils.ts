@@ -13,3 +13,9 @@ export const getEditorText = (value: string) => {
   value = value.replace(/&nbsp;/g, ''); // 去掉空格
   return value;
 };
+
+export const isString = (val: any) => {
+  console.log(typeof val)
+  console.log(typeof val === 'string')
+  return typeof val === 'string';
+}
