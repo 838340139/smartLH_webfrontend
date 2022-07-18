@@ -203,7 +203,9 @@
             data-index="education"
             ellipsis
             width="320"
-            :tooltip="true"
+            :tooltip="{
+              'mouse-enter-delay': 800
+            }"
           >
             <template #cell="{ record }">
               <a-space direction="vertical">

@@ -147,6 +147,7 @@ export interface Manager {
   phone?: string;
   mailbox?: string;
   isManager?: number;
+  role?: string;
 }
 
 export const educationType = [

@@ -44,7 +44,6 @@
             :tooltip="{
               'mouse-enter-delay': 800
             }"
-            }
           >
           </a-table-column>
           <a-table-column title="正文" data-index="content">

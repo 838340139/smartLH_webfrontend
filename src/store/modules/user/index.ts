@@ -18,6 +18,7 @@ const useUserStore = defineStore('user', {
     phone: undefined,
     mailbox: undefined,
     isManager: undefined,
+    role: 'admin',
   }),
 
   getters: {
