@@ -8,6 +8,6 @@
   "themeColor": "#165DFF",
   "menuWidth": 250,
   "globalSettings": false,
-  "baseUrl": "http://127.0.0.1:8081",
-  "imageUploadUrl": "http://127.0.0.1:8081/upload/image"
+  "baseUrl": "http://49.51.244.95:8081",
+  "imageUploadUrl": "http://49.51.244.95:8081/upload/image"
 }

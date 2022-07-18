@@ -18,7 +18,6 @@ const useUserStore = defineStore('user', {
     phone: undefined,
     mailbox: undefined,
     isManager: undefined,
-    role: 'admin',
   }),
 
   getters: {
@@ -65,7 +64,7 @@ const useUserStore = defineStore('user', {
       // await userLogout();
       this.resetInfo();
       clearToken();
-      window.location.href = 'vue-admin-arco#/login?redirect=dashboard';
+      window.location.href = '/#/login?redirect=dashboard';
     },
   },
 });
