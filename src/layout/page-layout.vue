@@ -27,7 +27,7 @@
                     font-weight: bold;
                     color: #fff;
                   "
-                  >智慧隆回</span
+                  >智汇隆回</span
                 >
                 <a-typography-title
                   :style="{ margin: 0, fontSize: '14px', color: '#fff',textAlign:'center' }"

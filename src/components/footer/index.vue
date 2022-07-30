@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer class="footer">
-    <b> 智慧隆回 </b>
+    <b> 智汇隆回 </b>
     &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
     <p
       >人才信息管理
