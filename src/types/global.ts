@@ -179,10 +179,7 @@ export const educationType = [
     label: '博士',
     value: '博士',
   },
-  {
-    label: '不限',
-    value: '不限',
-  },
+
 ];
 
 export const sexType = [

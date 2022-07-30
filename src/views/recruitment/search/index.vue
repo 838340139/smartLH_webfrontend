@@ -22,7 +22,7 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col :span="8">
+              <!-- <a-col :span="8">
                 <a-form-item
                   field="place"
                   label="工作地点"
@@ -34,6 +34,18 @@
                     :options="regionOptions"
                     :placeholder="$t('searchRec.form.recAddress.placeholder')"
                     allow-search
+                  />
+                </a-form-item>
+              </a-col> -->
+              <a-col :span="8">
+                <a-form-item
+                  field="place"
+                  label="工作地点"
+                >
+                  <a-select
+                    v-model="formModel.place"
+                    :options="countryType"
+                    :placeholder="$t('searchRec.form.recAddress.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -454,10 +466,11 @@
 <!--        </a-row>-->
 <!--    </a-modal>-->
     <a-modal
-      :key="recModalVisible"
+  
       v-model:visible="recModalVisible"
       width="80%"
       :mask-closable="false"
+      :on-before-ok="handleBeforeOk"
       @ok="handleCreateRecOk"
       @cancel="handleCreateCancel"
     >
@@ -513,7 +526,7 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options, Recruitment, educationType, freshType, sexType, politicsType, experienceType } from '@/types/global';
+import { Pagination, Options, Recruitment, educationType, countryType, freshType, sexType, politicsType, experienceType } from '@/types/global';
 import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
@@ -625,7 +638,10 @@ export default defineComponent({
 
     // ]);
     const fetchData = async (
-      params: RecListParams = { pageNum: 1, size: 20 }
+      params: RecListParams = { 
+        pageNum: pagination.current,
+        size: pagination.pageSize,
+        }
     ) => {
       setLoading(true);
       // 地址编码转为文字
@@ -633,7 +649,11 @@ export default defineComponent({
       try {
         const { data } = await queryRecList(params);
         renderData.value = data.list;
-        pagination.current = params.pageNum;
+         if (data.list.length === 0 && data.total > 0) {
+          params.pageNum = data.pages;
+          fetchData(params);
+        }
+        pagination.current = data.pageNum;
         pagination.total = data.total;
       } catch (err) {
         // you can report use errorHandler or other
@@ -644,7 +664,7 @@ export default defineComponent({
 
     const search = () => {
       fetchData({
-        size: basePagination.pageSize,
+        size: pagination.pageSize,
         pageNum: basePagination.current,
         ...formModel.value,
       } as unknown as RecListParams);
@@ -857,6 +877,7 @@ export default defineComponent({
       renderData,
       pagination,
       regionOptions,
+      countryType,
       formModel,
       reset,
       cutString,

@@ -19,15 +19,15 @@ export default {
         roles: ['*'],
       },
     },
-    {
-      path: 'analysis', // The midline path complies with SEO specifications
-      name: 'analysis-personnel',
-      component: () => import('@/views/personnel/analysis/index.vue'),
-      meta: {
-        locale: 'menu.personnel.analysis',
-        requiresAuth: true,
-        roles: ['*'],
-      },
-    },
+    // {
+    //   path: 'analysis', // The midline path complies with SEO specifications
+    //   name: 'analysis-personnel',
+    //   component: () => import('@/views/personnel/analysis/index.vue'),
+    //   meta: {
+    //     locale: 'menu.personnel.analysis',
+    //     requiresAuth: true,
+    //     roles: ['*'],
+    //   },
+    // },
   ],
 };

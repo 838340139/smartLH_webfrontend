@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <a-space direction="vertical" :size="16" fill>
-      <a-card class="general-card" title="招聘标题">
-        <template #extra>
+      
+      <a-card class="general-card" >
+        <template #title><span style="color:red">*</span> 招聘标题</template>
+        <template #extra >
           <a-space :size="25" fill>
             <span v-if="recruitmentForm.view">点击量：{{
                 recruitmentForm.view
@@ -52,6 +54,7 @@
                 <div style="display: flex; align-items: center">
                   <a-input
                     v-model="recruitmentForm.salaryFloor"
+                    
                     placeholder="薪资下限"
                     :max-length="30"
                     style="flex: 1"
@@ -102,7 +105,7 @@
               <a-form-item field="content" label="岗位职责" required>
                 <a-textarea
                   v-model="recruitmentForm.content"
-                  :max-length="800"
+                  :max-length="200"
                   :placeholder="contentPlaceholder"
                   allow-clear
                   style="height: 200px"
@@ -153,11 +156,17 @@
           <a-row>
             <a-col :span="8">
               <a-form-item field="endTime" label="截止时间">
-                <a-date-picker
+                <!-- <a-date-picker
                   v-model="recruitmentForm.endTime"
                   placeholder="截止时间"
                   style="width: 90%"
+                  
                   size="medium"
+                /> -->
+                <a-date-picker
+                v-model="recruitmentForm.endTime"
+                style="width: 600px;"
+                :disabledDate="(current) => dayjs(current).isBefore(dayjs())"
                 />
               </a-form-item>
             </a-col>
@@ -191,7 +200,7 @@
                 <a-textarea
                   v-model="recruitmentForm.remark"
                   :placeholder="remarkPlaceholder"
-                  :max-length="800"
+                  :max-length="200"
                   allow-clear
                   style="height: 200px"
                   show-word-limit
@@ -220,6 +229,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue';
 import useLoading from '@/hooks/loading';
+import dayjs from 'dayjs';
 import editor from '@/components/editor/index.vue';
 import { Message } from '@arco-design/web-vue';
 import { Recruitment, educationType, Organization, experienceType } from '@/types/global';
@@ -301,12 +311,12 @@ const validate = (form: Recruitment) => {
     });
     return false;
   }
-  // if (form.salaryFloor.toString()>form.salaryCell.toString()) {
-  //   Message.info({
-  //     content: '请填写岗位要求',
-  //   });
-  //   return false;
-  // }
+  if (form.salaryFloor>form.salaryCell) {
+    Message.info({
+      content: '薪资下限不能大于薪资上限',
+    });
+    return false;
+  }
   if (!form.remark || !form.remark.trim()) {
     Message.info({
       content: '请填写岗位要求',
@@ -365,9 +375,10 @@ export default defineComponent({
       recruitmentForm.value.orgId = value.id;
       recruitmentForm.value.orgName = value.name;
     };
-
+    
     return {
       loading,
+      dayjs,
       educationType,
       experienceType,
       remarkPlaceholder,
