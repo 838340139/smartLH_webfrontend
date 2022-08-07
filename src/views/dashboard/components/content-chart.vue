@@ -238,11 +238,17 @@ export default defineComponent({
         list.sort((v1, v2) => {
           return v1.visitTime > v2.visitTime ? 1 : -1;
         });
+        // xAxis.value.push(list[0].visitTime);
+        // perChartsData.value.push(list[0].userVisit);
+        // orgChartsData.value.push(list[0].orgVisit);
         list.forEach((item) => {
           xAxis.value.push(item.visitTime);
           orgChartsData.value.push(item.orgVisit);
           perChartsData.value.push(item.userVisit);
         });
+        // xAxis.value.push(list[list.length-1].visitTime);
+        // perChartsData.value.push(list[list.length-1].userVisit);
+        // orgChartsData.value.push(list[list.length-1].orgVisit);
         // console.log(xAxis.value);
         // console.log(orgChartsData.value);
         // console.log(perChartsData.value);

@@ -51,6 +51,19 @@ export function exportExcel(params: PerListParams) {
   });
 }
 
+export function exportExcelTemplate(params: any) {
+  return axios.get('/User/exportExcelTemplate', {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    responseType: 'blob',
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
+
 export function deleteUser(params: { userId: number }) {
   return axios.get('/User/deleteUser', {
     params,

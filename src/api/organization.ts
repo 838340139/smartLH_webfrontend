@@ -98,3 +98,16 @@ export function exportExcel(params: OrgListParams) {
     },
   });
 }
+
+export function exportExcelTemplate(params: any) {
+  return axios.get('/Organization/exportExcelTemplate', {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    responseType: 'blob',
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}

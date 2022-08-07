@@ -8,7 +8,7 @@
   "themeColor": "#165DFF",
   "menuWidth": 250,
   "globalSettings": false,
-  "baseUrl": "https://49.51.244.95:443",
+  "baseUrl": "https://127.0.0.1:8443",
   "imageUploadUrl": "https://49.51.244.95:443/upload/image"
 
 

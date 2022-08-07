@@ -58,3 +58,16 @@ export function exportExcel(params: RecListParams) {
     },
   });
 }
+
+export function exportExcelTemplate(params: any) {
+  return axios.get('/Recruitment/exportExcelTemplate', {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    responseType: 'blob',
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}

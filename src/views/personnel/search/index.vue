@@ -204,7 +204,7 @@
             ellipsis
             width="320"
             :tooltip="{
-              'mouse-enter-delay': 800
+              'mouse-enter-delay': 800,
             }"
           >
             <template #cell="{ record }">
@@ -376,7 +376,7 @@
     </a-modal>
     <a-modal
       v-model:visible="perModalVisible"
-      :width="1000"
+      :width="1100"
       :mask-closable="false"
       :on-before-ok="handleBeforeOk"
       @ok="handleCreatePerOk"
@@ -414,167 +414,173 @@
           <div style="text-align: center; padding-top: 10px">审核材料</div>
         </a-col> -->
       <a-col :span="viewOrCreate ? 20 : 24">
-        <div>
+        <div style="height: 70vh">
           <a-form :model="perForm" auto-label-width @submit="handleCreatePerOk">
-            <a-form-item
-              field="wxAccount"
-              label="微信号"
-              required
-              :rules="[{ required: true, message: '微信号必填' }]"
-            >
-              <a-input v-model="perForm.wxAccount" placeholder="请输入" />
-            </a-form-item>
-            <a-form-item
-              field="name"
-              label="姓名"
-              required
-              :rules="[{ required: true, message: '姓名必填' }]"
-            >
-              <a-input v-model="perForm.name" placeholder="请输入" />
-            </a-form-item>
-            <a-form-item
-              field="phone"
-              label="电话"
-              required
-              :rules="[{ required: true, message: '电话必填' }]"
-            >
-              <a-input v-model="perForm.phone" placeholder="请输入" />
-            </a-form-item>
-            <a-form-item field="sex" label="性别">
-              <a-select
-                v-model="perForm.sex"
-                :options="sexType"
-                :placeholder="$t('searchOrg.form.selectDefault')"
-              />
-            </a-form-item>
-            <a-form-item field="home" label="籍贯">
-              <a-input v-model="perForm.home" placeholder="请输入" />
-            </a-form-item>
-            <a-form-item field="place" label="现居地">
-              <a-cascader
-                v-model="perForm.place"
-                size="large"
-                class="large-cascader"
-                check-strictly
-                :options="regionOptions"
-                placeholder="请选择"
-                allow-search
-              />
-            </a-form-item>
+            <a-row :gutter="20">
+              <a-col :span="12">
+                <a-form-item
+                  field="wxAccount"
+                  label="微信号"
+                  required
+                  :rules="[{ required: true, message: '微信号必填' }]"
+                >
+                  <a-input v-model="perForm.wxAccount" placeholder="请输入" />
+                </a-form-item>
+                <a-form-item
+                  field="name"
+                  label="姓名"
+                  required
+                  :rules="[{ required: true, message: '姓名必填' }]"
+                >
+                  <a-input v-model="perForm.name" placeholder="请输入" />
+                </a-form-item>
+                <a-form-item
+                  field="phone"
+                  label="电话"
+                  required
+                  :rules="[{ required: true, message: '电话必填' }]"
+                >
+                  <a-input v-model="perForm.phone" placeholder="请输入" />
+                </a-form-item>
+                <a-form-item field="sex" label="性别">
+                  <a-select
+                    v-model="perForm.sex"
+                    :options="sexType"
+                    :placeholder="$t('searchOrg.form.selectDefault')"
+                  />
+                </a-form-item>
+                <a-form-item field="home" label="籍贯">
+                  <a-input v-model="perForm.home" placeholder="请输入" />
+                </a-form-item>
+                <a-form-item field="place" label="现居地">
+                  <a-cascader
+                    v-model="perForm.place"
+                    size="large"
+                    class="large-cascader"
+                    check-strictly
+                    :options="regionOptions"
+                    placeholder="请选择"
+                    allow-search
+                  />
+                </a-form-item>
 
-            <a-form-item field="detail" label="详细地址">
-              <a-input v-model="perForm.detail" placeholder="请输入" />
-            </a-form-item>
+                <a-form-item field="detail" label="详细地址">
+                  <a-input v-model="perForm.detail" placeholder="请输入" />
+                </a-form-item>
 
-            <a-form-item field="subject" label="专业">
-              <a-input v-model="perForm.subject" placeholder="请输入" />
-            </a-form-item>
-            <a-form-item field="academic" label="学历">
-              <a-select
-                v-model="perForm.academic"
-                :options="educationType"
-                :placeholder="$t('searchOrg.form.selectDefault')"
-              />
-            </a-form-item>
+                <a-form-item field="subject" label="专业">
+                  <a-input v-model="perForm.subject" placeholder="请输入" />
+                </a-form-item>
+                <a-form-item field="academic" label="学历">
+                  <a-select
+                    v-model="perForm.academic"
+                    :options="educationType"
+                    :placeholder="$t('searchOrg.form.selectDefault')"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item field="marriage" label="婚姻状况">
+                  <a-input v-model="perForm.marriage" placeholder="请输入" />
+                </a-form-item>
 
-            <a-form-item id="education" field="education" label="教育经历">
-              <a-space direction="vertical">
-                <div v-for="(item, index) in educationForm" :key="index">
+                <a-form-item field="nation" label="民族">
+                  <a-input v-model="perForm.nation" placeholder="请输入" />
+                </a-form-item>
+
+                <a-form-item field="politics" label="政治面貌">
+                  <a-select
+                    v-model="perForm.politics"
+                    :options="politicsType"
+                    :placeholder="$t('searchOrg.form.selectDefault')"
+                  />
+                </a-form-item>
+                <a-form-item field="post" label="职称职务">
+                  <a-input v-model="perForm.post" placeholder="请输入" />
+                </a-form-item>
+
+                <a-form-item field="graduation" label="毕业时间">
                   <a-date-picker
-                    v-model="item.inDate"
-                    @change="forceSet"
-                    style="width: 200px; margin-right: 20px"
+                    v-model="perForm.graduation"
+                    placeholder="毕业时间"
+                    style="width: 90%"
+                    size="medium"
                   />
+                </a-form-item>
+
+                <a-form-item field="birthday" label="出生日期">
                   <a-date-picker
-                    v-model="item.outDate"
-                    @change="forceSet"
-                    style="width: 200px; margin-right: 20px"
+                    v-model="perForm.birthday"
+                    placeholder="出生日期"
+                    style="width: 90%"
+                    size="medium"
                   />
-                  <a-input
-                    v-model="item.schoolName"
-                    @input="forceSet"
-                    placeholder="请输入"
-                    style="width: 200px; display: inline-block"
-                  />
-                </div>
-                <a-button @click="handleClickAddEducation">
-                  <template #icon>
-                    <icon-plus />
-                  </template>
-                </a-button>
-              </a-space>
-            </a-form-item>
+                </a-form-item>
 
-            <a-form-item field="marriage" label="婚姻状况">
-              <a-input v-model="perForm.marriage" placeholder="请输入" />
-            </a-form-item>
+                <!-- <a-form-item
+                    field="fresh"
+                    label="是否应届"
+                    required
+                    :rules="[{ required: true, message: '是否应届必填' }]"
+                  >
+                    <a-input v-model="perForm.fresh" placeholder="请输入" />
+                  </a-form-item> -->
 
-            <a-form-item field="nation" label="民族">
-              <a-input v-model="perForm.nation" placeholder="请输入" />
-            </a-form-item>
+                <a-form-item field="mailbox" label="邮箱">
+                  <a-input v-model="perForm.mailbox" placeholder="请输入" />
+                </a-form-item>
 
-            <a-form-item field="politics" label="政治面貌">
-              <a-select
-                v-model="perForm.politics"
-                :options="politicsType"
-                :placeholder="$t('searchOrg.form.selectDefault')"
-              />
-            </a-form-item>
-            <a-form-item field="post" label="职称职务">
-              <a-input v-model="perForm.post" placeholder="请输入" />
-            </a-form-item>
+                <a-form-item field="work" label="现工作单位">
+                  <a-input v-model="perForm.work" placeholder="请输入" />
+                </a-form-item>
 
-            <a-form-item field="graduation" label="毕业时间">
-              <a-date-picker
-                v-model="perForm.graduation"
-                placeholder="毕业时间"
-                style="width: 90%"
-                size="medium"
-              />
-            </a-form-item>
-
-            <a-form-item field="birthday" label="生日">
-              <a-date-picker
-                v-model="perForm.birthday"
-                placeholder="毕业时间"
-                style="width: 90%"
-                size="medium"
-              />
-            </a-form-item>
-
-            <!-- <a-form-item
-                field="fresh"
-                label="是否应届"
-                required
-                :rules="[{ required: true, message: '是否应届必填' }]"
-              >
-                <a-input v-model="perForm.fresh" placeholder="请输入" />
-              </a-form-item> -->
-
-            <a-form-item field="mailbox" label="邮箱">
-              <a-input v-model="perForm.mailbox" placeholder="请输入" />
-            </a-form-item>
-
-            <a-form-item field="work" label="现工作单位">
-              <a-input v-model="perForm.work" placeholder="请输入" />
-            </a-form-item>
-
-            <a-form-item field="prize" label="获奖情况">
-              <a-input v-model="perForm.prize" placeholder="请输入" />
-            </a-form-item>
-            <a-form-item field="introduction" label="自我简介">
-              <a-textarea
-                v-model="perForm.introduction"
-                placeholder="请输入"
-                :max-length="255"
-                allow-clear
-                style="height: 200px"
-                show-word-limit
-              />
-            </a-form-item>
-            <a-form-item field="undergo" label="个人经历">
-              <a-input v-model="perForm.undergo" placeholder="请输入" />
-            </a-form-item>
+                <a-form-item field="prize" label="获奖情况">
+                  <a-input v-model="perForm.prize" placeholder="请输入" />
+                </a-form-item>
+              </a-col>
+              <a-form-item id="education" field="education" label="教育经历">
+                <a-space direction="vertical">
+                  <div v-for="(item, index) in educationForm" :key="index">
+                    <a-date-picker
+                      v-model="item.inDate"
+                      placeholder="入学时间"
+                      style="width: 200px; margin-right: 20px"
+                      @change="forceSet"
+                    />
+                    <a-date-picker
+                      v-model="item.outDate"
+                      placeholder="毕业时间"
+                      style="width: 200px; margin-right: 20px"
+                      @change="forceSet"
+                    />
+                    <a-input
+                      v-model="item.schoolName"
+                      placeholder="学校名称"
+                      style="width: 200px; display: inline-block"
+                      @input="forceSet"
+                    />
+                  </div>
+                  <a-button @click="handleClickAddEducation" type="primary" style="width: 10em">
+                    <template #icon>
+                      <icon-plus />
+                    </template>
+                  </a-button>
+                </a-space>
+              </a-form-item>
+              <a-form-item field="introduction" label="自我简介">
+                <a-textarea
+                  v-model="perForm.introduction"
+                  placeholder="毕业院校"
+                  :max-length="255"
+                  allow-clear
+                  style="height: 200px"
+                  show-word-limit
+                />
+              </a-form-item>
+              <a-form-item field="undergo" label="个人经历">
+                <a-input v-model="perForm.undergo" placeholder="请输入" />
+              </a-form-item>
+            </a-row>
           </a-form>
         </div>
       </a-col>
@@ -796,7 +802,7 @@ export default defineComponent({
     });
     const forceSet = () => {
       perForm.value.education = JSON.stringify(educationForm.value);
-    }
+    };
     // const fetchTypeData = async () => {
     //   const data = await getTypes();
     //   if(data.data){
@@ -1078,12 +1084,12 @@ export default defineComponent({
 
     const handleClickAddEducation = () => {
       educationForm.value.push({
-        inDate:undefined,
-        outDate:undefined,
-        schoolName:undefined
+        inDate: undefined,
+        outDate: undefined,
+        schoolName: undefined,
       });
       forceSet();
-    }
+    };
     const handleCreateCancel = () => {
       perModalVisible.value = false;
     };
