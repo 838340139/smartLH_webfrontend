@@ -268,9 +268,9 @@
               </a-form-item>
               <a-form-item
                 field="detail"
-                label="详细地址"
+                label="人才类别"
                 required
-                :rules="[{ required: true, message: '详细地址必填' }]"
+                :rules="[{ required: true, message: '人才类别必填' }]"
               >
                 <a-input v-model="orgForm.detail" placeholder="请输入" />
               </a-form-item>
@@ -493,7 +493,7 @@ export default defineComponent({
         return false;
       }
       if (isBlank(orgForm.value.detail)) {
-        Message.info('详细地址必填');
+        Message.info('人才类别必填');
         done(false);
         return false;
       }

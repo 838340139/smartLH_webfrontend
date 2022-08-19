@@ -1,2 +1,5 @@
 [0622/153202.293:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
 [0730/094920.897:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0816/175823.907:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0817/105414.024:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0817/110514.334:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event

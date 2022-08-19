@@ -27,6 +27,8 @@ export default {
   'searchTable.operation.create': '新建',
   'searchTable.operation.import': '批量导入',
   'searchTable.operation.download': '下载',
+  'searchTable.form.request': '关键字全局搜索',
+  'searchTable.form.request.placeholder': '请输入你需要的关键字',
   // columns
   'searchTable.columns.number': '用户账号',
   'searchTable.columns.name': '姓名',

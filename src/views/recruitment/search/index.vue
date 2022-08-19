@@ -768,7 +768,7 @@ export default defineComponent({
         return false;
       }
       if (isBlank(recForm.value.detail)) {
-        Message.info('详细地址必填');
+        Message.info('人才类别必填');
         done(false);
         return false;
       }

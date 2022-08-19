@@ -13,6 +13,11 @@ export interface PerListParams {
   size: number;
 }
 
+export interface KeyParams {
+  keyword?: string;
+  orgId?: 0;
+}
+
 export interface PerListRes {
   list: Personnel[];
   total: number;
@@ -20,6 +25,15 @@ export interface PerListRes {
 
 export function queryPerList(params: PerListParams) {
   return axios.get<PerListRes>('/User/getUserBySearch', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
+}
+
+export function searchByKeyWords(params: KeyParams) {
+  return axios.get<PerListRes>('/User/searchByKeyWords', {
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);

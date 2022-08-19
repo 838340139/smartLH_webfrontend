@@ -24,7 +24,7 @@
           <template #prefix>
             <icon-user />
           </template>
-        </a-input>
+        </a-input>                                                                
       </a-form-item>
       <a-form-item
         field="password"
@@ -79,8 +79,8 @@ export default defineComponent({
     const { loading, setLoading } = useLoading();
     const userStore = useUserStore();
     const userInfo = reactive({
-      username: 'admin',
-      password: 'admin',
+      // username: 'admin',
+      // password: 'admin',
     });
     const handleSubmit = async ({
       errors,

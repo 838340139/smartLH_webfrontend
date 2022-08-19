@@ -11,7 +11,7 @@
             label-align="left"
           >
             <a-row :gutter="16">
-              <a-col :span="8">
+              <!-- <a-col :span="8">
                 <a-form-item
                   field="userName"
                   :label="$t('searchTable.form.number')"
@@ -21,8 +21,21 @@
                     :placeholder="$t('searchTable.form.number.placeholder')"
                   />
                 </a-form-item>
+              </a-col> -->
+
+              <a-col :span="12">
+                <a-form-item
+                  field="keyword"
+                  :label="$t('searchTable.form.request')"
+                >
+                  <a-input
+                    v-model="formModel.keyword"
+                    :placeholder="$t('searchTable.form.request.placeholder')"
+                  />
+                </a-form-item>
               </a-col>
-              <a-col :span="8">
+
+              <!-- <a-col :span="8">
                 <a-form-item
                   field="subject"
                   :label="$t('searchTable.form.name')"
@@ -68,7 +81,7 @@
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
-              </a-col>
+              </a-col> -->
               <!-- <a-col :span="8">
                 <a-form-item
                   field="createdTime"
@@ -91,7 +104,7 @@
                   />
                 </a-form-item>
               </a-col> -->
-              <a-col :span="8">
+              <!-- <a-col :span="8">
                 <a-form-item
                   field="fresh"
                   :label="$t('searchTable.form.fresh')"
@@ -102,7 +115,7 @@
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
-              </a-col>
+              </a-col> -->
             </a-row>
           </a-form>
         </a-col>
@@ -464,7 +477,7 @@
                   />
                 </a-form-item>
 
-                <a-form-item field="detail" label="详细地址">
+                <a-form-item field="detail" label="人才类别">
                   <a-input v-model="perForm.detail" placeholder="请输入" />
                 </a-form-item>
 
@@ -703,7 +716,7 @@ import {
   Options,
   Personnel,
   educationType,
-  politicsType,
+  politicsType, 
   sexType,
   experienceType,
   freshType,
@@ -715,6 +728,8 @@ import {
   addUser,
   deleteUser,
   exportExcel,
+  KeyParams,
+  searchByKeyWords,
 } from '@/api/personnel';
 import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
@@ -724,12 +739,13 @@ import importExcel from '@/components/importExcel/index.vue';
 
 const generateFormModel = () => {
   return {
-    userName: '',
-    subject: '',
-    academic: '',
-    sex: '',
-    fresh: '',
-    politics: '',
+    // userName: '',
+    // subject: '',
+    // academic: '',
+    // sex: '',
+    // fresh: '',
+    // politics: '',
+    keyword: '',
   };
 };
 
@@ -855,17 +871,17 @@ export default defineComponent({
     //  ]);
 
     const fetchData = async (
-      params: PerListParams = { pageNum: 1, size: 20 }
+      params: KeyParams = { }
     ) => {
       setLoading(true);
       // params.place = codeToText(params.place).join('/');
       try {
-        const { data } = await queryPerList(params);
+        const { data } = await searchByKeyWords(params);
         renderData.value = data.list;
-        pagination.current = params.pageNum;
-        pagination.total = data.total;
+        // pagination.current = params.pageNum;
+        // pagination.total = data.total;
       } catch (err) {
-        // you can report use errorHandler or other
+        // you can report use errorHandler or other   
       } finally {
         setLoading(false);
       }
@@ -875,8 +891,8 @@ export default defineComponent({
       fetchData({
         size: pagination.pageSize,
         pageNum: basePagination.current,
-        ...formModel.value,
-      } as unknown as PerListParams);
+        ...formModel.value, 
+      } as unknown as KeyParams);
     };
     const onPageChange = (pageNum: number) => {
       fetchData({ ...basePagination, size: basePagination.pageSize, pageNum });
@@ -954,7 +970,7 @@ export default defineComponent({
         return false;
       }
       if (isBlank(perForm.value.detail)) {
-        Message.info('详细地址必填');
+        Message.info('人才类别必填');
         done(false);
         return false;
       }
