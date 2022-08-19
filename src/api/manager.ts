@@ -13,7 +13,7 @@ export interface LoginRes {
   manager: Manager;
 }
 export function login(data: LoginData) {
-  return axios.post<LoginRes>('/Manager/login', {
+  return axios.post<LoginRes>('/web/login', {
     ...data,
   });
 }
@@ -23,11 +23,11 @@ export function logout() {
 }
 
 export function getUserInfo() {
-  return axios.get<Manager>('/Manager/getInfo', {});
+  return axios.get<Manager>('/web/getInfo', {});
 }
 
 export function setInfo(data: Manager) {
-  return axios.post('/Manager/setInfo', {
+  return axios.post('/web/setInfo', {
     ...data,
   });
 }

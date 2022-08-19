@@ -1,5 +1,5 @@
 export default {
-  'menu.setting.admin': '管理员账户',
+  'menu.setting.admin': '账户信息',
   'admin.tab.basicInformation': '我的账户',
   'admin.tab.member': '单位管理员',
   'userInfo.editUserInfo': '编辑信息',

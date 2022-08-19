@@ -878,8 +878,8 @@ export default defineComponent({
       try {
         const { data } = await searchByKeyWords(params);
         renderData.value = data.list;
-        // pagination.current = params.pageNum;
-        // pagination.total = data.total;
+        pagination.current = params.pageNum;
+        pagination.total = data.total;
       } catch (err) {
         // you can report use errorHandler or other   
       } finally {

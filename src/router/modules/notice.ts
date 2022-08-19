@@ -1,3 +1,5 @@
+import {ManagerType} from "@/types/global";
+
 export default {
   path: 'notice',
   name: 'notice',
@@ -15,7 +17,7 @@ export default {
       meta: {
         locale: 'menu.notice.send',
         requiresAuth: true,
-        roles: ['*'],
+        roles: [ManagerType.superAdmin, ManagerType.normalAdmin],
       },
     },
     {

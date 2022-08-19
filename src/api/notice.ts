@@ -46,10 +46,12 @@ export interface QueryNoticeRes{
   total: number;
   hasNextPage: boolean;
   pages: number;
+  pageSize: number;
+  size: number;
 }
 
 export function getNotices(params: QueryNoticeParams) {
-  return axios.get<QueryNoticeRes>('/Notice/getNotices', {
+  return axios.get<QueryNoticeRes>('/web/getNotices', {
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);

@@ -126,7 +126,7 @@ export default defineComponent({
         return true;
       if (props.passwordInputState === passwordInputStateEnum.enable)
         return false;
-      return ifChangePassword;
+      return ifChangePassword.value;
     });
     const handleSubmit = async () => {
       const res = await formRef.value?.validate();
@@ -136,7 +136,9 @@ export default defineComponent({
       if (!res) {
         setLoading(true);
         try {
+          console.log(passwordFinalDisable.value)
           if (passwordFinalDisable.value) {
+
             formData.value.password = undefined;
           }
           await props.onSubmit(formData.value);

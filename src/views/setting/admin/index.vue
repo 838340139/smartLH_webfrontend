@@ -13,7 +13,9 @@
               />
             </a-tab-pane>
             <a-tab-pane
-              v-if="userStore.isManager === ManagerType.superAdmin"
+              v-if="
+                userStore.role === ManagerType.superAdmin
+              "
               key="2"
               :title="$t('admin.tab.member')"
             >

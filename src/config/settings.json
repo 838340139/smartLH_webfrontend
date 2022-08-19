@@ -8,6 +8,6 @@
   "themeColor": "#165DFF",
   "menuWidth": 250,
   "globalSettings": false,
-  "baseUrl": "https://zhuzhibu.xiangyan.shop:8443",
-  "imageUploadUrl": "https://zhuzhibu.xiangyan.shop:8443/upload/image"
+  "baseUrl": "https://127.0.0.1:8443",
+  "imageUploadUrl": "https://127.0.0.1:8443/upload/image"
 }

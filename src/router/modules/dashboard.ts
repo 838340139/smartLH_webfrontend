@@ -1,3 +1,5 @@
+import {ManagerType} from "@/types/global";
+
 export default {
   path: 'dashboard',
   name: 'dashboard',
@@ -6,5 +8,6 @@ export default {
     locale: 'menu.dashboard',
     requiresAuth: true,
     icon: 'icon-dashboard',
+    roles: [ManagerType.superAdmin, ManagerType.normalAdmin],
   },
 };

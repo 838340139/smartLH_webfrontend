@@ -169,6 +169,7 @@ export default defineComponent({
       if (fetchIndex !== currentFetchIndex) return;
       dataList.value = data.list;
       pagination.total = data.total;
+      pagination.pageSize = data.size;
       setLoading(false);
     };
 

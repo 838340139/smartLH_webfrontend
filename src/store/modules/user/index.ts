@@ -17,7 +17,9 @@ const useUserStore = defineStore('user', {
     password: undefined,
     phone: undefined,
     mailbox: undefined,
-    isManager: undefined,
+    role: undefined,
+    orgId: undefined,
+    orgName: undefined
   }),
 
   getters: {

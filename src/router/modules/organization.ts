@@ -1,3 +1,5 @@
+import {ManagerType} from "@/types/global";
+
 export default {
   path: 'organization',
   name: 'organization',
@@ -6,6 +8,7 @@ export default {
     locale: 'menu.organization',
     requiresAuth: true,
     icon: 'icon-list',
+    roles: [ManagerType.superAdmin, ManagerType.normalAdmin],
   },
   children: [
     {

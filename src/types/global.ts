@@ -136,8 +136,10 @@ export interface Notice {
 }
 
 export const ManagerType = {
-  superAdmin: 1,
-  normalAdmin: 0,
+  superAdmin: '超级管理员',
+  normalAdmin: '普通管理员',
+  superOrgAdmin: '单位超级管理员',
+  normalOrgAdmin: '单位普通管理员',
 };
 
 export interface Manager {
@@ -146,8 +148,9 @@ export interface Manager {
   password?: string;
   phone?: string;
   mailbox?: string;
-  isManager?: number;
   role?: string;
+  orgId?: string;
+  orgName?: string;
 }
 
 export const educationType = [
@@ -179,7 +182,6 @@ export const educationType = [
     label: '博士',
     value: '博士',
   },
-
 ];
 
 export const sexType = [
@@ -191,7 +193,7 @@ export const sexType = [
     label: '女',
     value: '女',
   },
-]
+];
 
 export const freshType = [
   {
@@ -202,7 +204,7 @@ export const freshType = [
     label: '否',
     value: '否',
   },
-]
+];
 
 export const politicsType = [
   {
@@ -217,8 +219,7 @@ export const politicsType = [
     label: '中共党员（含预备党员）',
     value: '中共党员（含预备党员）',
   },
-
-]
+];
 
 export const experienceType = [
   {
@@ -245,7 +246,7 @@ export const experienceType = [
     label: '10年工作经验',
     value: '10年工作经验',
   },
-]
+];
 
 export const countryType = [
   {
@@ -348,4 +349,4 @@ export const countryType = [
     label: '山界回族乡',
     value: '山界回族乡',
   },
-]
+];
