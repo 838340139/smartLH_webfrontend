@@ -3,19 +3,21 @@
     <Breadcrumb :items="['menu.notice', 'menu.notice.list']" />
     <a-card class="general-card">
       <template #title>
-        <a-space :size="20">
+        <a-space
+          v-if="
+            userStore.role === ManagerType.normalAdmin ||
+            userStore.role === ManagerType.superAdmin
+          "
+          :size="20"
+        >
           <a-input-search
             v-model="searchForm.title"
             :placeholder="$t('notice.listSearch.placeholder')"
             style="width: 450px"
             width="200px"
           />
-          <a-button type="primary" @click="handleClickSearch">
-            搜索
-          </a-button>
-          <a-button @click="handleClickReset">
-            重置
-          </a-button>
+          <a-button type="primary" @click="handleClickSearch"> 搜索 </a-button>
+          <a-button @click="handleClickReset"> 重置 </a-button>
         </a-space>
       </template>
       <a-table
@@ -42,7 +44,7 @@
             data-index="receiverInfo"
             ellipsis
             :tooltip="{
-              'mouse-enter-delay': 800
+              'mouse-enter-delay': 800,
             }"
           >
           </a-table-column>
@@ -56,7 +58,7 @@
                     type: 'tooltip',
                     props: {
                       'mouse-enter-delay': 800,
-                      style: { maxWidth: `500px` },
+                      'style': { maxWidth: `500px` },
                     },
                   },
                 }"
@@ -79,6 +81,10 @@
                 详情
               </a-button>
               <a-button
+                v-if="
+                  userStore.role === ManagerType.normalAdmin ||
+                  userStore.role === ManagerType.superAdmin
+                "
                 type="text"
                 status="danger"
                 size="small"
@@ -120,13 +126,14 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
-import { NoticeType, Notice, Pagination } from '@/types/global';
+import { NoticeType, Notice, Pagination, ManagerType } from '@/types/global';
 import useLoading from '@/hooks/loading';
 import { Modal, Message } from '@arco-design/web-vue';
 import noImgSvg from '@/assets/images/no-img.svg';
 import MessageCard from '@/views/notice/list/components/message-card.vue';
-import {QueryNoticeParams, getNotices, deleteNotices} from '@/api/notice';
+import { QueryNoticeParams, getNotices, deleteNotices } from '@/api/notice';
 import { cutString, getEditorText } from '@/utils/stringUtils';
+import { useUserStore } from '@/store';
 
 const generateSearchForm = () => {
   return {
@@ -145,6 +152,7 @@ export default defineComponent({
     const detailModelVisible = ref<boolean>(false);
     const searchForm = ref<QueryNoticeParams>(generateSearchForm());
     const detail = ref<Notice>({});
+    const userStore = useUserStore();
     const basePagination: Pagination = {
       'current': 1,
       'pageSize': 5,
@@ -198,9 +206,9 @@ export default defineComponent({
         title: '提醒',
         content: '是否确认删除消息？',
         onOk: async () => {
-          if(record.id === undefined)return;
+          if (record.id === undefined) return;
           await deleteNotices({
-            noticeId: record.id
+            noticeId: record.id,
           });
           Message.success('删除成功');
           fetchData();
@@ -211,6 +219,7 @@ export default defineComponent({
 
     fetchData();
     return {
+      userStore,
       loading,
       dataList,
       noImgSvg,
@@ -218,6 +227,7 @@ export default defineComponent({
       pagination,
       detailModelVisible,
       detail,
+      ManagerType,
       cutString,
       getEditorText,
       handleClickSearch,
