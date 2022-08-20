@@ -158,6 +158,18 @@
               </a-button>
               <a-button
                 type="text"
+                size="small"
+                status="warning"
+                @click="
+                  () => {
+                    handleClickOrgManager(record);
+                  }
+                "
+              >
+                单位管理员
+              </a-button>
+              <a-button
+                type="text"
                 status="danger"
                 size="small"
                 @click="
@@ -183,6 +195,17 @@
     >
       <template #title> 批量导入 </template>
       <import-excel url="/Organization/importExcel"> </import-excel>
+    </a-modal>
+    <a-modal
+      v-model:visible="orgManagerVisible"
+      :width="1000"
+      :mask-closable="false"
+      unmount-on-close
+      hide-cancel
+      @ok="orgManagerVisible = false"
+    >
+      <template #title> 单位管理员 </template>
+      <Member :org-id="orgForm.id" style="height: 72vh"></Member>
     </a-modal>
     <a-modal
       v-model:visible="orgModalVisible"
@@ -317,6 +340,7 @@ import { cutString } from '@/utils/stringUtils';
 import { getToken } from '@/utils/auth';
 import config from '@/config/settings.json';
 import importExcel from '@/components/importExcel/index.vue';
+import Member from './components/member.vue';
 
 const generateFormModel = () => {
   return {
@@ -339,13 +363,14 @@ const generateCreateOrgFormModel = () => {
   };
 };
 export default defineComponent({
-  components: { importExcel },
+  components: { Member, importExcel },
   setup() {
     const { loading, setLoading } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
       useLoading(false);
     const orgModalVisible = ref<boolean>(false);
     const importModalVisible = ref<boolean>(false);
+    const orgManagerVisible = ref<boolean>(false);
     const viewOrCreate = ref<boolean>(false);
     const orgForm = ref<Organization>(generateCreateOrgFormModel());
     const { t } = useI18n();
@@ -437,6 +462,11 @@ export default defineComponent({
       viewOrCreate.value = true;
       orgForm.value = JSON.parse(JSON.stringify(record));
       orgForm.value.address = textToCode(orgForm.value.address);
+    };
+
+    const handleClickOrgManager = (record: Organization) => {
+      orgManagerVisible.value = true;
+      orgForm.value = JSON.parse(JSON.stringify(record));
     };
 
     const handleDeleteOk = async (item: { id: number }) => {
@@ -569,9 +599,11 @@ export default defineComponent({
       viewOrCreate,
       orgModalVisible,
       importModalVisible,
+      orgManagerVisible,
       orgForm,
       handleClickView,
       handleCreateOrg,
+      handleClickOrgManager,
       handleBeforeOk,
       handleCreateOrgOk,
       handleCreateCancel,

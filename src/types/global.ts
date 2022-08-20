@@ -153,6 +153,17 @@ export interface Manager {
   orgName?: string;
 }
 
+export interface WxOrg {
+  id?: number;
+  name?: string;
+  password?: string;
+  phone?: string;
+  mail?: string;
+  orgId?: number;
+  orgName?: string;
+  status?: number;
+}
+
 export const educationType = [
   {
     label: '小学',
