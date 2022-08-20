@@ -17,15 +17,15 @@
             <a-typography-text>{{ userInfo.phone }}</a-typography-text>
           </div>
           <div>
-            <icon-home />
+            <icon-at />
             <a-typography-text>
               {{ userInfo.mailbox }}
             </a-typography-text>
           </div>
-<!--          <div>-->
-<!--            <icon-location />-->
-<!--            <a-typography-text>{{ userInfo.locationName }}</a-typography-text>-->
-<!--          </div>-->
+          <div v-if="userInfo.role === ManagerType.superOrgAdmin || userInfo.role === ManagerType.normalOrgAdmin">
+            <icon-home />
+            <a-typography-text>{{ userInfo.orgName }}</a-typography-text>
+          </div>
         </a-space>
       </div>
     </a-space>
@@ -36,13 +36,15 @@
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/store';
 import adminPng from '@/assets/images/admin.png'
+import { ManagerType } from '@/types/global';
 
 export default defineComponent({
   setup() {
     const userStore = useUserStore();
     return {
       userInfo: userStore,
-      adminPng
+      adminPng,
+      ManagerType,
     };
   },
 });
