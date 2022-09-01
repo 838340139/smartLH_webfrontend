@@ -183,10 +183,7 @@
             :title="$t('searchRec.columns.num')"
             data-index="number"
           />
-          <!-- <a-table-column
-            :title="$t('searchRec.columns.phone')"
-            data-index="phone"
-          /> -->
+         
           <a-table-column
             :title="$t('searchRec.columns.address')"
             data-index="place"
@@ -204,6 +201,16 @@
           <a-table-column
             title="发布时间"
             data-index="publishTime"
+          >
+          </a-table-column>
+          <a-table-column 
+            title="投递数"
+            data-index="deliverNumber"
+          >
+          </a-table-column>
+          <a-table-column
+            title="下级单位名称"
+            data-index="includeOrg"
           >
           </a-table-column>
           <!--          <a-table-column-->
@@ -237,6 +244,7 @@
               >
                 {{ $t('searchOrg.columns.operations.view') }}
               </a-button>
+
               <a-button
 
                 type="text"
@@ -250,6 +258,21 @@
               >
                 {{ $t('searchOrg.columns.operations.delete') }}
               </a-button>
+
+               <a-button
+
+                type="text"
+                status="danger"
+                size="small"
+                @click="
+                  () => {
+                    handleClickViewDeliver(record);
+                  }
+                "
+              >
+                {{ $t('查看投递详情') }}
+              </a-button>
+
             </template>
           </a-table-column>
         </template>
@@ -267,204 +290,6 @@
       <import-excel url="/Recruitment/importExcel"> </import-excel>
     </a-modal>
 
-<!--     <a-modal-->
-<!--      v-model:visible="recModalVisible"-->
-<!--      :width="1000"-->
-<!--      :mask-closable="false"-->
-<!--      :on-before-ok="handleBeforeOk"-->
-<!--      @ok="handleCreateORecOk"-->
-<!--      @cancel="handleCreateCancel"-->
-<!--    >-->
-<!--      <template #title> {{ viewOrCreate ? '详情' : '添加' }} </template>-->
-<!--      <a-row style="height: 450px" :gutter="20">-->
-<!--        &lt;!&ndash; <a-col v-if="viewRecCreate" :span="12">-->
-<!--          <a-carousel-->
-<!--            v-if="orgForm.material && orgForm.material.length > 0"-->
-<!--            :style="{-->
-<!--              width: '480px',-->
-<!--              height: '400px',-->
-<!--            }"-->
-<!--          >-->
-<!--            <a-carousel-item-->
-<!--              v-for="(image, index) in orgForm.material"-->
-<!--              :key="index"-->
-<!--            >-->
-<!--              <a-image width="480px" height="400px" :src="image" />-->
-<!--            </a-carousel-item>-->
-<!--          </a-carousel>-->
-<!--          <div-->
-<!--            v-else-->
-<!--            style="-->
-<!--              width: 480px;-->
-<!--              height: 400px;-->
-<!--              display: flex;-->
-<!--              justify-content: center;-->
-<!--              align-items: center;-->
-<!--            "-->
-<!--          >-->
-<!--            <a-empty />-->
-<!--          </div>-->
-<!--          <div style="text-align: center; padding-top: 10px">审核材料</div>-->
-<!--        </a-col> &ndash;&gt;-->
-<!--    -->
-<!--        <a-col :span="viewRecCreate ? 20 : 24" >-->
-<!--          <div>-->
-<!--            <a-form-->
-<!--              :model="recForm"-->
-<!--              auto-label-width-->
-<!--              @submit="handleCreateRecOk"-->
-<!--            >-->
-<!--              <a-form-item-->
-<!--                field="orgName"-->
-<!--                label="单位名称"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '单位名称必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.orgName" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="number"-->
-<!--                label="招聘人数"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '招聘人数必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.number" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--               <a-form-item-->
-<!--                field="position"-->
-<!--                label="职位名称"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '职位名称必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.position" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="subject"-->
-<!--                label="专业名称"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '专业名称必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.subject" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="fresh"-->
-<!--                label="是否应届"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '是否应届必填' }]"-->
-<!--              >-->
-<!--                <a-select-->
-<!--                  v-model="recForm.fresh"-->
-<!--                  :options="freshType"-->
-<!--                  :placeholder="$t('searchOrg.form.selectDefault')"-->
-<!--                />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="age"-->
-<!--                label="年龄"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '年龄必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.age" placeholder="请输入" />-->
-
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="education"-->
-<!--                label="最低学历要求"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '最低学历要求必填' }]"-->
-<!--              >-->
-<!--                <a-select-->
-<!--                  v-model="recForm.education"-->
-<!--                  :options="educationType"-->
-<!--                  :placeholder="$t('searchOrg.form.selectDefault')"-->
-<!--                />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="place"-->
-<!--                label="单位地址"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '单位地址必填' }]"-->
-<!--              >-->
-<!--                <a-cascader-->
-<!--                  v-model="recForm.place"-->
-<!--                  size="large"-->
-<!--                  class="large-cascader"-->
-<!--                  check-strictly-->
-<!--                  :options="regionOptions"-->
-<!--                  placeholder="请选择"-->
-<!--                  allow-search-->
-<!--                />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="politics"-->
-<!--                label="政治面貌"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '政治面貌必填' }]"-->
-<!--              >-->
-<!--                <a-select-->
-<!--                  v-model="recForm.politics"-->
-<!--                  :options="politicsType"-->
-<!--                  :placeholder="$t('searchOrg.form.selectDefault')"-->
-<!--                />-->
-<!--              </a-form-item>-->
-<!--               <a-form-item-->
-<!--                field="remark"-->
-<!--                label="岗位要求"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '岗位要求必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.remark" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-
-<!--               <a-form-item-->
-<!--                field="salaryFloor"-->
-<!--                label="薪资下限"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '薪资下线必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.salaryFloor" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--              <a-form-item-->
-<!--                field="salaryCell"-->
-<!--                label="薪资上限"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '薪资上线必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.salaryCell" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-
-<!--               <a-form-item-->
-<!--                field="content"-->
-<!--                label="岗位职责"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '岗位职责必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.content" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--             <a-form-item-->
-<!--                field="title"-->
-<!--                label="招聘标题"-->
-<!--                required-->
-<!--                :rules="[{ required: true, message: '招聘标题必填' }]"-->
-<!--              >-->
-<!--                <a-input v-model="recForm.title" placeholder="请输入" />-->
-<!--              </a-form-item>-->
-<!--             -->
-<!--              <a-form-item field="experience" label="个人经历">-->
-<!--                <a-textarea-->
-<!--                  v-model="recForm.experience"-->
-<!--                  placeholder="请输入"-->
-<!--                  :max-length="255"-->
-<!--                  allow-clear-->
-<!--                  style="height: 200px"-->
-<!--                  show-word-limit-->
-<!--                />-->
-<!--              </a-form-item>-->
-<!--            </a-form>-->
-<!--          </div>-->
-<!--        </a-col>-->
-<!--        </a-row>-->
-<!--    </a-modal>-->
     <a-modal
   
       v-model:visible="recModalVisible"
@@ -484,41 +309,7 @@
       >
       </recruitment-form>
     </a-modal>
-      <!--      <div>-->
-      <!--        <a-form :model="recForm" auto-label-width>-->
-      <!--          <a-form-item field="orgName" label="招聘单位名称">-->
-      <!--            <a-input v-model="recForm.orgName" placeholder="请输入" />-->
-      <!--          </a-form-item>-->
-      <!--          <a-form-item field="number" label="招聘人数">-->
-      <!--           <a-input v-model="recForm.number" placeholder="请输入" />-->
-      <!--          </a-form-item>-->
-      <!--          <a-form-item field="place" label="工作地点">-->
-      <!--            <a-cascader-->
-      <!--              v-model="recForm.place"-->
-      <!--              size="large"-->
-      <!--              class="large-cascader"-->
-      <!--              check-strictly-->
-      <!--              :options="regionOptions"-->
-      <!--              placeholder="请选择"-->
-      <!--              allow-search-->
-      <!--            />-->
-      <!--          </a-form-item>-->
-      <!--          <a-form-item field="education" label="学历要求">-->
-      <!--            <a-input v-model="recForm.education" placeholder="请输入" />-->
-      <!--          </a-form-item>-->
-      <!--          &lt;!&ndash; <a-form-item field="type" label="介绍">-->
-      <!--            <a-textarea-->
-      <!--              v-model="recForm.introduction"-->
-      <!--              placeholder="请输入"-->
-      <!--              :max-length="255"-->
-      <!--              allow-clear-->
-      <!--              style="height: 100px"-->
-      <!--              show-word-limit-->
-      <!--            />-->
-      <!--          </a-form-item> &ndash;&gt;-->
-      <!--        </a-form>-->
-      <!--      </div>-->
-    <!-- </a-modal> -->
+   
   </div>
 </template>
 
@@ -569,6 +360,8 @@ const generateCreateRecFormModel = () => {
     salaryCell: '',
     experience:'',
     detail:'',
+    deliverNumber:'',
+    includeOrg:'',
   };
 };
 export default defineComponent({
@@ -610,33 +403,6 @@ export default defineComponent({
       }
     };
     const regionOptions = ref(regionData);
-    // const fetchTypeData = async () => {
-    //   const data = await getTypes();
-    //   if (data.data) {
-    //     typeOptions.value = data.data.map((item) => {
-    //       return {
-    //         label: item,
-    //         value: item,
-    //       };
-    //     });
-    //   }
-    // };
-    // fetchTypeData();
-    // const typeOptions = computed<Options[]>(() => [
-    //   {
-    //     label: t('本科'),
-    //     value: t('recruitment.recType.undergraduate'),
-    //   },
-    //   {
-    //     label: t('硕士研究生'),
-    //     value: t('recruitment.recType.master'),
-    //   },
-    //   {
-    //     label: t('博士研究生'),
-    //     value: t('recruitment.recType.phd'),
-    //   },
-
-    // ]);
     const fetchData = async (
       params: RecListParams = { 
         pageNum: pagination.current,

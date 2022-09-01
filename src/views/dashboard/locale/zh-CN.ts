@@ -7,6 +7,9 @@ export default {
   'workplace.personnel.visitCount': '今日访问量(个人)',
   'workplace.org.visitCount': '今日访问量(单位)',
   'workplace.history.visitCount': '历史总访问量',
+  'workplace.person.visitCount': '个人总访问量',
+  'workplace.organ.visitCount': '单位总访问量',
+  'workplace.manager.visitCount': '管理员总访问量',
   'workplace.personnel.dataCount': '人才信息条数',
   'workplace.orgInfoCount': '单位信息条数',
   'workplace.recruitInfoCount': '招聘信息条数',
@@ -36,7 +39,10 @@ export default {
   'workplace.popularContent.week': '近一周发布',
   'workplace.popularContent.month': '近一月发布',
   'workplace.categoriesPercent': '单位性质占比',
+  'workplace.detailPercent': '人才类别占比',
+  'workplace.educationPercent': '学历占比',
   'workplace.pecs.strip': '条',
   'workplace.pecs.second': '次',
+
   'workplace.addMore': '发布消息',
 };

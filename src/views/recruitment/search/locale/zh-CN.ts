@@ -20,7 +20,7 @@ export default {
   'searchRec.form.selectDefault': '全部',
   'searchRec.operation.create': '添加',
   'searchRec.operation.import': '批量导入',
-  'searchRec.operation.download': '下载',
+  'searchRec.operation.download': '批量导出',
   // columns
   'searchRec.columns.number': '编号',
   'searchRec.columns.name': '招聘单位名称',
@@ -33,4 +33,5 @@ export default {
   'searchRec.columns.operations': '操作',
   'searchRec.columns.operations.view': '查看',
   'searchRec.columns.operations.delete': '删除',
+  'searchRec.columns.operations.viewDe': '查看投递详情',
 };

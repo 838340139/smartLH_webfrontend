@@ -238,10 +238,10 @@
               </a-space>
             </template>
           </a-table-column>
-          <a-table-column
+          <!-- <a-table-column
             :title="$t('searchTable.columns.marriage')"
             data-index="marriage"
-          />
+          /> -->
           <!--   <a-table-column
             :title="$t('searchTable.columns.phone')"
             data-index="phone"

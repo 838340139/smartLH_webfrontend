@@ -17,7 +17,7 @@ export default {
   'searchOrg.form.selectDefault': '全部',
   'searchOrg.operation.create': '添加',
   'searchOrg.operation.import': '批量导入',
-  'searchOrg.operation.download': '下载',
+  'searchOrg.operation.download': '批量导出',
   // columns
   'searchOrg.columns.number': '编号',
   'searchOrg.columns.name': '单位名称',

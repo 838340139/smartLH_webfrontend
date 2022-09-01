@@ -7,12 +7,48 @@
         <ContentChart />
       </div>
       <a-row style="margin-top: 16px">
-        <a-col :flex="1" class="panel" style="margin-right: 16px">
-          <PopularContent />
-        </a-col>
-        <a-col :flex="1" class="panel">
+         <a-col :flex="1" class="panel" style="margin-right: 16px">  
+          <a-tabs>
+           <a-tab-pane key="1">
+      <template #title>
+        <icon-calendar/> 单位分布
+      </template>
+      <CateforiesPercent />
+    </a-tab-pane>
+    </a-tabs>
+         </a-col>
+      <a-col :flex="1" class="panel" style="margin-right: 0px">  
+
+  <a-tabs>
+    <!-- <a-tab-pane key="1">
+      <template #title>
+        <icon-calendar/> 单位分布
+      </template>
+      <CateforiesPercent />
+    </a-tab-pane> -->
+    <a-tab-pane key="2">
+      <template #title>
+        <icon-clock-circle/> 学历分布
+      </template>
+      <Education />
+    </a-tab-pane>
+    <a-tab-pane key="3">
+      <template #title>
+        <icon-user/> 人才分布
+      </template>
+       <Detail />
+    </a-tab-pane>
+  </a-tabs>
+</a-col>
+        <!-- <a-col :flex="1" class="panel">
           <CateforiesPercent />
         </a-col>
+           <a-col :flex="1" class="panel">
+          <Education />
+        </a-col>
+        <a-col :flex="1" class="panel">
+          <Detail />
+        </a-col> -->
       </a-row>
     </div>
     <div class="right-side">
@@ -30,7 +66,11 @@
       <div class="panel" style="margin-top: 16px">
         <SystemMessage />
       </div>
-
+    <div>
+<a-col :flex="1" class="panel" style="margin-top: 16px">
+          <PopularContent />
+        </a-col>
+  </div>
     </div>
   </div>
 </template>
@@ -45,6 +85,8 @@ import CateforiesPercent from './components/categories-percent.vue';
 import QuickOperation from './components/todowork.vue';
 import SystemMessage from './components/system-message.vue';
 import Carousel from './components/carousel.vue';
+import Education from './components/education.vue';
+import Detail from './components/detail.vue';
 
 export default defineComponent({
   components: {
@@ -56,6 +98,8 @@ export default defineComponent({
     QuickOperation,
     SystemMessage,
     Carousel,
+    Education,
+    Detail,
   },
 });
 </script>

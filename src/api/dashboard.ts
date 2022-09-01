@@ -31,6 +31,14 @@ export function getTypesCount() {
   return axios.get<TypeCount[]>('/dashboard/getTypesCount', {});
 }
 
+export function getEducationTypesCount() {
+  return axios.get<TypeCount[]>('/dashboard/getEducationTypesCount', {});
+}
+
+export function getDetailTypesCount() {
+  return axios.get<TypeCount[]>('/dashboard/getDetailTypesCount', {});
+}
+
 export interface DataSummary {
   perVisitCount: number;
   orgVisitCount: number;
@@ -39,6 +47,8 @@ export interface DataSummary {
   perCount: number;
   orgCount: number;
   recruitCount: number;
+  perTotalVisitCount: number;
+  orgTotalVisitCount: number;
 }
 
 export function getDataSummary() {

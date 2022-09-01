@@ -7,10 +7,10 @@
         padding: '20px',
       }"
     >
-      <template #title>
+      <!-- <template #title>
         {{ $t('workplace.categoriesPercent') }}
-      </template>
-      <Chart height="310px" :option="chartOption" />
+      </template>-->
+      <Chart height="310px" :option="chartOption" /> 
     </a-card>
   </a-spin>
 </template>
@@ -55,7 +55,7 @@ export default defineComponent({
               left: 'center',
               top: '45%',
               style: {
-                text: '单位性质',
+                text: '单位分布',
                 textAlign: 'center',
                 fill: isDark ? '#ffffffb3' : '#4E5969',
                 fontSize: 14,

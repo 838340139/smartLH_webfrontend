@@ -102,6 +102,8 @@ export interface Recruitment {
   salaryCell?: number;
   experience?: string;
   detail?: string;
+  deliverNumber?: number;
+  includeOrg?: string;
 }
 export const AuditEnum = {
   0: '未审核',

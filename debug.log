@@ -3,3 +3,7 @@
 [0816/175823.907:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
 [0817/105414.024:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
 [0817/110514.334:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0820/001405.946:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0822/150241.889:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0822/152533.019:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event
+[0831/151214.110:ERROR:exit_code_watcher_win.cc(87)] Failed to wait for process exit or stop event

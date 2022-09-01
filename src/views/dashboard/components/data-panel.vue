@@ -85,7 +85,7 @@
         </a-space>
       </a-col>
     </a-row>
-    <a-row>
+    <a-row style="margin-bottom: 2em">
       <a-col class="panel-col" :span="8">
         <a-space>
           <a-avatar :size="54" class="col-avatar">
@@ -163,6 +163,82 @@
         </a-space>
       </a-col>
     </a-row>
+
+    <a-row >
+
+    <a-col class="panel-col" :span="8">
+        <a-space>
+          <a-avatar :size="54" class="col-avatar">
+            <history-visit-svg
+              style="width: 30px; height: 30px"
+            ></history-visit-svg>
+          </a-avatar>
+          <a-statistic
+            :title="$t('workplace.person.visitCount')"
+            :value="
+              Number.isInteger(summaryData.perTotalVisitCount) ? summaryData.perTotalVisitCount : undefined
+            "
+            :value-from="0"
+            placeholder="-"
+            animation
+            show-group-separator
+          >
+            <template #suffix>
+              <span class="unit">{{ $t('workplace.pecs.second') }}</span>
+            </template>
+          </a-statistic>
+        </a-space>
+      </a-col>
+      
+       <a-col class="panel-col" :span="8">
+        <a-space>
+          <a-avatar :size="54" class="col-avatar">
+            <history-visit-svg
+              style="width: 30px; height: 30px"
+            ></history-visit-svg>
+          </a-avatar>
+          <a-statistic
+            :title="$t('workplace.organ.visitCount')"
+            :value="
+              Number.isInteger(summaryData.orgTotalVisitCount) ? summaryData.orgTotalVisitCount : undefined
+            "
+            :value-from="0"
+            placeholder="-"
+            animation
+            show-group-separator
+          >
+            <template #suffix>
+              <span class="unit">{{ $t('workplace.pecs.second') }}</span>
+            </template>
+          </a-statistic>
+        </a-space>
+      </a-col>
+
+       <a-col class="panel-col" :span="8">
+        <a-space>
+          <a-avatar :size="54" class="col-avatar">
+            <history-visit-svg
+              style="width: 30px; height: 30px"
+            ></history-visit-svg>
+          </a-avatar>
+          <a-statistic
+            :title="$t('workplace.manager.visitCount')"
+            :value="
+              Number.isInteger(summaryData.managerVisitCount) ? summaryData.managerVisitCount : undefined
+            "
+            :value-from="0"
+            placeholder="-"
+            animation
+            show-group-separator
+          >
+            <template #suffix>
+              <span class="unit">{{ $t('workplace.pecs.second') }}</span>
+            </template>
+          </a-statistic>
+        </a-space>
+      </a-col>
+
+      </a-row>
     <a-divider class="panel-border" />
   </a-col>
 </template>
