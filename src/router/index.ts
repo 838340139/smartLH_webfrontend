@@ -30,6 +30,17 @@ const router = createRouter({
       children: appRoutes,
     },
     {
+      path: '/deliver', // The midline path complies with SEO specifications
+      name: 'deliver-recruitment',
+      component: () => import('@/views/recruitment/deliver/index.vue'),
+      meta: {
+        locale: 'menu.recruitment.deliver',
+        requiresAuth: true,
+        roles: ['*'],
+        hideInMenu: true,
+      },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'notFound',
       component: () => import('@/views/not-found/index.vue'),

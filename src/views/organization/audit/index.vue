@@ -116,14 +116,15 @@
                   v-if="orgDetail.material && orgDetail.material.length > 0"
                   :style="{
                     width: '480px',
-                    height: '400px',
+                    'height': '400px'
                   }"
                 >
                   <a-carousel-item
                     v-for="(image, index) in orgDetail.material"
                     :key="index"
+                    style="display: flex; justify-content: center; align-items: center"
                   >
-                    <a-image width="480px" height="400px" :src="image" />
+                    <a-image style="max-width:400px;max-height: 400px" :src="image" />
                   </a-carousel-item>
                 </a-carousel>
                 <div

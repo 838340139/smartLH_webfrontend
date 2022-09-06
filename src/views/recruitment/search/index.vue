@@ -12,10 +12,7 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item
-                  field="orgName"
-                  label="招聘单位"
-                >
+                <a-form-item field="orgName" label="招聘单位">
                   <a-input
                     v-model="formModel.orgName"
                     :placeholder="$t('searchRec.form.recName.placeholder')"
@@ -38,10 +35,7 @@
                 </a-form-item>
               </a-col> -->
               <a-col :span="8">
-                <a-form-item
-                  field="place"
-                  label="工作地点"
-                >
+                <a-form-item field="place" label="工作地点">
                   <a-select
                     v-model="formModel.place"
                     :options="countryType"
@@ -122,11 +116,11 @@
         <!-- <a-col :span="16">
           <a-space>
                        <a-button type="primary" @click="handleCreateRec">-->
-            <!--              <template #icon>-->
-            <!--                <icon-plus />-->
-            <!--              </template>-->
-            <!--              {{ $t('searchRec.operation.create') }}-->
-            <!--            </a-button>
+        <!--              <template #icon>-->
+        <!--                <icon-plus />-->
+        <!--              </template>-->
+        <!--              {{ $t('searchRec.operation.create') }}-->
+        <!--            </a-button>
             <a-upload action="/">
               <template #upload-button>
                 <a-button>
@@ -138,18 +132,18 @@
         </a-col> -->
         <a-col :span="16">
           <a-space>
-<!--            <a-button type="primary" @click="handleCreateRec">-->
-<!--              <template #icon>-->
-<!--                <icon-plus />-->
-<!--              </template>-->
-<!--              {{ $t('searchOrg.operation.create') }}-->
-<!--            </a-button>-->
+            <!--            <a-button type="primary" @click="handleCreateRec">-->
+            <!--              <template #icon>-->
+            <!--                <icon-plus />-->
+            <!--              </template>-->
+            <!--              {{ $t('searchOrg.operation.create') }}-->
+            <!--            </a-button>-->
             <a-button @click="handleClickImport"> 批量导入 </a-button>
           </a-space>
         </a-col>
         <a-col :span="8" style="text-align: right">
           <a-tooltip content="数据量大时导出需要较长时间">
-             <a-button :loading="downloadLoading" @click="handleClickDownload">
+            <a-button :loading="downloadLoading" @click="handleClickDownload">
               <template #icon>
                 <icon-download />
               </template>
@@ -169,23 +163,23 @@
         <template #columns>
           <a-table-column
             :title="$t('searchRec.columns.number')"
-            data-index="id"
+            :width="70"
+            data-index="rowNum"
           />
-          <a-table-column
-              title="标题"
-              data-index="title"
-          />
+          <a-table-column title="标题" :width="130" data-index="title" />
           <a-table-column
             :title="$t('searchRec.columns.name')"
+            :width="130"
             data-index="orgName"
           />
           <a-table-column
             :title="$t('searchRec.columns.num')"
             data-index="number"
           />
-         
+
           <a-table-column
             :title="$t('searchRec.columns.address')"
+            :width="130"
             data-index="place"
           >
           </a-table-column>
@@ -193,25 +187,25 @@
             :title="$t('searchRec.columns.education')"
             data-index="education"
           />
-          <a-table-column
-              title="点击量"
-              data-index="view"
-          >
+          <a-table-column title="点击量" data-index="view"> </a-table-column>
+          <a-table-column title="发布时间" data-index="publishTime">
           </a-table-column>
-          <a-table-column
-            title="发布时间"
-            data-index="publishTime"
-          >
+          <a-table-column title="投递数" data-index="deliverNumber">
+            <template #cell="{ record }">
+              <a-button
+                type="text"
+                size="small"
+                @click="
+                  () => {
+                    handleClickViewDeliver(record);
+                  }
+                "
+              >
+                {{ record.deliverNumber }}
+              </a-button>
+            </template>
           </a-table-column>
-          <a-table-column 
-            title="投递数"
-            data-index="deliverNumber"
-          >
-          </a-table-column>
-          <a-table-column
-            title="下级单位名称"
-            data-index="includeOrg"
-          >
+          <a-table-column title="下级单位名称" data-index="includeOrg">
           </a-table-column>
           <!--          <a-table-column-->
           <!--            :title="$t('searchOrg.columns.createdTime')"-->
@@ -233,7 +227,6 @@
           >
             <template #cell="{ record }">
               <a-button
-
                 type="text"
                 size="small"
                 @click="
@@ -246,7 +239,6 @@
               </a-button>
 
               <a-button
-
                 type="text"
                 status="danger"
                 size="small"
@@ -258,40 +250,88 @@
               >
                 {{ $t('searchOrg.columns.operations.delete') }}
               </a-button>
-
-               <a-button
-
-                type="text"
-                status="danger"
-                size="small"
-                @click="
-                  () => {
-                    handleClickViewDeliver(record);
-                  }
-                "
-              >
-                {{ $t('查看投递详情') }}
-              </a-button>
-
             </template>
           </a-table-column>
         </template>
       </a-table>
     </a-card>
     <a-modal
+      v-model:visible="deliverTableVisible"
+      width="65%"
+      :mask-closable="false"
+      unmount-on-close
+      hide-cancel
+      @ok="deliverTableVisible = false"
+    >
+      <template #title> 投递详情 </template>
+
+      <a-table
+        row-key="id"
+        :loading="loadingDeliver"
+        :pagination="false"
+        :data="deliverTable"
+        :bordered="false"
+        style="height: 62vh"
+      >
+        <template #columns>
+          <a-table-column
+              title="序号"
+              :width="100"
+              data-index="index"
+          />
+          <a-table-column
+            title="姓名"
+            :width="140"
+            data-index="resumeInfo.name"
+          />
+          <a-table-column
+            title="性别"
+            :width="80"
+            data-index="resumeInfo.sex"
+          />
+          <a-table-column
+            title="电话"
+            :width="150"
+            data-index="resumeInfo.phone"
+          />
+          <a-table-column
+            title="微信"
+            :width="150"
+            data-index="resumeInfo.wxAccount"
+          />
+          <a-table-column
+            title="投递时间"
+            :width="200"
+            data-index="deliverInfo.deliverTime"
+          />
+          <a-table-column title="操作">
+            <template #cell="{ record }">
+              <a
+                target="_blank"
+                :href="
+                  './#/deliver?deliverId=' + record.deliverInfo.id
+                "
+                >查看简历</a
+              >
+            </template>
+          </a-table-column>
+        </template>
+      </a-table>
+    </a-modal>
+
+    <a-modal
       v-model:visible="importModalVisible"
       :width="500"
       :mask-closable="false"
       unmount-on-close
       hide-cancel
-      @ok="importModalVisible=false"
+      @ok="importModalVisible = false"
     >
       <template #title> 批量导入 </template>
       <import-excel url="/Recruitment/importExcel"> </import-excel>
     </a-modal>
 
     <a-modal
-  
       v-model:visible="recModalVisible"
       width="80%"
       :mask-closable="false"
@@ -309,7 +349,6 @@
       >
       </recruitment-form>
     </a-modal>
-   
   </div>
 </template>
 
@@ -317,7 +356,17 @@
 import { defineComponent, computed, ref, reactive, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import { Pagination, Options, Recruitment, educationType, countryType, freshType, sexType, politicsType, experienceType } from '@/types/global';
+import {
+  Pagination,
+  Options,
+  Recruitment,
+  educationType,
+  countryType,
+  freshType,
+  sexType,
+  politicsType,
+  experienceType,
+} from '@/types/global';
 import { regionData, CodeToText } from 'element-china-area-data';
 import { Modal, Message } from '@arco-design/web-vue';
 import { codeToText, textToCode } from '@/utils/region';
@@ -330,9 +379,10 @@ import {
   deleteRecruit,
   exportExcel,
 } from '@/api/recruitment';
+import { getByRecruitmentId } from '@/api/deliver';
 // import RecruitmentForm from '@/views/recruitment/components/recruitment-form.vue';
-import importExcel from "@/components/importExcel/index.vue";
-import RecruitmentForm from '../components/recruitment-form.vue'
+import importExcel from '@/components/importExcel/index.vue';
+import RecruitmentForm from '../components/recruitment-form.vue';
 
 const generateFormModel = () => {
   return {
@@ -354,14 +404,14 @@ const generateCreateRecFormModel = () => {
     place: '',
     politics: '',
     remark: '',
-    title:'',
-    content:'',
+    title: '',
+    content: '',
     salaryFloor: '',
     salaryCell: '',
-    experience:'',
-    detail:'',
-    deliverNumber:'',
-    includeOrg:'',
+    experience: '',
+    detail: '',
+    deliverNumber: '',
+    includeOrg: '',
   };
 };
 export default defineComponent({
@@ -369,13 +419,16 @@ export default defineComponent({
   components: { importExcel, RecruitmentForm },
   setup() {
     const { loading, setLoading } = useLoading(true);
+    const {loading: loadingDeliver, setLoading: setLoadingDeliver } = useLoading(true);
     const { loading: downloadLoading, setLoading: setDownloadLoading } =
       useLoading(false);
     const recModalVisible = ref<boolean>(false);
     const importModalVisible = ref<boolean>(false);
+    const deliverTableVisible = ref<boolean>(false);
     const viewRecCreate = ref<boolean>(false);
     const recForm = ref<Recruitment>(generateCreateRecFormModel());
     const { t } = useI18n();
+    const deliverTable = ref<any>([]);
     const renderData = ref<Recruitment[]>([]);
     // const typeOptions = ref<{ label: string; value: string }[]>([]);
     const formModel = ref(generateFormModel());
@@ -404,10 +457,10 @@ export default defineComponent({
     };
     const regionOptions = ref(regionData);
     const fetchData = async (
-      params: RecListParams = { 
+      params: RecListParams = {
         pageNum: pagination.current,
         size: pagination.pageSize,
-        }
+      }
     ) => {
       setLoading(true);
       // 地址编码转为文字
@@ -415,10 +468,13 @@ export default defineComponent({
       try {
         const { data } = await queryRecList(params);
         renderData.value = data.list;
-         if (data.list.length === 0 && data.total > 0) {
+        if (data.list.length === 0 && data.total > 0) {
           params.pageNum = data.pages;
           fetchData(params);
         }
+        renderData.value.forEach((item, index) => {
+          item.rowNum = index + data.startRow;
+        });
         pagination.current = data.pageNum;
         pagination.total = data.total;
       } catch (err) {
@@ -558,12 +614,12 @@ export default defineComponent({
         done(false);
         return false;
       }
-      if (recForm.value.salaryFloor==null) {
+      if (recForm.value.salaryFloor == null) {
         Message.info('薪资下限必填');
         done(false);
         return false;
       }
-      if (recForm.value.salaryCell==null) {
+      if (recForm.value.salaryCell == null) {
         Message.info('薪资上限必填');
         done(false);
         return false;
@@ -635,14 +691,41 @@ export default defineComponent({
       document.body.removeChild(a);
       setDownloadLoading(false);
     };
+    const handleClickViewDeliver = async (record: any) => {
+      deliverTableVisible.value = true;
+      deliverTable.value = [];
+      setLoadingDeliver(true);
+      try {
+        const { data } = await getByRecruitmentId({ recruitmentId: record.id });
+        const resumeMap: any = {};
+        data.users.forEach((item: any) => {
+          resumeMap[item.id] = item;
+        });
+        deliverTable.value = data.resumeDeliverList.map(
+          (item: any, index: number) => {
+            return {
+              deliverInfo: item,
+              resumeInfo: resumeMap[item.userId],
+              index: index + 1,
+            };
+          }
+        );
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
+      finally {
+        setLoadingDeliver(false);
+      }
+    };
     return {
       loading,
+      loadingDeliver,
       downloadLoading,
       search,
       onPageChange,
       renderData,
       pagination,
       regionOptions,
+      deliverTable,
       countryType,
       formModel,
       reset,
@@ -653,6 +736,7 @@ export default defineComponent({
       handleClickDelete,
       handleDeleteOk,
       viewRecCreate,
+      deliverTableVisible,
       recModalVisible,
       importModalVisible,
       recForm,
@@ -664,6 +748,7 @@ export default defineComponent({
       handleCreateCancel,
       handleClickImport,
       handleClickDownload,
+      handleClickViewDeliver,
     };
   },
 });

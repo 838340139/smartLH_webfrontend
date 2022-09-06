@@ -85,8 +85,8 @@ import CateforiesPercent from './components/categories-percent.vue';
 import QuickOperation from './components/todowork.vue';
 import SystemMessage from './components/system-message.vue';
 import Carousel from './components/carousel.vue';
-import Education from './components/education.vue';
-import Detail from './components/detail.vue';
+// import Education from './components/education.vue';
+// import Detail from './components/detail.vue';
 
 export default defineComponent({
   components: {
@@ -98,8 +98,8 @@ export default defineComponent({
     QuickOperation,
     SystemMessage,
     Carousel,
-    Education,
-    Detail,
+    // Education,
+    // Detail,
   },
 });
 </script>

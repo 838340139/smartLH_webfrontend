@@ -590,9 +590,6 @@
                   show-word-limit
                 />
               </a-form-item>
-              <a-form-item field="undergo" label="个人经历">
-                <a-input v-model="perForm.undergo" placeholder="请输入" />
-              </a-form-item>
             </a-row>
           </a-form>
         </div>
